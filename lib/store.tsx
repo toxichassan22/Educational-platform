@@ -14,6 +14,10 @@ interface Store {
   logout: () => void;
   addAttempt: (a: Omit<Attempt, "id" | "date">) => void;
   resetDemo: () => void;
+  saveLessonProgress: (lessonId: string, videoUrl: string, position: number) => void;
+  addStudyNote: (lessonId: string, videoUrl: string, seconds: number, text: string) => void;
+  removeStudyNote: (id: string) => void;
+  storageError: string;
   // ==== إدارة الأدمن ====
   addSubject: (gradeId: string, name: string, teacher: string) => void;
   deleteSubject: (subjectId: string) => void;
@@ -41,6 +45,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [db, setDb] = useState<DB>(() => seedDB());
   const [me, setMe] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
+  const [storageError, setStorageError] = useState("");
 
   // تحميل الحالة من localStorage
   useEffect(() => {
@@ -71,11 +76,33 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   // حفظ تلقائي
   useEffect(() => {
-    if (ready) localStorage.setItem(LS_DB, JSON.stringify(db));
+    if (!ready) return;
+    try {
+      localStorage.setItem(LS_DB, JSON.stringify(db));
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- نتيجة كتابة خارجية؛ لا بديل عن إظهارها كحالة
+      setStorageError("");
+    } catch {
+      setStorageError("تعذّر الحفظ على هذا المتصفح. قد تكون مساحة التخزين ممتلئة؛ لا تغلق الصفحة حتى تتمكن من حفظ تقدمك.");
+    }
   }, [db, ready]);
 
   const value = useMemo<Store>(() => ({
-    ready, db, me,
+    ready, db, me, storageError,
+    saveLessonProgress: (lessonId, videoUrl, position) => {
+      if (!me || me.role !== "student" || !Number.isFinite(position) || position < 0) return;
+      setDb((d) => ({ ...d, lessonProgress: [
+        ...(d.lessonProgress ?? []).filter((p) => p.userId !== me.id || p.lessonId !== lessonId),
+        { userId: me.id, lessonId, videoUrl, position, updatedAt: new Date().toISOString() },
+      ] }));
+    },
+    addStudyNote: (lessonId, videoUrl, seconds, text) => {
+      const value = text.trim().slice(0, 500);
+      if (!me || me.role !== "student" || !value || !Number.isFinite(seconds) || seconds < 0) return;
+      setDb((d) => ({ ...d, studyNotes: [...(d.studyNotes ?? []), {
+        id: `note-${uid()}`, userId: me.id, lessonId, videoUrl, seconds, text: value,
+      }] }));
+    },
+    removeStudyNote: (id) => setDb((d) => ({ ...d, studyNotes: (d.studyNotes ?? []).filter((n) => n.id !== id || n.userId !== me?.id) })), 
 
     login: (userId) => {
       const u = db.users.find((x) => x.id === userId);
@@ -177,7 +204,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         }, ...d.payments],
       }));
     },
-  }), [ready, db, me]);
+  }), [ready, db, me, storageError]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

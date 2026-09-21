@@ -249,7 +249,7 @@ export default function Landing() {
           <div className="text-center mb-14">
             <div className="inline-block bg-white/10 text-gold-300 text-xs font-black px-4 py-1.5 rounded-full mb-4">قالوا عنّا</div>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">طلاب وأولياء أمور ومعلمون</h2>
-            <p className="text-white/50">تجارب حقيقية من مستخدمي المنصة</p>
+            <p className="text-white/50">نماذج توضيحية لما تقدمه المنصة لمستخدميها</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {TESTIMONIALS.map((t, i) => (
@@ -257,7 +257,7 @@ export default function Landing() {
                 <div className="flex gap-1 mb-4 text-gold-400">
                   {[0, 1, 2, 3, 4].map((s) => <Icon key={s} name="star" size={16} filled />)}
                 </div>
-                <p className="text-white/80 text-sm leading-relaxed mb-6">"{t.text}"</p>
+                <p className="text-white/80 text-sm leading-relaxed mb-6">«{t.text}»</p>
                 <div className="flex items-center gap-3 pt-4 border-t border-white/10">
                   <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black text-lg shrink-0" style={{ background: t.color }}>
                     {t.initial}

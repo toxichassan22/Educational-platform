@@ -1,20 +1,27 @@
 "use client";
 
-import React, { use, useEffect, useMemo, useRef, useState } from "react";
+import React, { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
 import { Card, Icon, Btn, Badge, Progress } from "@/components/ui";
-import { lessonById, questionsOfLesson, subjectOfLesson, unitById, canAccessLesson } from "@/lib/data";
+import { lessonById, questionsOfLesson, subjectOfLesson, unitById, canAccessLesson, attemptsOfUser, compareAttempts, reviewMistakes, Attempt, Question } from "@/lib/data";
 
 type Phase = "intro" | "taking" | "result";
 
 export default function ExamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  return <ExamSession key={id} lessonId={decodeURIComponent(id)} />;
+}
+
+function ExamSession({ lessonId }: { lessonId: string }) {
   const { db, me, addAttempt } = useStore();
-  const lessonId = decodeURIComponent(id);
   const lesson = lessonById(db, lessonId);
-  const questions = useMemo(() => questionsOfLesson(db, lessonId), [db, lessonId]);
+  const [sessionQuestions, setSessionQuestions] = useState<Question[] | null>(null);
+  const questions = sessionQuestions ?? questionsOfLesson(db, lessonId);
+  const [baseline, setBaseline] = useState<Attempt>();
+  const [result, setResult] = useState<Attempt>();
+  const submitted = useRef(false);
   const subject = subjectOfLesson(db, lessonId);
   const unit = lesson && unitById(db, lesson.unitId);
 
@@ -27,37 +34,46 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
 
   const totalSec = Math.max(60, questions.length * 45);
 
-  const finish = (ans: (number | null)[], secs: number) => {
+  const finish = (ans: (number | null)[]) => {
+    if (submitted.current || !me || me.role !== "student" || !lesson || !questions.length || !canAccessLesson(db, me.id, lesson)) return;
+    submitted.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
-    if (!me) return;
-    const score = questions.reduce((s, q, i) => s + (ans[i] === q.correct ? 1 : 0), 0);
-    addAttempt({ userId: me.id, lessonId: lessonId, score, total: questions.length, timeTakenSec: Math.round((Date.now() - startTs) / 1000) });
+    const now = new Date().toISOString();
+    const attempt: Attempt = {
+      id: `at-${crypto.randomUUID()}`, userId: me.id, lessonId,
+      score: questions.reduce((s, q, i) => s + (ans[i] === q.correct ? 1 : 0), 0),
+      total: questions.length, date: now.slice(0, 10), submittedAt: now,
+      timeTakenSec: Math.min(totalSec, Math.max(0, Math.round((Date.now() - startTs) / 1000))),
+      answers: questions.map((question, i) => ({ question, selected: ans[i] ?? null })),
+    };
+    addAttempt(attempt);
+    setResult(attempt);
     setPhase("result");
   };
 
   const start = () => {
-    if (!questions.length) return;
-    setAnswers(new Array(questions.length).fill(null));
+    const nextQuestions = questionsOfLesson(db, lessonId);
+    if (!nextQuestions.length || !me || me.role !== "student") return;
+    submitted.current = false;
+    setBaseline(attemptsOfUser(db, me.id).filter((a) => a.lessonId === lessonId).at(-1));
+    setSessionQuestions(nextQuestions.map((q) => ({ ...q, options: [...q.options] })));
+    setAnswers(new Array(nextQuestions.length).fill(null));
     setCurrent(0);
-    setSecondsLeft(totalSec);
+    setSecondsLeft(Math.max(60, nextQuestions.length * 45));
     setStartTs(Date.now());
     setPhase("taking");
   };
 
+  const tick = useEffectEvent(() => {
+    const remaining = Math.max(0, Math.ceil((startTs + totalSec * 1000 - Date.now()) / 1000));
+    setSecondsLeft(remaining);
+    if (remaining === 0) finish(answers);
+  });
+
   useEffect(() => {
     if (phase !== "taking") return;
-    timerRef.current = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(timerRef.current!);
-          setAnswers((ans) => { setTimeout(() => finish(ans, 0), 0); return ans; });
-          return 0;
-        }
-        return s - 1;
-      });
-    }, 1000);
+    timerRef.current = setInterval(() => tick(), 250);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   if (!lesson) {
@@ -74,7 +90,7 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
           </div>
           <h2 className="text-xl font-black text-white mb-2">الاختبار للمشتركين فقط</h2>
           <p className="text-white/55 text-sm mb-6">اشترك لتؤدي اختبار «{lesson.title}» وتكسب XP</p>
-          <div className="flex gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/student/subscription" className="bg-gold-500 hover:bg-gold-600 text-night-950 px-7 py-3 rounded-2xl font-black text-sm transition-colors">اشترك الآن</Link>
             <Link href={`/student/lesson/${lessonId}`} className="border border-white/20 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">رجوع</Link>
           </div>
@@ -88,6 +104,8 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
   const answered = answers.filter((a) => a !== null).length;
   const score = questions.reduce((s, q, i) => s + (answers[i] === q.correct ? 1 : 0), 0);
   const pct = questions.length ? Math.round((score / questions.length) * 100) : 0;
+  const difference = result ? compareAttempts(result, baseline) : null;
+  const mistakes = reviewMistakes(result);
 
   return (
     <AppShell role="student">
@@ -119,10 +137,10 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
               </div>
 
               <div className="bg-white/[.07] border border-white/10 rounded-2xl p-3.5 text-xs text-white/70 mb-7 text-right leading-relaxed max-w-md mx-auto">
-                <b className="text-gold-300">تعليمات:</b> الاختبار موقوت ويبدأ فور ضغط «ابدأ». تُحفظ إجاباتك تلقائيًا ويمكنك التنقل بين الأسئلة — وعند انتهاء الوقت يُسلَّم تلقائيًا ويُصحَّح فورًا.
+                <b className="text-gold-300">تعليمات:</b> الاختبار موقوت ويبدأ فور ضغط «ابدأ». يمكنك التنقل بين الأسئلة أثناء المحاولة؛ لا تغلق الصفحة قبل التسليم. عند انتهاء الوقت تُسلَّم الإجابات تلقائيًا وتُحفظ النتيجة ومراجعتها على هذا المتصفح.
               </div>
 
-              <div className="flex gap-3 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center">
                 {questions.length > 0 ? (
                   <button onClick={start}
                     className="bg-gold-500 hover:bg-gold-600 text-night-950 px-10 py-3.5 rounded-2xl font-black transition-colors active:scale-95 flex items-center gap-2">
@@ -155,7 +173,7 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
                 <Progress value={(answered / questions.length) * 100} />
               </div>
               <div className="text-xs font-bold text-slate-500">{answered}/{questions.length}</div>
-              <Btn variant="danger" className="!py-1.5 !px-3 text-xs" onClick={() => finish(answers, secondsLeft)}>تسليم</Btn>
+              <Btn variant="danger" className="!py-1.5 !px-3 text-xs" onClick={() => finish(answers)}>تسليم</Btn>
             </Card>
 
             {/* السؤال */}
@@ -189,7 +207,7 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
             </Card>
 
             {/* تنقل + مؤشر الأسئلة */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <Btn variant="outline" onClick={() => setCurrent((c) => Math.max(0, c - 1))} disabled={current === 0}>السابق</Btn>
               <div className="flex gap-1.5 flex-wrap justify-center">
                 {questions.map((q, i) => (
@@ -201,7 +219,7 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
                 ))}
               </div>
               {current === questions.length - 1
-                ? <Btn variant="gold" onClick={() => finish(answers, secondsLeft)}>تسليم الاختبار</Btn>
+                ? <Btn variant="gold" onClick={() => finish(answers)}>تسليم الاختبار</Btn>
                 : <Btn onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}>التالي</Btn>}
             </div>
           </div>
@@ -233,6 +251,20 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
                 </div>
               </div>
             </div>
+
+            <Card className="p-5 sm:p-6 border border-primary-100">
+              <div className="flex items-center gap-2 text-primary-700 font-extrabold mb-3"><Icon name="target" /> خطوتك التالية</div>
+              {difference !== null && baseline && (
+                <div className="bg-primary-50 rounded-xl p-4 mb-4" role="status">
+                  <div className="text-sm font-bold text-primary-900">المحاولة السابقة {Math.round(baseline.score / baseline.total * 100)}% ← الآن {pct}%</div>
+                  <p className="text-xs text-slate-600 mt-2">{difference > 0 ? `تحسّن بمقدار ${difference} نقطة مئوية` : difference < 0 ? `انخفاض بمقدار ${Math.abs(difference)} نقطة مئوية — راجع الأخطاء ثم حاول مجددًا` : "نفس نتيجة المحاولة السابقة — راجع تفاصيل الإجابات"} · مقارنة لنفس أسئلة الاختبار، وليست مقياسًا شاملًا لإتقان المادة.</p>
+                </div>
+              )}
+              <p className="text-sm text-slate-600 leading-relaxed mb-4">{mistakes.length ? `لديك ${mistakes.length} أسئلة تحتاج مراجعة، بما فيها الأسئلة غير المجابة. جهزنا لك شرح الإجابات وروابط للمذكرة؛ راجعها ثم أعد الاختبار لقياس الفرق.` : "أجبت عن كل الأسئلة بشكل صحيح. انتقل للدرس التالي أو راجع ملخص الدرس لتثبيت فهمك."}</p>
+              <Link href={`/student/lesson/${lessonId}#review`} className="inline-flex items-center gap-2 bg-primary-700 text-white rounded-xl px-5 py-3 text-sm font-bold">
+                <Icon name="book" size={17} /> {mistakes.length ? "افتح خطة المراجعة" : "العودة إلى الدرس"}
+              </Link>
+            </Card>
 
             {/* مراجعة الإجابات */}
             <Card className="p-6 border border-slate-100">

@@ -22,6 +22,14 @@ export interface User {
 export interface Attempt {
   id: string; userId: string; lessonId: string;
   score: number; total: number; date: string; timeTakenSec: number;
+  answers?: { question: Question; selected: number | null }[];
+  submittedAt?: string;
+}
+export interface LessonProgress {
+  userId: string; lessonId: string; videoUrl: string; position: number; updatedAt: string;
+}
+export interface StudyNote {
+  id: string; userId: string; lessonId: string; videoUrl: string; seconds: number; text: string;
 }
 export interface Package {
   id: string; name: string; scope: "subject" | "stage" | "all";
@@ -44,6 +52,8 @@ export interface DB {
   units: Unit[]; lessons: Lesson[]; questions: Question[];
   users: User[]; attempts: Attempt[]; packages: Package[];
   subscriptions: Subscription[]; payments: Payment[]; discountCodes: { code: string; pct: number }[];
+  lessonProgress?: LessonProgress[];
+  studyNotes?: StudyNote[];
 }
 
 // ===================== فيديوهات تجريبية =====================
@@ -454,4 +464,72 @@ export function packageById(db: DB, id: string) {
 }
 export function userById(db: DB, id: string) {
   return db.users.find((u) => u.id === id);
+}
+
+export function reviewMistakes(attempt?: Attempt) {
+  return attempt?.answers?.filter(({ question, selected }) => selected !== question.correct) ?? [];
+}
+
+export function reviewPlan(db: DB, userId: string) {
+  const latest = new Map<string, Attempt>();
+  for (const attempt of [...attemptsOfUser(db, userId)].reverse()) {
+    if (!latest.has(attempt.lessonId)) latest.set(attempt.lessonId, attempt);
+  }
+  return [...latest.values()].filter((a) => lessonById(db, a.lessonId) && reviewMistakes(a).length > 0);
+}
+
+export function compareAttempts(current: Attempt, previous?: Attempt): number | null {
+  if (!previous || current.userId !== previous.userId || current.lessonId !== previous.lessonId ||
+      !current.total || current.total !== previous.total ||
+      current.answers?.length !== current.total || previous.answers?.length !== previous.total) return null;
+  const signature = (a: Attempt) => JSON.stringify(a.answers!.map(({ question: q }) =>
+    JSON.stringify([q.id, q.text, q.options, q.correct])).sort());
+  if (signature(current) !== signature(previous)) return null;
+  return Math.round(current.score / current.total * 100) - Math.round(previous.score / previous.total * 100);
+}
+
+const EQUATION_NOTES: NoteSection[] = [
+  {
+    heading: "الجمع والطرح: حافظ على توازن الطرفين",
+    body: "لحل 3س + 5 = 20 نطرح 5 من الطرفين، فنحصل على 3س = 15. نقسم الطرفين على 3، إذن س = 5. نقل الحد للطرف الآخر هو اختصار لإجراء العملية العكسية على الطرفين.",
+    points: ["في 2س − 4 = 10 نضيف 4 للطرفين: 2س = 14، إذن س = 7.", "في س + 9 = 14 نطرح 9: س = 5، وليس 23.", "تحقّق بالتعويض: 3 × 5 + 5 = 20."],
+  },
+  {
+    heading: "الضرب والقسمة: اعزل المجهول",
+    body: "في 5س = 45 نقسم الطرفين على 5، فنجد س = 9. وفي س ÷ 3 = 6 نضرب الطرفين في 3، فنجد س = 18. اختر العملية العكسية للعملية المرتبطة بالمجهول.",
+    points: ["طبّق نفس العملية على الطرفين.", "لا تقسم على صفر.", "عوّض بقيمة س في المعادلة الأصلية للتأكد من الحل."],
+  },
+  {
+    heading: "المسألة اللفظية: حوّل الكلمات إلى معادلة",
+    body: "عدد إذا ضربناه في 4 وأضفنا 6 أصبح 30. نرمز للعدد بـ س، فتكون المعادلة 4س + 6 = 30. نطرح 6 ثم نقسم على 4، إذن س = 6.",
+    points: ["حدّد المجهول أولًا.", "اكتب العمليات بالترتيب المذكور في المسألة.", "تحقّق: 4 × 6 + 6 = 30."],
+  },
+];
+
+export function lessonNotes(lesson: Lesson) {
+  return lesson.title === "المعادلات الخطية" ? EQUATION_NOTES : lesson.note;
+}
+
+export function reviewSection(lesson: Lesson, question: Question) {
+  if (lesson.title !== "المعادلات الخطية") return null;
+  const index = REAL_QUESTIONS[lesson.title].findIndex((q) => q.text === question.text);
+  return [0, 0, 0, 1, 2, 1][index] ?? null;
+}
+
+const EQUATION_FOLLOW_UP: Omit<Question, "id" | "lessonId">[] = [
+  { text: "حل المعادلة: 4س + 3 = 23", type: "mcq", options: ["س = 4", "س = 5", "س = 6"], correct: 1, explanation: "نطرح 3: 4س = 20، ثم نقسم على 4، إذن س = 5." },
+  { text: "حل المعادلة: 3س − 6 = 18", type: "mcq", options: ["س = 4", "س = 6", "س = 8"], correct: 2, explanation: "نضيف 6: 3س = 24، ثم نقسم على 3، إذن س = 8." },
+  { text: "حل المعادلة س + 7 = 12 هو س = 5", type: "tf", options: ["صح", "خطأ"], correct: 0, explanation: "نطرح 7 من الطرفين: س = 12 − 7 = 5." },
+  { text: "حل المعادلة: 7س = 42", type: "mcq", options: ["س = 7", "س = 5", "س = 6"], correct: 2, explanation: "نقسم الطرفين على 7، إذن س = 6." },
+  { text: "عدد إذا ضربناه في 3 وأضفنا 4 أصبح 25. ما العدد؟", type: "mcq", options: ["6", "7", "9"], correct: 1, explanation: "3س + 4 = 25، إذن 3س = 21، ومنه س = 7." },
+  { text: "إذا كان س ÷ 4 = 5، فإن س = 20", type: "tf", options: ["صح", "خطأ"], correct: 0, explanation: "نضرب الطرفين في 4، إذن س = 20." },
+];
+
+export function followUpQuestions(lesson: Lesson, questions: Question[]): Question[] {
+  if (lesson.title !== "المعادلات الخطية") return [];
+  return questions.flatMap((q) => {
+    const index = REAL_QUESTIONS[lesson.title].findIndex((original) => original.text === q.text);
+    const followUp = EQUATION_FOLLOW_UP[index];
+    return followUp ? [{ ...followUp, id: `${q.id}-practice`, lessonId: lesson.id }] : [];
+  });
 }

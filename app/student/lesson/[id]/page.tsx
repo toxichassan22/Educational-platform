@@ -1,16 +1,22 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
 import { Card, Icon, Badge, Btn } from "@/components/ui";
-import { lessonById, unitById, subjectById, lessonsOfUnit, unitsOfSubject, questionsOfLesson, attemptsOfUser, canAccessLesson } from "@/lib/data";
+import { lessonById, unitById, subjectById, lessonsOfUnit, unitsOfSubject, questionsOfLesson, attemptsOfUser, canAccessLesson, lessonNotes, reviewSection, followUpQuestions, reviewMistakes } from "@/lib/data";
+
+const formatTime = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 
 export default function LessonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { db, me } = useStore();
-  const lessonId = decodeURIComponent(id);
+  return <LessonContent key={id} lessonId={decodeURIComponent(id)} />;
+}
+
+function LessonContent({ lessonId }: { lessonId: string }) {
+  const { db, me, saveLessonProgress, addStudyNote, removeStudyNote, storageError } = useStore();
   const lesson = lessonById(db, lessonId);
   const unit = lesson && unitById(db, lesson.unitId);
   const subject = unit && subjectById(db, unit.subjectId);
@@ -21,6 +27,52 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
   const questions = lesson ? questionsOfLesson(db, lesson.id) : [];
   const myAttempts = lesson && me ? attemptsOfUser(db, me.id).filter((a) => a.lessonId === lesson.id) : [];
   const best = myAttempts.length ? Math.max(...myAttempts.map((a) => Math.round((a.score / a.total) * 100))) : null;
+  const latestAttempt = myAttempts.at(-1);
+  const mistakes = reviewMistakes(latestAttempt);
+  const practiceQuestions = lesson ? followUpQuestions(lesson, questions) : [];
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [duration, setDuration] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [noteDraft, setNoteDraft] = useState("");
+  const [reviewTarget, setReviewTarget] = useState<number | null>(null);
+  const notes = lesson && me ? (db.studyNotes ?? []).filter((n) => n.userId === me.id && n.lessonId === lesson.id) : [];
+  const saved = lesson && me ? (db.lessonProgress ?? []).find((p) => p.userId === me.id && p.lessonId === lesson.id) : undefined;
+  const resumable = !!(saved && lesson && saved.videoUrl === lesson.videoUrl && duration && saved.position > 10 && saved.position < duration - 10);
+
+  const saveNow = () => {
+    const video = videoRef.current;
+    if (!video || !lesson || !Number.isFinite(video.duration) || video.duration <= 0 || video.currentTime < 5) return;
+    saveLessonProgress(lesson.id, lesson.videoUrl, Math.floor(video.currentTime));
+  };
+  const persist = useEffectEvent(() => {
+    if (!lesson || !me || me.role !== "student") return;
+    saveNow();
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => persist(), 5000);
+    window.addEventListener("pagehide", persist);
+    window.addEventListener("visibilitychange", persist);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("pagehide", persist);
+      window.removeEventListener("visibilitychange", persist);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (window.location.hash !== "#review") return;
+    const t = setTimeout(() => document.getElementById("review")?.scrollIntoView({ behavior: "smooth", block: "start" }), 400);
+    return () => clearTimeout(t);
+  }, [lesson?.id]);
+
+  const addNote = () => {
+    const video = videoRef.current;
+    if (!video || !noteDraft.trim() || !lesson) return;
+    addStudyNote(lesson.id, lesson.videoUrl, Math.floor(video.currentTime), noteDraft);
+    setNoteDraft("");
+  };
 
   if (!lesson) {
     return <AppShell role="student"><Card className="p-10 text-center text-slate-400">الدرس غير موجود</Card></AppShell>;
@@ -101,7 +153,11 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
           {/* الفيديو + المذكرة */}
           <div className="lg:col-span-2 space-y-5">
             <Card className="overflow-hidden border border-slate-100">
-              <video key={lesson.id} controls preload="metadata" className="w-full aspect-video bg-black">
+              <video ref={videoRef} key={lesson.id} controls preload="metadata" className="w-full aspect-video bg-black"
+                onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                onTimeUpdate={(e) => setSeconds(Math.floor(e.currentTarget.currentTime))}
+                onPause={saveNow}
+                onEnded={saveNow}>
                 <source src={lesson.videoUrl} type="video/mp4" />
               </video>
               <div className="p-5">
@@ -114,6 +170,59 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
                     </div>
                   </div>
                   {best !== null && <Badge tone={best >= 80 ? "green" : best >= 50 ? "amber" : "red"}>أفضل نتيجة: {best}%</Badge>}
+                </div>
+
+                {storageError && <div className="mt-3 text-xs text-red-600 bg-red-50 rounded-xl px-3 py-2 font-bold">{storageError}</div>}
+
+                {/* استكمال المشاهدة — يحفظ موضع الفيديو على هذا المتصفح */}
+                {resumable && saved && (
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 bg-primary-50 border border-primary-100 rounded-xl px-3 py-2.5">
+                    <span className="text-xs font-bold text-primary-800 flex items-center gap-1.5">
+                      <Icon name="clock" size={14} className="text-primary-600" /> آخر مرة وقفت عند <span dir="ltr">{formatTime(saved.position)}</span>
+                    </span>
+                    <div className="flex gap-1.5">
+                      <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = saved.position; videoRef.current.play(); } }}
+                        className="bg-primary-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-primary-700 transition-colors">
+                        أكمل من هناك
+                      </button>
+                      <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play(); } }}
+                        className="text-xs font-bold px-3 py-1.5 rounded-lg text-slate-500 hover:bg-white transition-colors">
+                        من البداية
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* ملاحظات بوقت الفيديو */}
+                <div className="mt-4 pt-4 border-t border-slate-100">
+                  <h3 className="font-bold text-primary-900 text-sm mb-2.5 flex items-center gap-1.5">
+                    <Icon name="edit" size={15} className="text-primary-500" /> ملاحظاتي <span className="text-[10px] text-slate-400 font-medium">— محفوظة بتوقيت اللقطة</span>
+                  </h3>
+                  <div className="flex gap-2">
+                    <input value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") addNote(); }}
+                      maxLength={500} placeholder="اكتب ملاحظة عند هذه اللحظة…"
+                      className="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-primary-400" />
+                    <Btn className="!py-2 !px-4 text-xs" onClick={addNote} disabled={!noteDraft.trim()}>
+                      <Icon name="plus" size={13} /> {formatTime(seconds)}
+                    </Btn>
+                  </div>
+                  {notes.length > 0 && (
+                    <div className="mt-3 space-y-1.5">
+                      {notes.map((n) => (
+                        <div key={n.id} className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 text-sm group">
+                          <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = n.seconds; videoRef.current.play(); } }}
+                            className="shrink-0 text-[10px] font-black bg-primary-100 text-primary-700 px-2 py-1 rounded-md hover:bg-primary-200 transition-colors" dir="ltr">
+                            {formatTime(n.seconds)}
+                          </button>
+                          <span className="flex-1 text-slate-600 text-xs">{n.text}</span>
+                          <button onClick={() => removeStudyNote(n.id)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-slate-300 hover:text-red-500 transition-all">
+                            <Icon name="trash" size={13} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>
@@ -139,9 +248,34 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
                   <Icon name="download" size={15} /> تحميل PDF
                 </button>
               </div>
+              {/* خطة مراجعة موجهة من أخطاء آخر اختبار */}
+              {mistakes.length > 0 && (
+                <div id="review" className="mb-6 rounded-2xl border-2 border-gold-500/50 bg-gold-500/5 p-4 no-print">
+                  <h3 className="font-extrabold text-primary-900 text-sm mb-1 flex items-center gap-2">
+                    <Icon name="target" size={16} className="text-gold-600" /> خطة مراجعتك — بناءً على أخطاء آخر اختبار
+                  </h3>
+                  <p className="text-xs text-slate-500 mb-3">أخطأت في {mistakes.length} {mistakes.length === 1 ? "سؤال" : "أسئلة"} آخر مرة. هذه الأقسام تشرحها، وبعدها يوجد تدريب متابعة بأسئلة مختلفة.</p>
+                  <div className="space-y-1.5 mb-3">
+                    {[...new Set(mistakes.map((m) => reviewSection(lesson, m.question)).filter((s): s is number => s !== null))].map((si) => (
+                      <button key={si} onClick={() => { setReviewTarget(si); document.getElementById(`note-sec-${si}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); }}
+                        className="w-full flex items-center gap-2 text-right text-xs font-bold text-primary-800 bg-white/70 hover:bg-white rounded-lg px-3 py-2 transition-colors">
+                        <span className="w-5 h-5 rounded-md bg-gold-500/20 text-gold-600 flex items-center justify-center shrink-0">{si + 1}</span>
+                        {lessonNotes(lesson)[si]?.heading ?? "قسم المراجعة"}
+                        <Icon name="down" size={12} className="mr-auto text-slate-400" />
+                      </button>
+                    ))}
+                  </div>
+                  {practiceQuestions.length > 0 && (
+                    <Link href={`/student/practice/${lesson.id}`}
+                      className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-night-950 rounded-xl px-5 py-2.5 text-xs font-black transition-colors">
+                      <Icon name="bolt" size={14} /> تدريب متابعة — {practiceQuestions.length} أسئلة مختلفة
+                    </Link>
+                  )}
+                </div>
+              )}
               <div className="space-y-5">
-                {lesson.note.map((sec, i) => (
-                  <div key={i}>
+                {lessonNotes(lesson).map((sec, i) => (
+                  <div key={i} id={`note-sec-${i}`} className={`rounded-xl transition-all ${reviewTarget === i ? "bg-gold-500/10 ring-2 ring-gold-500/40 p-3 -m-3" : ""}`}>
                     <h3 className="font-bold text-primary-700 mb-2 flex items-center gap-2">
                       <span className="w-6 h-6 rounded-lg bg-primary-50 text-primary-600 text-xs flex items-center justify-center font-extrabold">{i + 1}</span>
                       {sec.heading}

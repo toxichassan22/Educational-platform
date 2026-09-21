@@ -1,69 +1,244 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useStore } from "@/lib/store";
+import { Icon, Logo } from "@/components/ui";
+
+const FEATURES = [
+  { icon: "doc", title: "مذكرات شاملة", desc: "أقوى المذكرات تغطي منهجك بالكامل — عرض داخل المنصة وتحميل PDF", color: "#0891b2" },
+  { icon: "video", title: "فيديوهات شرح مميزة", desc: "دروس مسجلة من نخبة المعلمين، تعيدها وقت ما تبي وبالسرعة اللي تناسبك", color: "#6d28d9" },
+  { icon: "target", title: "اختبارات ذكية", desc: "اختبارات موقوتة بتصحيح تلقائي فوري تكشف نقاط ضعفك وتعالجها", color: "#e11d48" },
+  { icon: "chart", title: "تقارير أداء دقيقة", desc: "إحصائيات فورية لمستواك في كل مادة ودرس — تعرف وين توصل أول بأول", color: "#059669" },
+  { icon: "users", title: "متابعة ولي الأمر", desc: "لوحة خاصة لأهلك تتابع درجاتك وتقدمك لحظة بلحظة", color: "#d97706" },
+  { icon: "flame", title: "نقاط وتحديات", desc: "اجمع XP مع كل درس واختبار، حافظ على سلسلتك اليومية، وتنافس للقمة", color: "#ea580c" },
+];
+
+const TICKER = ["الرياضيات", "الفيزياء", "الكيمياء", "الأحياء", "اللغة العربية", "اللغة الإنجليزية", "العلوم", "الدراسات الاجتماعية", "التربية الإسلامية"];
+
+const STEPS = [
+  { n: "١", t: "أنشئ حسابك", d: "سجّل خلال ثوانٍ وحدد صفك", icon: "user" },
+  { n: "٢", t: "اختر مادتك", d: "منهجك منظم: وحدات ودروس ومذكرات", icon: "grid" },
+  { n: "٣", t: "ادرس واختبر", d: "فيديو + مذكرة + اختبار ذكي", icon: "bolt" },
+  { n: "٤", t: "تابع تقدمك", d: "تقارير تكشف قوتك وضعفك", icon: "trophy" },
+];
+
+export default function Landing() {
+  const { db } = useStore();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-night-950">
+      {/* الهيدر */}
+      <header className="fixed top-0 inset-x-0 z-50 bg-night-950/70 backdrop-blur-xl border-b border-white/8">
+        <div className="max-w-6xl mx-auto px-4 h-[68px] flex items-center justify-between">
+          <Logo size={38} light />
+          <div className="hidden md:flex items-center gap-7 text-sm font-bold text-white/60">
+            <a href="#features" className="hover:text-white transition-colors">المميزات</a>
+            <a href="#how" className="hover:text-white transition-colors">كيف أبدأ</a>
+            <a href="#packages" className="hover:text-white transition-colors">الباقات</a>
+          </div>
+          <Link href="/login" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors">
+            دخول
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* البطل */}
+      <section className="relative hero-mesh overflow-hidden pt-[68px]">
+        {/* كرات ضوئية */}
+        <div className="absolute top-24 -right-24 w-96 h-96 rounded-full bg-primary-600/20 blur-3xl animate-orb" />
+        <div className="absolute bottom-0 -left-24 w-96 h-96 rounded-full bg-gold-500/10 blur-3xl animate-orb" style={{ animationDelay: "-4s" }} />
+        <div className="absolute inset-0 grid-pattern opacity-40" />
+
+        <div className="max-w-6xl mx-auto px-4 pt-14 pb-20 md:pt-20 md:pb-28 relative grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 glass text-primary-300 text-xs font-bold px-4 py-2 rounded-full mb-7">
+              <Icon name="spark" size={14} /> منصة تعليمية متكاملة لمناهج الكويت
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.15] mb-6">
+              ادرس <span className="text-gold-400">بذكاء</span>،<br />وتفوّق بثقة
+            </h1>
+            <p className="text-white/60 text-lg leading-relaxed mb-9 max-w-lg">
+              مذكرات شاملة، فيديوهات من نخبة المعلمين، اختبارات ذكية بتصحيح فوري،
+              ونقاط XP تخلّي المذاكرة إدمان — لكل مراحل الكويت.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/login" className="group bg-gold-500 hover:bg-gold-600 text-night-950 px-8 py-4 rounded-2xl font-black text-lg transition-colors flex items-center gap-2">
+                <Icon name="rocket" size={20} className="group-hover:-translate-y-0.5 transition-transform" />
+                ابدأ مجانًا الآن
+              </Link>
+              <Link href="/login" className="glass text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/15 transition-colors flex items-center gap-2">
+                <Icon name="play" size={18} /> جرّب الديمو
+              </Link>
+            </div>
+
+            {/* إحصائيات */}
+            <div className="flex gap-8 mt-12">
+              {[["+1200", "درس وفيديو"], ["+5000", "سؤال ذكي"], ["24/7", "متاح دائمًا"]].map(([v, l]) => (
+                <div key={l}>
+                  <div className="text-2xl md:text-3xl font-black text-white">{v}</div>
+                  <div className="text-white/40 text-xs mt-1 font-medium">{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* بطاقات عائمة — محاكاة واجهة التطبيق */}
+          <div className="relative hidden lg:block h-[460px]">
+            {/* بطاقة الفيديو */}
+            <div className="absolute top-2 right-0 w-72 glass rounded-3xl p-4 animate-float shadow-2xl">
+              <div className="rounded-2xl aspect-video bg-primary-600/40 flex items-center justify-center mb-3 relative overflow-hidden">
+                <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-primary-700 shadow-xl">
+                  <Icon name="play" size={24} />
+                </div>
+                <div className="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-md font-bold">12:34</div>
+              </div>
+              <div className="text-white font-bold text-sm">قانون نيوتن الثاني</div>
+              <div className="text-white/50 text-xs">الفيزياء — الصف العاشر</div>
+            </div>
+            {/* بطاقة النتيجة */}
+            <div className="absolute top-52 left-0 w-60 glass rounded-3xl p-5 animate-float-x shadow-2xl">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center"><Icon name="trophy" size={22} /></div>
+                <div><div className="text-white font-black text-2xl">94%</div><div className="text-white/50 text-[11px]">نتيجة الاختبار</div></div>
+              </div>
+              <div className="flex gap-1">{[1,1,1,1,0,1,1].map((v, i) => <div key={i} className={`h-1.5 flex-1 rounded-full ${v ? "bg-emerald-400" : "bg-white/15"}`} />)}</div>
+            </div>
+            {/* بطاقة الستريك */}
+            <div className="absolute bottom-0 right-16 glass rounded-3xl px-5 py-4 flex items-center gap-3 animate-float shadow-2xl" style={{ animationDelay: "-2.5s" }}>
+              <div className="text-orange-400 animate-flame"><Icon name="flame" size={30} /></div>
+              <div><div className="text-white font-black text-xl">12 يوم</div><div className="text-white/50 text-[11px]">سلسلة مذاكرة</div></div>
+            </div>
+            {/* بطاقة XP */}
+            <div className="absolute top-40 right-56 glass rounded-2xl px-4 py-3 flex items-center gap-2 animate-float-x shadow-xl" style={{ animationDelay: "-3.5s" }}>
+              <Icon name="bolt" size={18} className="text-gold-400" />
+              <span className="text-white font-black text-sm">+150 XP</span>
+            </div>
+          </div>
         </div>
-      </main>
+
+        {/* شريط المواد المتحرك */}
+        <div className="relative border-t border-white/8 bg-night-900/60 overflow-hidden py-4" dir="ltr">
+          <div className="flex gap-3 animate-ticker w-max" style={{ direction: "ltr" }}>
+            {[...TICKER, ...TICKER, ...TICKER, ...TICKER].map((s, i) => (
+              <span key={i} className="glass text-white/70 text-xs font-bold px-5 py-2 rounded-full whitespace-nowrap">{s}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* المميزات */}
+      <section id="features" className="max-w-6xl mx-auto px-4 py-20">
+        <div className="text-center mb-14">
+          <div className="inline-block bg-primary-100 text-primary-700 text-xs font-black px-4 py-1.5 rounded-full mb-4">ليش تفوّق؟</div>
+          <h2 className="text-3xl md:text-4xl font-black text-primary-950 mb-3">كل ما تحتاجه للنجاح</h2>
+          <p className="text-slate-500">تقنية تعليمية متكاملة مصممة للطالب وولي الأمر</p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {FEATURES.map((f, i) => (
+            <div key={f.title} className="card-hover bg-white rounded-3xl p-7 border border-slate-100 shadow-sm animate-fade-up" style={{ animationDelay: `${i * 70}ms` }}>
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style={{ background: `${f.color}14`, color: f.color }}>
+                <Icon name={f.icon} size={25} />
+              </div>
+              <h3 className="font-black text-primary-950 text-lg mb-2">{f.title}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* كيف أبدأ */}
+      <section id="how" className="py-20 hero-mesh relative overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-30" />
+        <div className="max-w-6xl mx-auto px-4 relative">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">ابدأ رحلتك في 4 خطوات</h2>
+            <p className="text-white/50">من التسجيل للتفوق — أقل من دقيقة</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {STEPS.map((s, i) => (
+              <div key={s.n} className="glass rounded-3xl p-6 text-center relative overflow-hidden animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+                <div className="absolute -top-4 -left-4 text-7xl font-black text-white/5">{s.n}</div>
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-primary-600 text-white flex items-center justify-center mb-4">
+                  <Icon name={s.icon} size={24} />
+                </div>
+                <h3 className="font-black text-white mb-1.5">{s.t}</h3>
+                <p className="text-white/50 text-sm">{s.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* الباقات */}
+      <section id="packages" className="max-w-6xl mx-auto px-4 py-20">
+        <div className="text-center mb-14">
+          <div className="inline-block bg-gold-400/15 text-gold-600 text-xs font-black px-4 py-1.5 rounded-full mb-4">وفّر لغاية 80%</div>
+          <h2 className="text-3xl md:text-4xl font-black text-primary-950 mb-3">باقات تناسب الجميع</h2>
+          <p className="text-slate-500">دفع آمن عبر KNET و Visa و Mastercard</p>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-5 max-w-5xl mx-auto items-stretch">
+          {db.packages.map((p) => (
+            <div key={p.id} className={`relative rounded-3xl p-7 flex flex-col transition-all ${
+              p.popular
+                ? "hero-mesh text-white shadow-2xl shadow-gold-500/20 scale-[1.04] border border-gold-400/40"
+                : "bg-white border border-slate-100 card-hover"}`}>
+              {p.popular && (
+                <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                  <div className="price-shine" />
+                </div>
+              )}
+              {p.popular && (
+                <div className="absolute -top-3.5 right-1/2 translate-x-1/2 bg-gold-500 text-night-950 text-xs font-black px-4 py-1.5 rounded-full shadow-lg shadow-gold-500/40">
+                  الأكثر اشتراكًا
+                </div>
+              )}
+              <h3 className={`font-black text-lg text-center ${p.popular ? "text-white" : "text-primary-950"}`}>{p.name}</h3>
+              <div className="text-center my-5">
+                <span className={`font-black ${p.popular ? "text-6xl text-gold-grad drop-shadow-[0_2px_14px_rgba(251,191,36,.35)]" : "text-5xl text-primary-800"}`}>{p.priceKwd}</span>
+                <span className={`text-sm ${p.popular ? "text-white/60" : "text-slate-400"}`}> د.ك / {p.period}</span>
+              </div>
+              <ul className="space-y-2.5 mb-7 flex-1">
+                {p.features.map((f) => (
+                  <li key={f} className={`flex items-center gap-2 text-sm ${p.popular ? "text-white/80" : "text-slate-600"}`}>
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${p.popular ? "bg-emerald-400/20 text-emerald-300" : "bg-emerald-50 text-emerald-500"}`}>
+                      <Icon name="check" size={12} />
+                    </span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/login" className={`block text-center py-3 rounded-2xl font-black text-sm transition-colors ${
+                p.popular ? "bg-gold-500 hover:bg-gold-600 text-night-950" : "bg-primary-50 text-primary-700 hover:bg-primary-100"}`}>
+                اشترك الآن
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="hero-mesh rounded-[2.5rem] p-10 md:p-16 text-center relative overflow-hidden">
+          <div className="absolute -top-20 right-1/4 w-72 h-72 rounded-full bg-primary-500/25 blur-3xl" />
+          <div className="relative">
+            <div className="w-16 h-16 mx-auto rounded-3xl bg-gold-500 text-night-950 flex items-center justify-center mb-6 animate-float">
+              <Icon name="rocket" size={30} />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">جاهز تغيّر طريقة دراستك؟</h2>
+            <p className="text-white/60 mb-9">انضم لآلاف الطلاب المتفوقين — أول درس مجاني</p>
+            <Link href="/login" className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-night-950 px-10 py-4 rounded-2xl font-black text-lg transition-colors">
+              <Icon name="bolt" size={20} /> أنشئ حسابك مجانًا
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/8 py-8 bg-night-950">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Logo size={32} light />
+          <div className="text-white/30 text-xs">تفوّق © جميع الحقوق محفوظة 2026 — نسخة تجريبية (Proof of Concept)</div>
+        </div>
+      </footer>
     </div>
   );
 }

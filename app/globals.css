@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* العلامة: teal-cyan نابض */
+  --color-primary-50: #ecfeff;
+  --color-primary-100: #cffafe;
+  --color-primary-200: #a5f3fc;
+  --color-primary-300: #67e8f9;
+  --color-primary-400: #22d3ee;
+  --color-primary-500: #06b6d4;
+  --color-primary-600: #0891b2;
+  --color-primary-700: #0e7490;
+  --color-primary-800: #155e75;
+  --color-primary-900: #164e63;
+  --color-primary-950: #083344;
+
+  /* ذهبي */
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  /* كحلي عميق للخلفيات الغامقة */
+  --color-night-800: #101c3a;
+  --color-night-900: #0a1229;
+  --color-night-950: #060b1d;
+
+  --font-sans: "Alexandria", "Segoe UI", Tahoma, Arial, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background: #f1f5fb;
+  color: #1e293b;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ===== حركات ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp .55s cubic-bezier(.2,.8,.3,1) both; }
+
+@keyframes pop {
+  0% { transform: scale(.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop { animation: pop .4s cubic-bezier(.2,1.6,.4,1) both; }
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.animate-float { animation: floatY 5s ease-in-out infinite; }
+
+@keyframes floatX {
+  0%, 100% { transform: translateX(0) rotate(-2deg); }
+  50% { transform: translateX(-10px) rotate(2deg); }
+}
+.animate-float-x { animation: floatX 7s ease-in-out infinite; }
+
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-25px) scale(1.15); }
+  66% { transform: translate(-20px,20px) scale(.9); }
+}
+.animate-orb { animation: orbDrift 12s ease-in-out infinite; }
+
+@keyframes flamePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+.animate-flame { animation: flamePulse 1.6s ease-in-out infinite; transform-origin: bottom center; }
+
+@keyframes tickerMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
+}
+.animate-ticker { animation: tickerMove 36s linear infinite; }
+
+/* ===== أدوات ===== */
+.text-gradient {
+  background: linear-gradient(90deg, #67e8f9, #fbbf24);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ذهب معدني للأرقام المميزة */
+.text-gold-grad {
+  background: linear-gradient(160deg, #fef3c7 0%, #fcd34d 35%, #f59e0b 70%, #b45309 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* لمعة تمسح البطاقة المميزة كل فترة */
+@keyframes shineSweep {
+  0% { transform: translateX(140%) skewX(-18deg); }
+  55%, 100% { transform: translateX(-220%) skewX(-18deg); }
+}
+.price-shine {
+  position: absolute; top: 0; bottom: 0; width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(252,211,77,.14) 35%, rgba(255,255,255,.22) 50%, rgba(252,211,77,.14) 65%, transparent);
+  animation: shineSweep 4.5s ease-in-out infinite;
+}
+
+.glass {
+  background: rgba(255,255,255,.09);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.hero-mesh {
+  background:
+    radial-gradient(ellipse 70% 60% at 85% 10%, rgba(37,99,235,.22), transparent),
+    #0b1424;
+}
+
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, black 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, black 25%, transparent 78%);
+}
+
+.card-hover {
+  transition: transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .3s;
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px -12px rgba(8,51,68,.22);
+}
+
+/* طباعة المذكرة */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .print-area { box-shadow: none !important; border: none !important; }
 }

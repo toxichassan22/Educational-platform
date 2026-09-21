@@ -7,11 +7,11 @@ import { Icon } from "@/components/ui";
 /* ===================== بيانات الصفحة ===================== */
 
 const TRUST_ITEMS = [
+  { label: "أفضل منصة تعليمية في الكويت", icon: "award", sub: "اختيار الطلبة وأولياء الأمور" },
   { label: "تقييم 4.8 من 5", icon: "star", sub: "من آلاف الطلبة وأولياء الأمور" },
+  { label: "أوائل الكويت معنا", icon: "medal", sub: "نسب 99% و100% موثقة" },
+  { label: "+10 سنوات خبرة", icon: "clock", sub: "في التعليم الكويتي" },
   { label: "تغطية كاملة للمنهج الكويتي", icon: "book", sub: "ابتدائي · متوسط · ثانوي" },
-  { label: "اختبارات من نماذج وزارية", icon: "doc", sub: "تصحيح فوري وتحليل أخطاء" },
-  { label: "متابعة فردية مستمرة", icon: "users", sub: "معلمون يردون على أسئلتك" },
-  { label: "قصص تفوق حقيقية", icon: "medal", sub: "نتائج موثقة لطلاب المنصة" },
 ];
 
 const TOP_STUDENTS = [
@@ -38,11 +38,36 @@ const TOP_STUDENTS = [
   },
 ];
 
+/* قصص إضافية تظهر عند «اعرض المزيد» */
+const MORE_STUDENTS = [
+  {
+    name: "طالب الصف الحادي عشر",
+    rank: "نسبة 98.5% — القسم العلمي",
+    pct: "98.5%",
+    initials: "ع",
+    quote: "فيديوهات الشرح القصيرة خلتني أراجع المنهج كاملًا قبل الامتحان بأسبوع.",
+  },
+  {
+    name: "طالبة الصف التاسع",
+    rank: "الأولى على المدرسة في الرياضيات",
+    pct: "+28%",
+    initials: "ف",
+    quote: "الاختبارات الذكية ورّتني غلطاتي بالضبط، وركزت مراجعتي عليها بس.",
+  },
+  {
+    name: "طالب الصف الثامن",
+    rank: "من متعثر إلى متفوق في فصل واحد",
+    pct: "+40%",
+    initials: "ي",
+    quote: "حفظ موضع الفيديو والمذكرات المرتبة خلّوا المذاكرة عادة يومية سهلة.",
+  },
+];
+
 const FEATURES = [
   {
     id: "notes",
-    title: "مذكرات منظمة لكل وحدة",
-    desc: "ملخصات مركزة تغطي أهداف كل درس في المنهج الكويتي، مع أمثلة محلولة وخرائط مراجعة سريعة.",
+    title: "مذكرات شاملة",
+    desc: "مذكرات مرتبة تلخص لك المنهج من أول صفحة لآخرها، بأسلوب مبسط يخليك تستغني عن أي مصدر ثاني.",
     order: "text-first",
     badge: "PDF قابل للطباعة",
     accent: "#22d3ee",
@@ -50,8 +75,8 @@ const FEATURES = [
   },
   {
     id: "video",
-    title: "شرح مرئي خطوة بخطوة",
-    desc: "دروس فيديو قصيرة تشرح كل فكرة على حدة، مع حفظ تلقائي لموضع المشاهدة وملاحظات مرتبطة بالوقت.",
+    title: "فيديوهات شرح مميزة",
+    desc: "دروس مسجلة تغطي المذكرة درسًا درسًا، شغّلها في الوقت اللي يناسبك وأعدها بدون أي حدود.",
     order: "img-first",
     badge: "استئناف من حيث توقفت",
     accent: "#a78bfa",
@@ -59,8 +84,8 @@ const FEATURES = [
   },
   {
     id: "quiz",
-    title: "تدريب واختبارات ذكية",
-    desc: "اختبارات موقوتة بتصحيح فوري، وخطة مراجعة تُبنى من أخطائك، وتدريب متابعة بأسئلة مختلفة.",
+    title: "اختبارات ذكية",
+    desc: "اختبارات قصيرة بتصحيح فوري مبنية على أنماط الامتحانات السابقة، تكشف نقاط ضعفك وتبني لك خطة مراجعة.",
     order: "text-first",
     badge: "تحليل نقاط القوة والضعف",
     accent: "#34d399",
@@ -68,8 +93,8 @@ const FEATURES = [
   },
   {
     id: "chat",
-    title: "معلمون يتابعون معك",
-    desc: "اسأل في أي وقت وتابع شرح المواد مع معلمي كل مرحلة، مع تقارير دورية لولي الأمر.",
+    title: "نخبة المعلمين معاك",
+    desc: "معلمون من الصف الأول يشرحون لك كل مادة ويردون على أسئلتك لحد ما توصل للمعلومة.",
     order: "img-first",
     badge: "ردود ومتابعة مستمرة",
     accent: "#fbbf24",
@@ -77,11 +102,12 @@ const FEATURES = [
   },
   {
     id: "box",
-    title: "باقة واحدة لكل مرحلتك",
-    desc: "اشتراك واحد يفتح جميع مواد صفك الدراسي، مع تجديد مرن ودفع آمن عبر وسائل الدفع الكويتية.",
+    title: "وفّر أكثر مع باقات تفوّق",
+    desc: "اشتراك واحد يفتح كل مواد صفك الدراسي، بسعر أوفر بكثير من الدروس الخصوصية.",
     order: "text-first",
     badge: "اشترك وجرب أول درس مجانًا",
     accent: "#60a5fa",
+    highlight: "وفّر لغاية 80%",
     points: ["كل مواد الصف بسعر واحد", "دروس مجانية للتجربة", "إلغاء مرن في أي وقت"],
   },
 ];
@@ -99,6 +125,7 @@ export default function Landing() {
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMsg, setChatMsg] = useState("");
   const [chatSent, setChatSent] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   /* حركات الظهور عند التمرير */
   useEffect(() => {
@@ -210,9 +237,9 @@ export default function Landing() {
           {/* الجانب الأيمن: النص والعنوان والزر */}
           <div className="relative z-10 text-center lg:text-right">
             <h1 className="rv font-black leading-[1.14] text-[2.6rem] sm:text-6xl xl:text-[4.2rem] text-white">
-              منهجك الكويتي كاملًا
+              شرح ومذكرات واختبارات
               <br />
-              <span className="text-gradient">في منصة واحدة</span>
+              <span className="text-gradient">لكل مناهج الكويت</span>
             </h1>
 
             <p
@@ -224,16 +251,16 @@ export default function Landing() {
 
             <div className="rv mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-3" style={{ "--rvd": "200ms" } as React.CSSProperties}>
               <Link
-                href="/login"
+                href="/student/browse"
                 className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-lg px-10 py-4 rounded-full transition-all hover:scale-[1.03] shadow-xl shadow-[#1d72fe]/35 active:scale-95"
               >
-                ابدأ التعلم الآن
+                استكشف المواد
               </Link>
               <Link
-                href="#features"
+                href="/login"
                 className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/85 font-bold text-base px-8 py-4 rounded-full transition-all"
               >
-                تعرف على المميزات
+                ابدأ الآن
               </Link>
             </div>
 
@@ -287,7 +314,7 @@ export default function Landing() {
       {/* ===================== شريط الثقة ===================== */}
       <section id="trust" className="py-14 sm:py-20 border-t border-b border-white/[0.06] bg-[#0b111e]/60">
         <h2 className="rv text-center text-2xl sm:text-4xl font-black text-white/35 mb-10 px-4">
-          لماذا يختارنا الطلبة وأولياء الأمور
+          جوائز وأرقام نفتخر فيها
         </h2>
 
         <div className="mx-auto max-w-[1440px] px-4 sm:px-8">
@@ -362,10 +389,10 @@ export default function Landing() {
                   ))}
                 </ul>
                 <Link
-                  href="/login"
+                  href="/student/browse"
                   className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-sm sm:text-base px-9 py-3.5 rounded-full transition-all hover:scale-[1.04] shadow-lg shadow-[#1d72fe]/30 active:scale-95"
                 >
-                  جرّب درسًا مجانيًا
+                  استكشف المواد
                 </Link>
               </div>
 
@@ -383,6 +410,11 @@ export default function Landing() {
                     </span>
                     <div className="text-white font-black">{f.title}</div>
                   </div>
+                  {"highlight" in f && f.highlight && (
+                    <div className="relative mb-5 font-black text-4xl sm:text-5xl text-gold-grad pct-shine">
+                      {f.highlight}
+                    </div>
+                  )}
                   <div className="relative space-y-2.5">
                     {f.points.map((p, j) => (
                       <div key={p} className="flex items-center gap-2.5 rounded-xl bg-white/[0.04] border border-white/[0.07] px-3.5 py-2.5">
@@ -405,7 +437,7 @@ export default function Landing() {
           <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">قصص تفوق من طلاب المنصة</h2>
 
           <div className="mx-auto max-w-6xl grid sm:grid-cols-3 gap-6">
-            {TOP_STUDENTS.map((s, i) => (
+            {(showMore ? [...TOP_STUDENTS, ...MORE_STUDENTS] : TOP_STUDENTS).map((s, i) => (
               <div
                 key={s.name}
                 className="rv group rounded-[2rem] overflow-hidden border border-white/10 bg-[#141f36] shadow-2xl transition-all duration-300 hover:-translate-y-2"
@@ -433,7 +465,14 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => setShowMore(!showMore)}
+              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/85 font-bold text-sm px-8 py-3 rounded-full transition-all"
+            >
+              {showMore ? "عرض أقل" : "اعرض المزيد من القصص"}
+              <Icon name="down" size={14} className={`transition-transform ${showMore ? "rotate-180" : ""}`} />
+            </button>
             <Link
               href="/login"
               className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-sm px-8 py-3 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#1d72fe]/30"
@@ -558,7 +597,17 @@ export default function Landing() {
       </footer>
 
       {/* ===================== زر المحادثة الحية العائم (Floating Chat) ===================== */}
-      <div className="fixed bottom-6 left-6 z-40">
+      <div className="fixed bottom-6 left-6 z-40 flex flex-col items-center gap-3">
+        {/* زر واتساب العائم */}
+        <a
+          href="https://wa.me/96500000000"
+          target="_blank"
+          rel="noreferrer"
+          className="w-14 h-14 rounded-full bg-[#22c55e] hover:bg-[#16a34a] text-white flex items-center justify-center shadow-2xl shadow-[#22c55e]/50 hover:scale-110 active:scale-95 transition-all"
+          aria-label="تواصل معنا واتساب"
+        >
+          <Icon name="wa" size={26} />
+        </a>
         <button
           onClick={() => setChatOpen(!chatOpen)}
           className="w-14 h-14 rounded-full bg-[#1d72fe] hover:bg-[#1560e0] text-white flex items-center justify-center shadow-2xl shadow-[#1d72fe]/50 hover:scale-110 active:scale-95 transition-all"

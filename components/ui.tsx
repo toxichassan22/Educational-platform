@@ -149,7 +149,7 @@ export function Logo({ size = 36, light }: { size?: number; light?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <div className="relative flex items-center justify-center font-black text-white shadow-lg shadow-primary-500/30"
-        style={{ width: size, height: size, borderRadius: size * 0.32, background: "#0e7490", fontSize: size * 0.5 }}>
+        style={{ width: size, height: size, borderRadius: size * 0.32, background: "#1d72fe", fontSize: size * 0.5 }}>
         ت
         <div className="absolute -top-1 -left-1 rounded-full bg-gold-400" style={{ width: size * 0.28, height: size * 0.28, opacity: .9 }} />
       </div>

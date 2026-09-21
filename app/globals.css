@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* العلامة: teal-cyan نابض */
-  --color-primary-50: #ecfeff;
-  --color-primary-100: #cffafe;
-  --color-primary-200: #a5f3fc;
-  --color-primary-300: #67e8f9;
-  --color-primary-400: #22d3ee;
-  --color-primary-500: #06b6d4;
-  --color-primary-600: #0891b2;
-  --color-primary-700: #0e7490;
-  --color-primary-800: #155e75;
-  --color-primary-900: #164e63;
-  --color-primary-950: #083344;
+  /* الأزرق الكهربائي للعلامة */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #1d72fe;
+  --color-primary-600: #1560e0;
+  --color-primary-700: #0e4ec2;
+  --color-primary-800: #113d94;
+  --color-primary-900: #0f2e6f;
+  --color-primary-950: #081a3e;
 
   /* ذهبي */
   --color-gold-300: #fcd34d;
@@ -20,10 +20,14 @@
   --color-gold-500: #f59e0b;
   --color-gold-600: #d97706;
 
-  /* كحلي عميق للخلفيات الغامقة */
-  --color-night-800: #101c3a;
-  --color-night-900: #0a1229;
-  --color-night-950: #060b1d;
+  /* الكحلي العميق */
+  --color-night-800: #0f172a;
+  --color-night-900: #0b111e;
+  --color-night-950: #080e1a;
+
+  /* بنفسجي قسم قصص التفوق */
+  --color-purple-uula: #3b0764;
+  --color-purple-uula-dark: #24053e;
 
   --font-sans: "Alexandria", "Segoe UI", Tahoma, Arial, sans-serif;
 }
@@ -149,7 +153,7 @@ body {
   box-shadow: 0 16px 40px -12px rgba(8,51,68,.22);
 }
 
-/* ===== لاندنج بأسلوب UULA — حركات جديدة ===== */
+/* ===== حركات صفحة الهبوط ===== */
 
 /* ظهور عند التمرير */
 .rv {

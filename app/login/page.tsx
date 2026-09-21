@@ -83,7 +83,7 @@ export default function LoginPage() {
               )}
               {err && <div className="text-xs font-bold text-rose-300 bg-rose-500/15 border border-rose-400/30 rounded-xl px-3.5 py-2.5">{err}</div>}
               <button type="submit"
-                className="w-full py-3.5 rounded-2xl font-black text-night-950 bg-gold-500 hover:bg-gold-600 transition-colors active:scale-[.98]">
+                className="w-full py-3.5 rounded-full font-black text-white bg-[#1d72fe] hover:bg-[#1560e0] shadow-lg shadow-[#1d72fe]/30 transition-all active:scale-[.98]">
                 {mode === "login" ? "دخول" : "إنشاء الحساب"}
               </button>
             </form>

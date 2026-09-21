@@ -34,10 +34,10 @@ export const STAGE_THEMES: Record<string, StageTheme> = {
     tagline: "تحدى نفسك واصعد للقمة",
     radius: "rounded-[1.75rem]",
   },
-  // ثانوي: كحلي داكن + ذهبي — نخبة ورصانة (أسلوب UULA)
+  // ثانوي: كحلي داكن + أزرق كهربائي — نخبة ورصانة
   high: {
-    color: "#0b1424",
-    accent: "#f59e0b",
+    color: "#0b111e",
+    accent: "#1d72fe",
     icon: "trophy",
     title: "صفوف النخبة",
     tagline: "المرحلة الحاسمة — مستقبلك يبدأ هنا",

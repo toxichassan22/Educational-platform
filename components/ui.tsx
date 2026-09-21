@@ -50,10 +50,10 @@ const PATHS: Record<string, React.ReactNode> = {
   send: <><path d="M22 2L11 13" /><path d="M22 2l-7 20-4-9-9-4 20-7z" /></>,
 };
 
-export function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
+export function Icon({ name, size = 20, className = "", filled }: { name: string; size?: number; className?: string; filled?: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg viewBox="0 0 24 24" width={size} height={size} fill={filled ? "currentColor" : "none"}
+      stroke={filled ? "none" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       {PATHS[name] ?? PATHS.book}
     </svg>
   );

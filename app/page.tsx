@@ -24,11 +24,11 @@ const STEPS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "أم عبدالله", role: "ولية أمر — الكويت", icon: "users", color: "#6d28d9",
+  { name: "أم عبدالله", role: "ولية أمر — الكويت", initial: "ع", color: "#6d28d9",
     text: "أخيرًا أعرف مستوى ولدي أول بأول — التقارير واضحة، والإشعارات توصلني بنتيجة كل اختبار لحظتها." },
-  { name: "أحمد — صف عاشر", role: "طالب ثانوية", icon: "gamepad", color: "#0891b2",
+  { name: "أحمد — صف عاشر", role: "طالب ثانوية", initial: "أ", color: "#0891b2",
     text: "الاختبارات الموقوتة ورّتني وين أضعف بالضبط، والستريك اليومي خلّى المذاكرة عادة ما أقدر أوقفها." },
-  { name: "أ. فيصل العنزي", role: "معلم رياضيات", icon: "book", color: "#059669",
+  { name: "أ. فيصل العنزي", role: "معلم رياضيات", initial: "ف", color: "#059669",
     text: "المنصة نظمت المنهج بشكل يوفر عليّ ساعات — الطالب يلقى الفيديو والمذكرة والاختبار في مكان واحد." },
 ];
 
@@ -137,10 +137,16 @@ export default function Landing() {
         </div>
 
         {/* شريط المواد المتحرك */}
-        <div className="relative border-t border-white/8 bg-night-900/60 overflow-hidden py-4" dir="ltr">
-          <div className="flex gap-3 animate-ticker w-max" style={{ direction: "ltr" }}>
-            {[...TICKER, ...TICKER, ...TICKER, ...TICKER].map((s, i) => (
-              <span key={i} className="glass text-white/70 text-xs font-bold px-5 py-2 rounded-full whitespace-nowrap">{s}</span>
+        <div className="relative border-t border-white/8 bg-night-900/60 overflow-hidden py-4 ticker-mask" dir="ltr">
+          <div className="flex animate-ticker w-max" style={{ direction: "ltr" }}>
+            {[0, 1, 2, 3].map((k) => (
+              <div key={k} className="flex items-center gap-10 pl-10">
+                {TICKER.map((s) => (
+                  <span key={s} className="glass text-white/70 text-sm font-bold px-7 py-2.5 rounded-full whitespace-nowrap flex items-center gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-400/70 shrink-0" />{s}
+                  </span>
+                ))}
+              </div>
             ))}
           </div>
         </div>
@@ -249,12 +255,12 @@ export default function Landing() {
             {TESTIMONIALS.map((t, i) => (
               <div key={t.name} className="glass rounded-3xl p-6 animate-fade-up" style={{ animationDelay: `${i * 90}ms` }}>
                 <div className="flex gap-1 mb-4 text-gold-400">
-                  {[0, 1, 2, 3, 4].map((s) => <Icon key={s} name="star" size={15} />)}
+                  {[0, 1, 2, 3, 4].map((s) => <Icon key={s} name="star" size={16} filled />)}
                 </div>
                 <p className="text-white/80 text-sm leading-relaxed mb-6">"{t.text}"</p>
                 <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: t.color }}>
-                    <Icon name={t.icon} size={19} />
+                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black text-lg shrink-0" style={{ background: t.color }}>
+                    {t.initial}
                   </div>
                   <div>
                     <div className="font-black text-white text-sm">{t.name}</div>

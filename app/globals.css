@@ -87,6 +87,12 @@ body {
 }
 .animate-ticker { animation: tickerMove 36s linear infinite; }
 
+/* تلاشي أطراف شريط المواد */
+.ticker-mask {
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+
 /* ===== أدوات ===== */
 .text-gradient {
   background: linear-gradient(90deg, #67e8f9, #fbbf24);

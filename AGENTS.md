@@ -34,7 +34,13 @@ Proof-of-concept لمنصة تعليمية كويتية (منافس لـ UULA / 
 - كل الصفحات الداخلية محمية بـ `components/AppShell.tsx` حسب الدور.
 - `me` تكون `null` أثناء SSR — أي صفحة تستخدم بيانات المستخدم لازم تحرس بـ `if (!me) return <AppShell/>`.
 - في Next 16: `use(params)` يرجّع الـ segment **مشفرًا** (URL-encoded) — الـ IDs العربية تحتاج `decodeURIComponent(id)` قبل البحث في `db`.
-- حماية المحتوى: `canAccessLesson(db, userId, lesson)` — الدرس مجاني (`l.free`) أو يتطلب اشتراكًا نشطًا. المقفول يعرض Paywall في صفحتي الدرس والاختبار.
+- حماية المحتوى: `canAccessLesson(db, userId, lesson)` — الدرس مجاني (`l.free`) أو ضمن نطاق الاشتراك. باقة `scope: "subject"` تفتح `sub.subjectId` فقط (يختارها الطالب/ولي الأمر وقت الدفع). المقفول يعرض Paywall في صفحتي الدرس والاختبار.
+- `store.login` يرجّع `boolean` — `false` لو الحساب موقوف (`u.active === false`).
+- الأدمن: `addUnit` يضيف وحدة لأي مادة، و`addSubject` ينشئ «الوحدة الأولى» تلقائيًا عشان يقدر يضيف دروسًا فورًا.
+- ولي الأمر يدفع لأبنائه من كارت الابن (PayModal في `app/parent/page.tsx`) — نفس `subscribe()`.
+- مزامنة لحظية بين التابات: `storage` event في StoreProvider يعيد تحميل `db` — تعديلات الأدمن تظهر للطالب في تاب تاني فورًا.
+- بحث المنهج في `app/student/browse` — يطابق عنوان الدرس/الوحدة/المادة/المعلم.
+- طباعة المذكرة: `.print-area` وحدها تظهر في `@media print` (globals.css) + هيدر `hidden print:block`.
 - الإشعارات تتولّد ديناميكيًا من `db` عبر `buildNotifs` في `components/NotifBell.tsx` (نتائج، مدفوعات، انتهاء اشتراكات) — لا تُخزَّن، تُحسب عند العرض.
 - كود خصم تجريبي للدفع: `KUWAIT20` و `AHLAN10`.
 - الهوية البصرية: teal `#0f3d56/#16658a` + ذهبي `#f59e0b` — خط Tajawal، RTL.

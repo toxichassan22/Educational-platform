@@ -6,7 +6,7 @@ import { Card, Icon, Btn, Modal, Badge } from "@/components/ui";
 import { unitsOfSubject, lessonsOfUnit, questionsOfLesson } from "@/lib/data";
 
 export default function CurriculumTab() {
-  const { db, addSubject, deleteSubject, addLesson, deleteLesson } = useStore();
+  const { db, addSubject, deleteSubject, addUnit, addLesson, deleteLesson } = useStore();
   const [stageId, setStageId] = useState("high");
   const [gradeId, setGradeId] = useState("g10");
   const [subjectId, setSubjectId] = useState<string | null>(null);
@@ -14,6 +14,8 @@ export default function CurriculumTab() {
   const [addSubOpen, setAddSubOpen] = useState(false);
   const [subName, setSubName] = useState("");
   const [subTeacher, setSubTeacher] = useState("");
+  const [addUnitOpen, setAddUnitOpen] = useState(false);
+  const [unitTitle, setUnitTitle] = useState("");
   const [addLessonOpen, setAddLessonOpen] = useState<string | null>(null);
   const [lessonTitle, setLessonTitle] = useState("");
   const [lessonDur, setLessonDur] = useState(10);
@@ -84,10 +86,13 @@ export default function CurriculumTab() {
             </div>
           ) : (
             <>
-              <h3 className="font-extrabold text-primary-900 text-sm mb-4 flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${subject.color}15`, color: subject.color }}><Icon name={subject.icon} size={14} /></span>
-                محتوى «{subject.name}»
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-extrabold text-primary-900 text-sm flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${subject.color}15`, color: subject.color }}><Icon name={subject.icon} size={14} /></span>
+                  محتوى «{subject.name}»
+                </h3>
+                <Btn className="!py-1.5 !px-3 text-xs" onClick={() => setAddUnitOpen(true)}><Icon name="plus" size={13} /> وحدة</Btn>
+              </div>
               <div className="space-y-3">
                 {units.map((u) => (
                   <div key={u.id} className="border border-slate-100 rounded-xl overflow-hidden">
@@ -133,6 +138,23 @@ export default function CurriculumTab() {
           </div>
           <Btn className="w-full" onClick={() => { if (subName.trim()) { addSubject(gradeId, subName.trim(), subTeacher.trim() || "فريق المنصة"); setSubName(""); setSubTeacher(""); setAddSubOpen(false); } }}>
             إضافة المادة
+          </Btn>
+        </div>
+      </Modal>
+
+      {/* إضافة وحدة */}
+      <Modal open={addUnitOpen} onClose={() => setAddUnitOpen(false)} title="إضافة وحدة جديدة">
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs font-bold text-slate-500 block mb-1">اسم الوحدة</label>
+            <input value={unitTitle} onChange={(e) => setUnitTitle(e.target.value)} placeholder="مثال: التفاضل والتكامل"
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400" />
+          </div>
+          <div className="text-xs text-slate-400 bg-slate-50 rounded-lg p-2">
+            ستُضاف إلى: <b>{subject?.name}</b> — وتظهر للطالب فورًا ويمكنك إضافة دروسها مباشرة.
+          </div>
+          <Btn className="w-full" onClick={() => { if (unitTitle.trim() && subject) { addUnit(subject.id, unitTitle.trim()); setUnitTitle(""); setAddUnitOpen(false); } }}>
+            إضافة الوحدة
           </Btn>
         </div>
       </Modal>

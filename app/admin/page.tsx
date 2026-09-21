@@ -33,6 +33,19 @@ export default function AdminPage() {
   const revenue = db.payments.filter((p) => p.status === "success").reduce((t, p) => t + p.amountKwd, 0);
   const avgScore = db.attempts.length ? Math.round(db.attempts.reduce((t, a) => t + a.score / a.total, 0) / db.attempts.length * 100) : 0;
 
+  // إيرادات ونشاط آخر ١٤ يوم
+  const last14 = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(Date.now() - (13 - i) * 86400000).toISOString().slice(0, 10);
+    return {
+      d,
+      rev: db.payments.filter((p) => p.date === d && p.status === "success").reduce((t, p) => t + p.amountKwd, 0),
+      att: db.attempts.filter((a) => a.date === d).length,
+    };
+  });
+  const maxRev = Math.max(...last14.map((x) => x.rev), 1);
+  const rev14 = last14.reduce((t, x) => t + x.rev, 0);
+  const att14 = last14.reduce((t, x) => t + x.att, 0);
+
   return (
     <AppShell role="admin">
       <div className="space-y-6 animate-fade-up">
@@ -102,6 +115,39 @@ export default function AdminPage() {
                 </div>
               </Card>
             </div>
+
+            {/* رسم الإيرادات — آخر ١٤ يوم */}
+            <Card className="p-5 border border-slate-100">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
+                <h3 className="font-extrabold text-primary-900 text-sm flex items-center gap-2">
+                  <Icon name="chart" size={16} className="text-primary-600" /> الإيرادات — آخر ١٤ يومًا
+                </h3>
+                <div className="flex items-center gap-2">
+                  <Badge tone="green">{rev14.toFixed(1)} د.ك</Badge>
+                  <Badge tone="blue">{att14} اختبارًا</Badge>
+                </div>
+              </div>
+              <div className="flex items-end gap-1.5 h-36" dir="ltr">
+                {last14.map((x, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1.5 group relative">
+                    {/* تلميح */}
+                    <div className="absolute -top-12 right-1/2 translate-x-1/2 bg-night-900 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                      {x.rev.toFixed(1)} د.ك · {x.att} اختبار · {x.d.slice(5)}
+                    </div>
+                    <div className="w-full flex flex-col justify-end h-28">
+                      <div className={`w-full rounded-t-lg transition-all ${x.rev > 0 ? "bg-primary-600 group-hover:bg-primary-500" : "bg-slate-100"}`}
+                        style={{ height: `${Math.max(x.rev > 0 ? 8 : 3, (x.rev / maxRev) * 100)}%` }} />
+                    </div>
+                    {x.att > 0 && <div className="w-1.5 h-1.5 rounded-full bg-gold-500" title={`${x.att} اختبار`} />}
+                    <div className="text-[8px] text-slate-300 font-bold">{i % 2 === 0 ? x.d.slice(8) : ""}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 text-[10px] font-bold text-slate-400">
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-primary-600" /> إيراد اليوم</span>
+                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-gold-500" /> اختبارات أُديت</span>
+              </div>
+            </Card>
           </div>
         )}
 

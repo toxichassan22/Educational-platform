@@ -4,14 +4,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
-import { Icon } from "@/components/ui";
-import { unitsOfSubject, lessonsOfUnit, subjectOfLesson, attemptsOfUser } from "@/lib/data";
+import { Icon, Badge } from "@/components/ui";
+import { unitsOfSubject, lessonsOfUnit, subjectOfLesson, unitById, subjectById, gradeOf, attemptsOfUser } from "@/lib/data";
 import { stageTheme } from "@/lib/theme";
 
 export default function Browse() {
   const { db, me } = useStore();
   // الافتراضي = مرحلة الطالب وصفه — يتحدد بعد تحميل الحساب، والاختيار اليدوي يغلّبه
   const [picked, setPicked] = useState<{ stage?: string; grade?: string }>({});
+  const [query, setQuery] = useState("");
   const myGrade = me ? db.grades.find((g) => g.id === me.gradeId) : undefined;
   const stageId = picked.stage ?? myGrade?.stageId ?? "high";
   const gradeId = picked.grade ?? myGrade?.id ?? db.grades.find((g) => g.stageId === stageId)!.id;
@@ -20,6 +21,17 @@ export default function Browse() {
   const subjects = db.subjects.filter((s) => s.gradeId === gradeId);
   const myAttempts = me ? attemptsOfUser(db, me.id) : [];
 
+  // بحث شامل في كل المنهج: عنوان الدرس / الوحدة / المادة / المعلم
+  const q = query.trim();
+  const searchResults = q.length >= 2
+    ? db.lessons.filter((l) => {
+        const u = unitById(db, l.unitId);
+        const s = u && subjectById(db, u.subjectId);
+        return l.title.includes(q) || u?.title.includes(q) || s?.name.includes(q) || s?.teacher.includes(q);
+      }).slice(0, 30)
+    : [];
+  const searching = q.length >= 2;
+
   return (
     <AppShell role="student">
       <div className="space-y-6 animate-fade-up">
@@ -27,6 +39,59 @@ export default function Browse() {
           <h1 className="text-2xl font-black text-primary-950">تصفح المنهج</h1>
           <p className="text-slate-400 text-sm">منهج الكويت كامل — المرحلة ← الصف ← المادة ← الدروس</p>
         </div>
+
+        {/* البحث */}
+        <div className="relative">
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300"><Icon name="target" size={17} /></span>
+          <input value={query} onChange={(e) => setQuery(e.target.value)}
+            placeholder="ابحث عن درس أو مادة أو معلم… (مثال: نيوتن، النحو، العتيبي)"
+            className="w-full bg-white border border-slate-200 rounded-2xl pr-11 pl-4 py-3.5 text-sm outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100 transition-all shadow-sm" />
+          {query && (
+            <button onClick={() => setQuery("")} className="absolute left-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-200">
+              <Icon name="x" size={13} />
+            </button>
+          )}
+        </div>
+
+        {searching ? (
+          /* ===== نتائج البحث ===== */
+          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50/60 text-xs font-bold text-slate-500">
+              {searchResults.length} نتيجة لـ «{q}»
+            </div>
+            {searchResults.length === 0 && (
+              <div className="p-10 text-center text-slate-400 text-sm">
+                <Icon name="target" size={36} className="mx-auto mb-3 text-slate-200" />
+                لا توجد نتائج — جرّب كلمة ثانية
+              </div>
+            )}
+            <div className="divide-y divide-slate-50">
+              {searchResults.map((l) => {
+                const u = unitById(db, l.unitId);
+                const s = u && subjectById(db, u.subjectId);
+                const g = s && gradeOf(db, s.gradeId);
+                const done = myAttempts.some((a) => a.lessonId === l.id);
+                return (
+                  <Link key={l.id} href={`/student/lesson/${l.id}`} className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-slate-50/70 transition-colors group">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${s?.color ?? "#64748b"}14`, color: s?.color ?? "#64748b" }}>
+                      <Icon name="play" size={16} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold text-primary-950 flex items-center gap-2 flex-wrap">
+                        {l.title}
+                        {l.free && <span className="text-[10px] font-black bg-gold-400/15 text-gold-600 px-2 py-0.5 rounded-full">مجاني</span>}
+                        {done && <Badge tone="green">مُنجز</Badge>}
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">{s?.name} · {u?.title} · {g?.name} · {l.durationMin} دقيقة</div>
+                    </div>
+                    <Icon name="back" size={15} className="text-slate-300 group-hover:text-primary-500 rotate-180 shrink-0" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+        <>
 
         {/* المراحل — لكل مرحلة شخصيتها البصرية */}
         <div className="grid grid-cols-3 gap-3">
@@ -104,6 +169,8 @@ export default function Browse() {
             <Icon name="grid" size={40} className="mx-auto mb-3 text-slate-200" />
             لا توجد مواد لهذا الصف بعد
           </div>
+        )}
+        </>
         )}
       </div>
     </AppShell>

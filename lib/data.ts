@@ -28,6 +28,8 @@ export interface Package {
 }
 export interface Subscription {
   id: string; userId: string; packageId: string;
+  /** لباقة المادة فقط: المادة المفتوحة — غير محدد = يفتح الكل (بيانات قديمة) */
+  subjectId?: string;
   startDate: string; endDate: string; status: "active" | "expired";
 }
 export interface Payment {
@@ -367,9 +369,17 @@ export function attemptsOfUser(db: DB, userId: string) {
 export function activeSub(db: DB, userId: string) {
   return db.subscriptions.find((s) => s.userId === userId && s.status === "active");
 }
-/** حماية المحتوى: الدرس متاح لو مجاني أو المستخدم مشترك */
+/** حماية المحتوى: الدرس متاح لو مجاني أو ضمن نطاق اشتراك المستخدم */
 export function canAccessLesson(db: DB, userId: string | undefined, lesson: Lesson) {
-  return !!lesson.free || (!!userId && !!activeSub(db, userId));
+  if (lesson.free) return true;
+  if (!userId) return false;
+  const sub = activeSub(db, userId);
+  if (!sub) return false;
+  const pkg = packageById(db, sub.packageId);
+  if (pkg?.scope === "subject" && sub.subjectId) {
+    return subjectOfLesson(db, lesson.id)?.id === sub.subjectId;
+  }
+  return true;
 }
 export function packageById(db: DB, id: string) {
   return db.packages.find((p) => p.id === id);

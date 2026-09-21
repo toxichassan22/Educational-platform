@@ -36,6 +36,7 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
   };
 
   const start = () => {
+    if (!questions.length) return;
     setAnswers(new Array(questions.length).fill(null));
     setCurrent(0);
     setSecondsLeft(totalSec);
@@ -122,10 +123,16 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
               </div>
 
               <div className="flex gap-3 justify-center">
-                <button onClick={start}
-                  className="bg-gold-500 hover:bg-gold-600 text-night-950 px-10 py-3.5 rounded-2xl font-black transition-colors active:scale-95 flex items-center gap-2">
-                  <Icon name="bolt" size={18} /> ابدأ الاختبار
-                </button>
+                {questions.length > 0 ? (
+                  <button onClick={start}
+                    className="bg-gold-500 hover:bg-gold-600 text-night-950 px-10 py-3.5 rounded-2xl font-black transition-colors active:scale-95 flex items-center gap-2">
+                    <Icon name="bolt" size={18} /> ابدأ الاختبار
+                  </button>
+                ) : (
+                  <div className="bg-white/[.07] border border-white/10 rounded-2xl px-6 py-3.5 text-sm font-bold text-white/60">
+                    لا توجد أسئلة لهذا الدرس بعد — راجع المذكرة حاليًا
+                  </div>
+                )}
                 <Link href={`/student/lesson/${lessonId}`}
                   className="border border-white/20 text-white px-6 py-3.5 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">
                   رجوع للدرس

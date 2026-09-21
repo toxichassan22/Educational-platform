@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
 import { Card, Icon, Badge, Btn, Modal } from "@/components/ui";
-import { activeSub, packageById, Package } from "@/lib/data";
+import { activeSub, packageById, subjectsOfGrade, subjectById, Package } from "@/lib/data";
 
 type Step = "choose" | "pay" | "processing" | "done";
 
@@ -17,10 +17,13 @@ export default function Subscription() {
   const [code, setCode] = useState("");
   const [applied, setApplied] = useState<{ code: string; pct: number } | null>(null);
   const [codeErr, setCodeErr] = useState("");
+  const [subjPick, setSubjPick] = useState("");
 
   if (!me) return <AppShell role="student">{null}</AppShell>;
   const sub = activeSub(db, me.id);
   const currentPkg = sub ? packageById(db, sub.packageId) : null;
+  const subSubject = sub?.subjectId ? subjectById(db, sub.subjectId) : null;
+  const mySubjects = subjectsOfGrade(db, me.gradeId);
   const myPayments = db.payments.filter((p) => p.userId === me.id);
 
   const applyCode = () => {
@@ -34,7 +37,7 @@ export default function Subscription() {
   const pay = () => {
     setStep("processing");
     setTimeout(() => {
-      subscribe(me.id, sel!.id, method, Number(finalPrice.toFixed(2)));
+      subscribe(me.id, sel!.id, method, Number(finalPrice.toFixed(2)), sel!.scope === "subject" ? subjPick : undefined);
       setStep("done");
     }, 1800);
   };
@@ -59,7 +62,10 @@ export default function Subscription() {
                 </div>
                 <div>
                   <div className="font-extrabold text-primary-900">{currentPkg.name} <Badge tone="green">نشط</Badge></div>
-                  <div className="text-xs text-slate-500 mt-1">من {sub.startDate} إلى {sub.endDate} · متبقّي {daysLeft} يومًا</div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    من {sub.startDate} إلى {sub.endDate} · متبقّي {daysLeft} يومًا
+                    {subSubject && <> · يفتح مادة <b className="text-primary-700">{subSubject.name}</b> فقط</>}
+                  </div>
                 </div>
               </div>
               <div className="text-left">
@@ -92,7 +98,7 @@ export default function Subscription() {
                   ))}
                 </ul>
                 <Btn variant={isCurrent ? "outline" : p.popular ? "gold" : "primary"} className="w-full" disabled={isCurrent}
-                  onClick={() => { setSel(p); setStep("choose"); setApplied(null); setCode(""); }}>
+                  onClick={() => { setSel(p); setStep("choose"); setApplied(null); setCode(""); setSubjPick(""); }}>
                   {isCurrent ? "باقتك الحالية" : "اشترك"}
                 </Btn>
               </div>
@@ -136,6 +142,25 @@ export default function Subscription() {
               <div className="text-xl font-extrabold text-primary-800">{sel.priceKwd} د.ك</div>
             </div>
 
+            {/* باقة المادة: الطالب يختار مادة واحدة تُفتح له */}
+            {sel.scope === "subject" && (
+              <div>
+                <label className="text-xs font-bold text-slate-500 block mb-1.5">اختر المادة اللي تفتحها</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {mySubjects.map((s) => (
+                    <button key={s.id} type="button" onClick={() => setSubjPick(s.id)}
+                      className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-sm font-bold transition-all ${subjPick === s.id ? "border-primary-500 bg-primary-50 text-primary-800" : "border-slate-200 text-slate-500 hover:border-primary-200"}`}>
+                      <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${s.color}15`, color: s.color }}>
+                        <Icon name={s.icon} size={14} />
+                      </span>
+                      <span className="truncate">{s.name}</span>
+                    </button>
+                  ))}
+                </div>
+                {!subjPick && <div className="text-[11px] text-amber-600 mt-1.5 font-bold">اختر مادة واحدة — باقي المواد تفضل مقفولة</div>}
+              </div>
+            )}
+
             {/* كود الخصم */}
             <div>
               <label className="text-xs font-bold text-slate-500 block mb-1.5">كود الخصم (جرّب KUWAIT20)</label>
@@ -167,7 +192,7 @@ export default function Subscription() {
               <div className="flex justify-between font-extrabold text-primary-900 text-base pt-1"><span>الإجمالي</span><span>{finalPrice.toFixed(2)} د.ك</span></div>
             </div>
 
-            <Btn variant="gold" className="w-full !py-3" onClick={() => setStep("pay")}>متابعة للدفع</Btn>
+            <Btn variant="gold" className="w-full !py-3" disabled={sel.scope === "subject" && !subjPick} onClick={() => setStep("pay")}>متابعة للدفع</Btn>
             <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1">
               <Icon name="lock" size={11} /> دفع آمن ومشفر — بيئة تجريبية (Sandbox)
             </p>

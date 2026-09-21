@@ -3,13 +3,14 @@
 import React, { useState } from "react";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
-import { Card, Icon, Progress, Badge } from "@/components/ui";
-import { gradeOf, stageOfGrade, attemptsOfUser, subjectOfLesson, lessonById, activeSub, packageById, subjectsOfGrade, User } from "@/lib/data";
+import { Card, Icon, Progress, Badge, Btn, Modal } from "@/components/ui";
+import { gradeOf, stageOfGrade, attemptsOfUser, subjectOfLesson, lessonById, activeSub, packageById, subjectsOfGrade, subjectById, User } from "@/lib/data";
 import { buildNotifs, whenLabel } from "@/components/NotifBell";
 
 function ChildCard({ child, defaultOpen }: { child: User; defaultOpen: boolean }) {
   const { db } = useStore();
   const [expanded, setExpanded] = useState(defaultOpen);
+  const [payOpen, setPayOpen] = useState(false);
   const grade = gradeOf(db, child.gradeId);
   const stage = stageOfGrade(db, child.gradeId);
   const attempts = attemptsOfUser(db, child.id);
@@ -29,27 +30,57 @@ function ChildCard({ child, defaultOpen }: { child: User; defaultOpen: boolean }
 
   return (
     <Card className="overflow-hidden border border-slate-100">
-      <button onClick={() => setExpanded((e) => !e)} className="w-full p-5 flex items-center gap-4 hover:bg-slate-50/60 transition-colors">
-        <div className="w-14 h-14 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center font-extrabold text-xl">
-          {child.name[0]}
-        </div>
-        <div className="flex-1 text-right">
-          <div className="font-extrabold text-primary-900 flex items-center gap-2">
-            {child.name}
-            {pkg ? <Badge tone="green">{pkg.name}</Badge> : <Badge tone="gray">بدون اشتراك</Badge>}
+      <div className="w-full p-5 flex items-center gap-3">
+        <button onClick={() => setExpanded((e) => !e)} className="flex-1 min-w-0 flex items-center gap-4 text-right hover:bg-slate-50/60 rounded-2xl transition-colors -m-2 p-2">
+          <div className="w-14 h-14 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center font-extrabold text-xl shrink-0">
+            {child.name[0]}
           </div>
-          <div className="text-xs text-slate-400 mt-0.5">{grade?.name} · {stage?.name}</div>
-        </div>
-        <div className="hidden sm:grid grid-cols-3 gap-6 text-center">
-          <div><div className="text-xl font-extrabold text-primary-800">{avg}%</div><div className="text-[10px] text-slate-400">المعدل</div></div>
-          <div><div className="text-xl font-extrabold text-primary-800">{attempts.length}</div><div className="text-[10px] text-slate-400">اختبارًا</div></div>
-          <div><div className="text-xl font-extrabold text-primary-800">{Math.round(studyMin)}</div><div className="text-[10px] text-slate-400">دقيقة دراسة</div></div>
-        </div>
-        <Icon name="down" size={18} className={`text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} />
-      </button>
+          <div className="flex-1 text-right min-w-0">
+            <div className="font-extrabold text-primary-900 flex items-center gap-2 flex-wrap">
+              {child.name}
+              {pkg ? <Badge tone="green">{pkg.name}</Badge> : <Badge tone="gray">بدون اشتراك</Badge>}
+            </div>
+            <div className="text-xs text-slate-400 mt-0.5">{grade?.name} · {stage?.name}</div>
+          </div>
+          <div className="hidden sm:grid grid-cols-3 gap-6 text-center shrink-0">
+            <div><div className="text-xl font-extrabold text-primary-800">{avg}%</div><div className="text-[10px] text-slate-400">المعدل</div></div>
+            <div><div className="text-xl font-extrabold text-primary-800">{attempts.length}</div><div className="text-[10px] text-slate-400">اختبارًا</div></div>
+            <div><div className="text-xl font-extrabold text-primary-800">{Math.round(studyMin)}</div><div className="text-[10px] text-slate-400">دقيقة دراسة</div></div>
+          </div>
+        </button>
+        {!pkg && (
+          <button onClick={() => setPayOpen(true)}
+            className="shrink-0 bg-gold-500 hover:bg-gold-600 text-night-950 text-xs font-black px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-colors shadow-lg shadow-gold-500/25">
+            <Icon name="gem" size={14} /> اشترك الآن
+          </button>
+        )}
+        <button onClick={() => setExpanded((e) => !e)} className="p-2 shrink-0">
+          <Icon name="down" size={18} className={`text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} />
+        </button>
+      </div>
 
       {expanded && (
         <div className="border-t border-slate-100 p-5 grid md:grid-cols-2 gap-5 animate-fade-up">
+          {/* حالة الاشتراك */}
+          <div className="md:col-span-2 flex flex-wrap items-center justify-between gap-3 bg-slate-50 rounded-2xl px-4 py-3">
+            <div className="flex items-center gap-2.5 text-sm">
+              <span className={`w-9 h-9 rounded-xl flex items-center justify-center ${pkg ? "bg-emerald-100 text-emerald-600" : "bg-slate-200 text-slate-400"}`}>
+                <Icon name="gem" size={16} />
+              </span>
+              {pkg ? (
+                <span className="text-slate-600">مشترك في <b className="text-primary-900">{pkg.name}</b>
+                  {sub?.subjectId && subjectById(db, sub.subjectId) ? ` — مادة ${subjectById(db, sub.subjectId)!.name}` : ""}
+                  <span className="text-slate-400 text-xs"> · ينتهي {sub?.endDate}</span>
+                </span>
+              ) : (
+                <span className="text-slate-500">بدون اشتراك نشط — يشوف الدروس المجانية فقط</span>
+              )}
+            </div>
+            <Btn variant={pkg ? "outline" : "gold"} className="!py-2 text-xs" onClick={() => setPayOpen(true)}>
+              {pkg ? "ترقية / تجديد" : "اشترك لابنك"}
+            </Btn>
+          </div>
+
           {/* أداء المواد */}
           <div>
             <h4 className="font-extrabold text-sm text-primary-900 mb-3">الأداء حسب المادة</h4>
@@ -91,7 +122,146 @@ function ChildCard({ child, defaultOpen }: { child: User; defaultOpen: boolean }
           </div>
         </div>
       )}
+      <PayModal child={child} open={payOpen} onClose={() => setPayOpen(false)} />
     </Card>
+  );
+}
+
+// ===== مودال اشتراك الأبناء — ولي الأمر يدفع مباشرة =====
+function PayModal({ child, open, onClose }: { child: User; open: boolean; onClose: () => void }) {
+  const { db, subscribe } = useStore();
+  const [sel, setSel] = useState("");
+  const [method, setMethod] = useState<"KNET" | "Visa" | "Mastercard">("KNET");
+  const [code, setCode] = useState("");
+  const [applied, setApplied] = useState<{ code: string; pct: number } | null>(null);
+  const [codeErr, setCodeErr] = useState("");
+  const [subjPick, setSubjPick] = useState("");
+  const [step, setStep] = useState<"form" | "processing" | "done">("form");
+
+  const pkg = db.packages.find((p) => p.id === sel) ?? db.packages.find((p) => p.popular) ?? db.packages[0];
+  const gradeSubjects = subjectsOfGrade(db, child.gradeId);
+  const needSubject = pkg?.scope === "subject";
+  const finalPrice = pkg ? Math.max(0, pkg.priceKwd * (1 - (applied?.pct ?? 0) / 100)) : 0;
+
+  const applyCode = () => {
+    const found = db.discountCodes.find((c) => c.code === code.trim().toUpperCase());
+    if (found) { setApplied(found); setCodeErr(""); }
+    else { setApplied(null); setCodeErr("كود غير صحيح"); }
+  };
+
+  const pay = () => {
+    if (!pkg) return;
+    setStep("processing");
+    setTimeout(() => {
+      subscribe(child.id, pkg.id, method, Number(finalPrice.toFixed(2)), needSubject ? subjPick : undefined);
+      setStep("done");
+    }, 1600);
+  };
+
+  const close = () => {
+    onClose();
+    setTimeout(() => { setStep("form"); setApplied(null); setCode(""); setSubjPick(""); }, 250);
+  };
+
+  return (
+    <Modal open={open} onClose={close} title={`اشتراك لـ ${child.name.split(" ")[0]}`}>
+      {step === "form" && pkg && (
+        <div className="space-y-4">
+          {/* الباقات */}
+          <div className="space-y-2">
+            {db.packages.map((p) => (
+              <button key={p.id} onClick={() => { setSel(p.id); if (p.scope !== "subject") setSubjPick(""); }}
+                className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 text-right transition-all ${pkg.id === p.id ? "border-primary-500 bg-primary-50/60" : "border-slate-200 hover:border-primary-200"}`}>
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${pkg.id === p.id ? "border-primary-600 bg-primary-600" : "border-slate-300"}`}>
+                  {pkg.id === p.id && <Icon name="check" size={11} className="text-white" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-extrabold text-primary-900">{p.name} {p.popular && <Badge tone="amber">الأكثر اشتراكًا</Badge>}</div>
+                  <div className="text-[11px] text-slate-400">{p.scope === "subject" ? "مادة واحدة تختارها" : p.scope === "stage" ? "كل مواد المرحلة" : "كل المنصة"}</div>
+                </div>
+                <div className="font-black text-primary-800 shrink-0">{p.priceKwd} <span className="text-[10px] font-bold text-slate-400">د.ك/{p.period}</span></div>
+              </button>
+            ))}
+          </div>
+
+          {/* باقة المادة: اختيار المادة */}
+          {needSubject && (
+            <div>
+              <label className="text-xs font-bold text-slate-500 block mb-1.5">المادة اللي تنفتح لـ {child.name.split(" ")[0]}</label>
+              <div className="grid grid-cols-2 gap-2">
+                {gradeSubjects.map((s) => (
+                  <button key={s.id} onClick={() => setSubjPick(s.id)}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-sm font-bold transition-all ${subjPick === s.id ? "border-primary-500 bg-primary-50 text-primary-800" : "border-slate-200 text-slate-500 hover:border-primary-200"}`}>
+                    <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${s.color}15`, color: s.color }}>
+                      <Icon name={s.icon} size={14} />
+                    </span>
+                    <span className="truncate">{s.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* كود الخصم */}
+          <div>
+            <label className="text-xs font-bold text-slate-500 block mb-1.5">كود الخصم (جرّب KUWAIT20)</label>
+            <div className="flex gap-2">
+              <input value={code} onChange={(e) => setCode(e.target.value)} dir="ltr" placeholder="XXXX"
+                className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400 text-left" />
+              <Btn variant="outline" onClick={applyCode}>تطبيق</Btn>
+            </div>
+            {codeErr && <div className="text-xs text-red-500 mt-1">{codeErr}</div>}
+            {applied && <div className="text-xs text-emerald-600 mt-1 font-bold">تم تطبيق خصم {applied.pct}%</div>}
+          </div>
+
+          {/* طريقة الدفع */}
+          <div>
+            <label className="text-xs font-bold text-slate-500 block mb-1.5">طريقة الدفع</label>
+            <div className="grid grid-cols-3 gap-2">
+              {(["KNET", "Visa", "Mastercard"] as const).map((m) => (
+                <button key={m} onClick={() => setMethod(m)}
+                  className={`py-2.5 rounded-xl border-2 font-extrabold text-sm transition-all ${method === m ? "border-primary-500 bg-primary-50 text-primary-700" : "border-slate-200 text-slate-500"}`}>
+                  {m}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-slate-100 pt-3 space-y-1.5 text-sm">
+            <div className="flex justify-between text-slate-500"><span>{pkg.name}</span><span>{pkg.priceKwd} د.ك</span></div>
+            {applied && <div className="flex justify-between text-emerald-600"><span>خصم {applied.pct}%</span><span>-{(pkg.priceKwd * applied.pct / 100).toFixed(2)} د.ك</span></div>}
+            <div className="flex justify-between font-extrabold text-primary-900 text-base pt-1"><span>الإجمالي</span><span>{finalPrice.toFixed(2)} د.ك</span></div>
+          </div>
+
+          <Btn variant="gold" className="w-full !py-3" disabled={needSubject && !subjPick} onClick={pay}>
+            ادفع {finalPrice.toFixed(2)} د.ك عبر {method}
+          </Btn>
+          <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1">
+            <Icon name="lock" size={11} /> دفع آمن ومشفر — بيئة تجريبية (Sandbox)
+          </p>
+        </div>
+      )}
+
+      {step === "processing" && (
+        <div className="py-12 text-center">
+          <div className="w-16 h-16 mx-auto rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin mb-5" />
+          <div className="font-bold text-primary-900">جارٍ معالجة الدفع…</div>
+          <div className="text-xs text-slate-400 mt-1">التواصل مع بوابة {method} الآمنة</div>
+        </div>
+      )}
+
+      {step === "done" && (
+        <div className="text-center py-4">
+          <div className="w-20 h-20 mx-auto rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center mb-4 animate-pop">
+            <Icon name="check" size={40} />
+          </div>
+          <h3 className="text-xl font-extrabold text-primary-900 mb-1">تم الدفع بنجاح!</h3>
+          <p className="text-sm text-slate-500 mb-1">اشتراك {child.name.split(" ")[0]} في «{pkg?.name}» مفعّل الآن{subjPick && pkg?.scope === "subject" ? ` — مادة ${subjectById(db, subjPick)?.name}` : ""}</p>
+          <p className="text-xs text-slate-400 mb-6">الدروس والاختبارات اتفتحت له فورًا</p>
+          <Btn className="w-full" onClick={close}>تم</Btn>
+        </div>
+      )}
+    </Modal>
   );
 }
 

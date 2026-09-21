@@ -143,9 +143,20 @@ body {
   box-shadow: 0 16px 40px -12px rgba(8,51,68,.22);
 }
 
-/* طباعة المذكرة */
+/* طباعة المذكرة — يظهر محتوى المذكرة فقط */
 @media print {
   .no-print { display: none !important; }
-  body { background: #fff; }
-  .print-area { box-shadow: none !important; border: none !important; }
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 28px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
 }

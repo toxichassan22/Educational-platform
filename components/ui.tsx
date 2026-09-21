@@ -89,7 +89,7 @@ export function Btn({ children, onClick, variant = "primary", className = "", di
 }) {
   const v = {
     primary: "text-white bg-primary-600 hover:bg-primary-700",
-    gold: "text-white bg-gold-500 hover:bg-gold-600",
+    gold: "text-night-950 bg-gold-500 hover:bg-gold-600",
     ghost: "bg-transparent text-primary-700 hover:bg-primary-50",
     outline: "border-2 border-primary-500 text-primary-700 hover:bg-primary-50",
     danger: "bg-red-50 text-red-600 hover:bg-red-100",

@@ -22,10 +22,11 @@ export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [pass, setPass] = useState("");
   const [resetDone, setResetDone] = useState(false);
+  const [err, setErr] = useState("");
 
   const quick = (userId: string, role: string) => {
-    login(userId);
-    router.push(HOME[role]);
+    if (login(userId)) router.push(HOME[role]);
+    else setErr("هذا الحساب موقوف — تواصل مع إدارة المنصة");
   };
 
   const submit = (e: React.FormEvent) => {
@@ -80,6 +81,7 @@ export default function LoginPage() {
               {mode === "login" && (
                 <div className="text-left"><button type="button" className="text-xs text-primary-300 font-bold hover:underline">نسيت كلمة المرور؟</button></div>
               )}
+              {err && <div className="text-xs font-bold text-rose-300 bg-rose-500/15 border border-rose-400/30 rounded-xl px-3.5 py-2.5">{err}</div>}
               <button type="submit"
                 className="w-full py-3.5 rounded-2xl font-black text-night-950 bg-gold-500 hover:bg-gold-600 transition-colors active:scale-[.98]">
                 {mode === "login" ? "دخول" : "إنشاء الحساب"}

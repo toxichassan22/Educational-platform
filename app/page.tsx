@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { Icon, Logo } from "@/components/ui";
@@ -22,8 +23,26 @@ const STEPS = [
   { n: "٤", t: "تابع تقدمك", d: "تقارير تكشف قوتك وضعفك", icon: "trophy" },
 ];
 
+const TESTIMONIALS = [
+  { name: "أم عبدالله", role: "ولية أمر — الكويت", icon: "users", color: "#6d28d9",
+    text: "أخيرًا أعرف مستوى ولدي أول بأول — التقارير واضحة، والإشعارات توصلني بنتيجة كل اختبار لحظتها." },
+  { name: "أحمد — صف عاشر", role: "طالب ثانوية", icon: "gamepad", color: "#0891b2",
+    text: "الاختبارات الموقوتة ورّتني وين أضعف بالضبط، والستريك اليومي خلّى المذاكرة عادة ما أقدر أوقفها." },
+  { name: "أ. فيصل العنزي", role: "معلم رياضيات", icon: "book", color: "#059669",
+    text: "المنصة نظمت المنهج بشكل يوفر عليّ ساعات — الطالب يلقى الفيديو والمذكرة والاختبار في مكان واحد." },
+];
+
+const FAQS = [
+  { q: "هل المحتوى مطابق لمنهج الكويت؟", a: "نعم — المنهج منظم حسب المرحلة (ابتدائي/متوسط/ثانوي) ← الصف ← المادة ← الوحدة والدرس، ويُحدَّث باستمرار من لوحة الإدارة." },
+  { q: "إيه الفرق بين الباقات؟", a: "باقة المادة تفتح مادة واحدة تختارها، باقة المرحلة تفتح كل مواد صفك، والباقة الذهبية تفتح المنصة كاملة لسنة كاملة." },
+  { q: "هل يقدر ولي الأمر يتابع مستوى ابنه؟", a: "نعم — حساب خاص لولي الأمر يعرض معدل كل ابن، أداءه حسب المادة، آخر اختباراته، وإشعارات فورية بالنتائج وانتهاء الاشتراكات." },
+  { q: "إيه طرق الدفع المتاحة؟", a: "KNET و Visa و Mastercard عبر بوابة دفع كويتية آمنة — مع دعم أكواد الخصم والتفعيل الفوري للمحتوى." },
+  { q: "هل أقدر ألغي اشتراكي؟", a: "تقدر توقف التجديد في أي وقت — ويبقى المحتوى متاحًا لك لحد نهاية المدة المدفوعة." },
+];
+
 export default function Landing() {
   const { db } = useStore();
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <div className="min-h-screen bg-night-950">
@@ -35,6 +54,7 @@ export default function Landing() {
             <a href="#features" className="hover:text-white transition-colors">المميزات</a>
             <a href="#how" className="hover:text-white transition-colors">كيف أبدأ</a>
             <a href="#packages" className="hover:text-white transition-colors">الباقات</a>
+            <a href="#faq" className="hover:text-white transition-colors">الأسئلة الشائعة</a>
           </div>
           <Link href="/login" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors">
             دخول
@@ -71,9 +91,9 @@ export default function Landing() {
               </Link>
             </div>
 
-            {/* إحصائيات */}
+            {/* إحصائيات — حقيقية من قاعدة البيانات */}
             <div className="flex gap-8 mt-12">
-              {[["+1200", "درس وفيديو"], ["+5000", "سؤال ذكي"], ["24/7", "متاح دائمًا"]].map(([v, l]) => (
+              {[[`+${db.lessons.length}`, "درس وفيديو"], [`+${db.questions.length}`, "سؤال ذكي"], ["24/7", "متاح دائمًا"]].map(([v, l]) => (
                 <div key={l}>
                   <div className="text-2xl md:text-3xl font-black text-white">{v}</div>
                   <div className="text-white/40 text-xs mt-1 font-medium">{l}</div>
@@ -213,6 +233,63 @@ export default function Landing() {
               </Link>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* آراء المستخدمين */}
+      <section className="py-20 hero-mesh relative overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-30" />
+        <div className="max-w-6xl mx-auto px-4 relative">
+          <div className="text-center mb-14">
+            <div className="inline-block bg-white/10 text-gold-300 text-xs font-black px-4 py-1.5 rounded-full mb-4">قالوا عنّا</div>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">طلاب وأولياء أمور ومعلمون</h2>
+            <p className="text-white/50">تجارب حقيقية من مستخدمي المنصة</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <div key={t.name} className="glass rounded-3xl p-6 animate-fade-up" style={{ animationDelay: `${i * 90}ms` }}>
+                <div className="flex gap-1 mb-4 text-gold-400">
+                  {[0, 1, 2, 3, 4].map((s) => <Icon key={s} name="star" size={15} />)}
+                </div>
+                <p className="text-white/80 text-sm leading-relaxed mb-6">"{t.text}"</p>
+                <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: t.color }}>
+                    <Icon name={t.icon} size={19} />
+                  </div>
+                  <div>
+                    <div className="font-black text-white text-sm">{t.name}</div>
+                    <div className="text-white/45 text-[11px]">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* الأسئلة الشائعة */}
+      <section id="faq" className="max-w-3xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <div className="inline-block bg-primary-100 text-primary-700 text-xs font-black px-4 py-1.5 rounded-full mb-4">عندك سؤال؟</div>
+          <h2 className="text-3xl md:text-4xl font-black text-primary-950 mb-3">الأسئلة الشائعة</h2>
+          <p className="text-slate-500">كل ما يهمك عن المنصة والاشتراكات</p>
+        </div>
+        <div className="space-y-3">
+          {FAQS.map((f, i) => {
+            const open = openFaq === i;
+            return (
+              <div key={i} className={`bg-white rounded-2xl border transition-all ${open ? "border-primary-200 shadow-lg shadow-primary-900/5" : "border-slate-200"}`}>
+                <button onClick={() => setOpenFaq(open ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 p-5 text-right">
+                  <span className={`font-black text-sm md:text-base ${open ? "text-primary-800" : "text-primary-950"}`}>{f.q}</span>
+                  <span className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all ${open ? "bg-primary-600 text-white rotate-180" : "bg-slate-100 text-slate-400"}`}>
+                    <Icon name="down" size={15} />
+                  </span>
+                </button>
+                {open && <p className="px-5 pb-5 text-sm text-slate-500 leading-relaxed animate-fade-up">{f.a}</p>}
+              </div>
+            );
+          })}
         </div>
       </section>
 

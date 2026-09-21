@@ -101,8 +101,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
           {/* الفيديو + المذكرة */}
           <div className="lg:col-span-2 space-y-5">
             <Card className="overflow-hidden border border-slate-100">
-              <video key={lesson.id} controls preload="metadata" className="w-full aspect-video bg-black"
-                poster="">
+              <video key={lesson.id} controls preload="metadata" className="w-full aspect-video bg-black">
                 <source src={lesson.videoUrl} type="video/mp4" />
               </video>
               <div className="p-5">
@@ -121,6 +120,16 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
 
             {/* المذكرة */}
             <Card className="p-6 border border-slate-100 print-area">
+              {/* هيدر الطباعة — يظهر في الـ PDF فقط */}
+              <div className="hidden print:block mb-6 pb-4 border-b-2 border-primary-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-black text-2xl text-primary-800">منصة تفوّق — مذكرة درس</div>
+                    <div className="text-sm text-slate-500 mt-1">«{lesson.title}» · {subject?.name} · {unit?.title}</div>
+                  </div>
+                  <div className="text-xs text-slate-400 font-bold">tafawwug.edu.kw</div>
+                </div>
+              </div>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-extrabold text-primary-900 flex items-center gap-2">
                   <Icon name="doc" size={19} className="text-primary-500" /> مذكرة الدرس

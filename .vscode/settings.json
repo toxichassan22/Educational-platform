@@ -1,0 +1,7 @@
+{
+  // Tailwind v4 at-rules (@theme, @utility, @source...) aren't known to the
+  // built-in CSS linter — the Tailwind IntelliSense extension handles them.
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore"
+}

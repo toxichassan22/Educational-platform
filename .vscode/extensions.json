@@ -1,0 +1,4 @@
+{
+  // Understands Tailwind v4 (@theme, @utility) + class autocomplete/hover.
+  "recommendations": ["bradlc.vscode-tailwindcss"]
+}

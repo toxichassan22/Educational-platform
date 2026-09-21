@@ -253,6 +253,12 @@ export default function ExamPage({ params }: { params: Promise<{ id: string }> }
                               إجابتك: <b>{answers[i] !== null ? q.options[answers[i]!] : "— بدون إجابة"}</b>
                             </div>
                             {!ok && <div className="text-emerald-700">الإجابة الصحيحة: <b>{q.options[q.correct]}</b></div>}
+                            {q.explanation && (
+                              <div className="mt-2 bg-primary-50/70 border border-primary-100 rounded-xl px-3 py-2 text-primary-800 leading-relaxed flex items-start gap-1.5">
+                                <Icon name="spark" size={13} className="text-primary-500 mt-0.5 shrink-0" />
+                                <span><b className="text-primary-600">الشرح:</b> {q.explanation}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>

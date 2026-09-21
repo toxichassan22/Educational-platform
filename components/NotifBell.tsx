@@ -97,6 +97,19 @@ export function buildNotifs(db: DB, me: User): Notif[] {
         out.push({ id: `nosub-${k.id}`, icon: "wallet", color: "#94a3b8", text: `${k.name.split(" ")[0]} بدون اشتراك — الدروس المجانية فقط متاحة`, ts: Date.now() - DAY });
       }
     });
+    // مدفوعات الأبناء
+    kids.flatMap((k) => db.payments.filter((p) => p.userId === k.id).map((p) => ({ k, p })))
+      .sort((x, y) => y.p.date.localeCompare(x.p.date)).slice(0, 2)
+      .forEach(({ k, p }) => {
+        out.push({
+          id: `pay-${p.id}`, icon: p.status === "success" ? "check" : "x",
+          color: p.status === "success" ? "#059669" : "#e11d48",
+          text: p.status === "success"
+            ? `تم تفعيل «${p.packageName}» لـ ${k.name.split(" ")[0]} — ${p.amountKwd} د.ك عبر ${p.method}`
+            : `تعذّرت عملية الدفع لـ ${k.name.split(" ")[0]} — ${p.packageName}`,
+          ts: ts(p.date),
+        });
+      });
   }
 
   if (me.role === "admin") {

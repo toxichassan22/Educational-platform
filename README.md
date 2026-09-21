@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# منصة تفوّق — Proof of Concept
 
-## Getting Started
+منصة تعليمية كويتية متكاملة (نموذج أولي تفاعلي) — منافس لـ UULA / The Q / TMKN.
 
-First, run the development server:
+## التشغيل
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # بناء إنتاجي
+npx tsc --noEmit   # فحص الأنواع
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## حسابات الديمو (من /login)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| الحساب | الدور | ملاحظة |
+|---|---|---|
+| `s1` أحمد الكندري | طالب — الصف العاشر | مشترك في باقة المرحلة |
+| `s2` سارة الكندري | طالبة — الصف السابع | اشتراكها منتهي ← لعرض قفل المحتوى |
+| `p1` خالد الكندري | ولي أمر | أبناء: s1, s2 — يدفع ويتابع |
+| `a1` | مدير | لوحة تحكم كاملة |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**«إعادة تعيين بيانات الديمو»** في صفحة الدخول ترجع كل شيء للبداية.
+أكواد خصم الدفع: `KUWAIT20` و `AHLAN10` — طرق الدفع: KNET / Visa / Mastercard.
 
-## Learn More
+## أبرز المزايا
 
-To learn more about Next.js, take a look at the following resources:
+- **للطالب:** داشبورد تفاعلي (مستوى + XP + سلسلة يومية + أوسمة + متصدرون)، دروس فيديو + مذكرات PDF، اختبارات موقوتة بتصحيح فوري ومراجعة إجابات مع الشرح، تقارير نقاط قوة وضعف، بحث في كل المنهج.
+- **لولي الأمر:** متابعة أداء الأبناء حسب المادة، إشعارات نتائج واشتراكات، **دفع/تجديد اشتراكات الأبناء مباشرة**.
+- **للإدارة:** إحصائيات إيرادات حية + رسم بياني، إدارة المنهج (مواد/وحدات/دروس تظهر للطالب فورًا)، بنك أسئلة، مستخدمون، باقات وأكواد خصم، سجل مبيعات.
+- **حماية محتوى:** الدرس مجاني أو ضمن نطاق الاشتراك — باقة المادة تفتح مادة واحدة مختارة فقط.
+- **مزامنة لحظية** بين تبويبات المتصفح: تعديل الأدمن يظهر للطالب فورًا.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## التقنية
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js 16 (App Router · Turbopack) · React 19 · TypeScript · Tailwind CSS 4 — RTL بالكامل، خط Alexandria.
+البيانات التجريبية في `lib/data.ts` وتُحفظ في localStorage — في الإنتاج تُستبدل بقاعدة بيانات وبوابة دفع كويتية معتمدة.
 
-## Deploy on Vercel
+## ملفات مفيدة
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `DEMO.md` — سيناريو عرض ~10 دقائق.
+- `AGENTS.md` — ملاحظات معمارية وقواعد المساهمة.

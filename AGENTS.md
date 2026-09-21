@@ -12,6 +12,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Proof-of-concept لمنصة تعليمية كويتية (منافس لـ UULA / The Q / TMKN).
 
+## الريبو والرفع
+- الريبو: https://github.com/toxichassan22/Educational-platform — برانش `main` (ريموت `origin`).
+- **ارفع أول بأول:** بعد أي تعديلات تكتمل، اعمل commit وpush على `origin main` فورًا — لا تترك تغييرات غير مرفوعة.
+- الملفات غير المتتبعة مقصودًا: `خطة_العمل.html` (خارج الريبو)، `.playwright-mcp/`، `dev.log` — شوف `.gitignore`.
+
 ## الأوامر
 - `npm run dev` — تشغيل التطوير (Turbopack) على http://localhost:3000
 - `npm run build` — بناء إنتاجي

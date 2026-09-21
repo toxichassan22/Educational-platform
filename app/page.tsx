@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useStore } from "@/lib/store";
 import { Icon, Logo } from "@/components/ui";
 
 /* ===================== محتوى الصفحة ===================== */
@@ -48,17 +47,27 @@ const STARS: [number, number, number][] = [
 ];
 
 export default function Landing() {
-  const { db } = useStore();
   const [openStudent, setOpenStudent] = useState<number | null>(null);
 
   /* ظهور العناصر عند التمرير */
   useEffect(() => {
     const io = new IntersectionObserver(
       (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("on")),
-      { threshold: 0.18 }
+      { threshold: 0.12, rootMargin: "0px 0px 60px 0px" }
     );
-    document.querySelectorAll(".rv").forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const els = [...document.querySelectorAll<HTMLElement>(".rv")];
+    els.forEach((el) => io.observe(el));
+    /* عنصر اتعدّاه التمرير السريع/القفز يبان فورًا بدل ما يفضل مخفي */
+    const onScroll = () => {
+      els.forEach((el) => {
+        if (!el.classList.contains("on") && el.getBoundingClientRect().bottom < 0) el.classList.add("on");
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -119,7 +128,14 @@ export default function Landing() {
             </div>
             {/* الكوكب */}
             <div className="relative w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[500px] lg:h-[500px]">
-              <div className="orb-glow absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle at 38% 30%, #22d3ee 0%, #0891b2 42%, #0e7490 68%, #155e75 100%)" }} />
+              <div className="orb-glow absolute inset-0 rounded-full overflow-hidden" style={{ background: "radial-gradient(circle at 38% 30%, #22d3ee 0%, #0891b2 42%, #0e7490 68%, #155e75 100%)" }}>
+                <div className="absolute rounded-full bg-white/10 blur-md" style={{ width: "34%", height: "22%", top: "12%", left: "18%", transform: "rotate(-24deg)" }} />
+                <div className="absolute rounded-full bg-black/15 blur-lg" style={{ width: "55%", height: "40%", bottom: "-8%", right: "-5%" }} />
+                <div className="absolute rounded-full bg-white/[.07]" style={{ width: "16%", height: "16%", top: "30%", left: "55%" }} />
+                <div className="absolute rounded-full bg-black/10" style={{ width: "11%", height: "11%", top: "55%", left: "28%" }} />
+                <div className="absolute rounded-full bg-white/[.06]" style={{ width: "8%", height: "8%", top: "68%", left: "60%" }} />
+                <div className="absolute inset-0 rounded-full" style={{ boxShadow: "inset -18px -24px 60px rgba(4,12,28,.55), inset 14px 18px 50px rgba(255,255,255,.18)" }} />
+              </div>
               {/* حلقة المدار */}
               <svg viewBox="0 0 100 100" className="orbit-ring absolute -inset-8 sm:-inset-12 w-[calc(100%+4rem)] sm:w-[calc(100%+6rem)] h-[calc(100%+4rem)] sm:h-[calc(100%+6rem)] opacity-70">
                 <ellipse cx="50" cy="50" rx="49" ry="34" fill="none" stroke="rgba(251,191,36,.5)" strokeWidth=".45" strokeDasharray="2.5 3" transform="rotate(-18 50 50)" />
@@ -127,10 +143,32 @@ export default function Landing() {
               {/* الطالب */}
               <div className="absolute inset-x-0 bottom-0 flex flex-col items-center z-10">
                 <div className="animate-bob flex flex-col items-center">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-b from-gold-300 to-gold-600 border-4 border-white/90 shadow-2xl flex items-center justify-center text-night-950 font-black text-4xl sm:text-5xl">
-                    أ
-                  </div>
-                  <div className="mt-3 bg-night-950/85 backdrop-blur rounded-2xl px-5 py-2.5 text-center border border-white/15 shadow-xl">
+                  <svg viewBox="0 0 120 118" className="w-28 h-28 sm:w-40 sm:h-40 drop-shadow-2xl">
+                    {/* كتاف */}
+                    <path d="M60 62c-24 0-40 14-44 34-1 6 3 9 9 9h70c6 0 10-3 9-9-4-20-20-34-44-34z" fill="#f59e0b" />
+                    <path d="M60 62c-24 0-40 14-44 34-1 6 3 9 9 9h70c6 0 10-3 9-9-4-20-20-34-44-34z" fill="url(#gshade)" />
+                    {/* رقبة وراس */}
+                    <rect x="52" y="46" width="16" height="16" rx="6" fill="#f0b27a" />
+                    <circle cx="60" cy="36" r="22" fill="#f7c794" />
+                    {/* شعر */}
+                    <path d="M38 34c0-14 10-24 22-24s22 10 22 24c0 3-1 5-2 6 1-8-4-16-10-18-8 4-18 4-24-2-4 3-6 8-6 14z" fill="#3b2b20" />
+                    {/* طاقية التخرج */}
+                    <path d="M60 4L104 22 60 40 16 22z" fill="#0b1526" stroke="#f59e0b" strokeWidth="2.5" strokeLinejoin="round" />
+                    <rect x="52" y="30" width="16" height="9" rx="3" fill="#0b1526" />
+                    <path d="M100 24v16" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+                    <circle cx="100" cy="44" r="4" fill="#f59e0b" />
+                    {/* عيون */}
+                    <circle cx="51" cy="37" r="2.6" fill="#2b1d12" />
+                    <circle cx="69" cy="37" r="2.6" fill="#2b1d12" />
+                    <path d="M53 47c4 3 10 3 14 0" stroke="#c47b4a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                    <defs>
+                      <linearGradient id="gshade" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stopColor="#fbbf24" stopOpacity="0" />
+                        <stop offset="1" stopColor="#b45309" stopOpacity=".55" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="mt-1 bg-night-950/85 backdrop-blur rounded-2xl px-5 py-2.5 text-center border border-white/15 shadow-xl">
                     <div className="font-black text-sm sm:text-base">أحمد الكندري</div>
                     <div className="text-white/55 text-[11px] font-bold mt-0.5">الأول على الكويت — علمي</div>
                   </div>
@@ -204,8 +242,8 @@ export default function Landing() {
       <div className="px-3 sm:px-6 pb-6 space-y-6">
         {FEATURES.map((f, i) => (
           <section key={f.id} id={f.id === "box" ? "packages" : undefined}
-            className="rv rounded-[2rem] sm:rounded-[2.75rem] bg-night-900 border border-white/[.06] overflow-hidden">
-            <div className="mx-auto max-w-6xl px-6 sm:px-12 py-14 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">
+            className="rv rounded-[2rem] sm:rounded-[2.75rem] border border-white/[.07] overflow-hidden" style={{ background: "linear-gradient(180deg,#0e1930 0%,#0a1226 100%)" }}>
+            <div className="mx-auto max-w-6xl px-6 sm:px-12 py-16 sm:py-24 grid lg:grid-cols-2 gap-12 items-center">
               {/* النص — يتناوب يمين/يسار مثل UULA */}
               <div className={`text-center ${i % 2 === 0 ? "lg:text-left lg:order-2" : "lg:text-right lg:order-1"}`}>
                 <h2 className="text-3xl sm:text-5xl font-black mb-5">{f.title}</h2>
@@ -216,8 +254,8 @@ export default function Landing() {
                 </Link>
               </div>
               {/* الرسمة */}
-              <div className={`flex items-center justify-center min-h-[260px] sm:min-h-[340px] ${i % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
-                <FeatureArt kind={f.art} subjects={db.subjects} />
+              <div className={`flex items-center justify-center min-h-[320px] sm:min-h-[420px] relative ${i % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
+                <FeatureArt kind={f.art} />
               </div>
             </div>
           </section>
@@ -358,172 +396,143 @@ function StoreBadge({ icon, top, bottom }: { icon: string; top: string; bottom: 
   );
 }
 
-/* ===================== رسومات الأقسام (CSS/SVG بدل الصور) ===================== */
+/* ===================== رسومات الأقسام — لقطات حقيقية من التطبيق في فريمات ===================== */
 
-function FeatureArt({ kind, subjects }: { kind: string; subjects: { name: string; color: string; icon: string }[] }) {
+/* فريم جوال */
+function PhoneFrame({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+  return (
+    <div className={`relative w-52 sm:w-64 rounded-[2.4rem] bg-slate-900 border-[5px] border-slate-700/80 shadow-[0_30px_80px_-20px_rgba(0,0,0,.8)] overflow-hidden ${className}`}>
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 rounded-full bg-slate-900 z-10 border border-slate-700/60" />
+      <img src={src} alt={alt} className="w-full aspect-[9/17] object-cover object-top" />
+    </div>
+  );
+}
+
+/* فريم متصفح/تابلت */
+function BrowserFrame({ src, alt, pos = "top", className = "" }: { src: string; alt: string; pos?: string; className?: string }) {
+  return (
+    <div className={`relative w-[320px] sm:w-[460px] rounded-2xl bg-slate-900 border border-slate-600/60 shadow-[0_30px_80px_-20px_rgba(0,0,0,.8)] overflow-hidden ${className}`}>
+      <div className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-800/90 border-b border-white/10" dir="ltr">
+        <span className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
+        <span className="w-2.5 h-2.5 rounded-full bg-gold-400/80" />
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+        <div className="flex-1 mx-2 h-5 rounded-md bg-white/10" />
+      </div>
+      <img src={src} alt={alt} className="w-full aspect-[16/10] object-cover" style={{ objectPosition: pos }} />
+    </div>
+  );
+}
+
+/* توهج لوني خلف الرسمة */
+function Glow({ color }: { color: string }) {
+  return <div className="absolute w-[70%] h-[70%] rounded-full blur-[90px] opacity-25 pointer-events-none" style={{ background: color }} />;
+}
+
+function FeatureArt({ kind }: { kind: string }) {
   switch (kind) {
     case "notes": return <NotesArt />;
     case "video": return <VideoArt />;
     case "quiz": return <QuizArt />;
     case "chat": return <ChatArt />;
-    case "box": return <BoxArt subjects={subjects} />;
+    case "box": return <BoxArt />;
     default: return null;
   }
 }
 
-/* مذكرات: كتاب مفتوح + جوال QR */
+/* مذكرات: جوال بعرض المذكرة + شارة PDF */
 function NotesArt() {
   return (
-    <div className="relative animate-bob">
-      {/* كتاب مفتوح */}
-      <div className="flex w-[280px] sm:w-[360px] drop-shadow-2xl" style={{ perspective: 600 }}>
-        <div className="flex-1 bg-white rounded-r-2xl rounded-l-md p-4 space-y-2.5 border-r-4 border-slate-200" style={{ transform: "rotateY(14deg)", transformOrigin: "left" }}>
-          {[70, 90, 55, 80, 65].map((w, i) => <div key={i} className="h-2 rounded-full bg-slate-200" style={{ width: `${w}%` }} />)}
-          <div className="h-16 rounded-lg bg-primary-100 flex items-center justify-center text-primary-500"><Icon name="chart" size={26} /></div>
-        </div>
-        <div className="flex-1 bg-slate-50 rounded-l-2xl rounded-r-md p-4 space-y-2.5" style={{ transform: "rotateY(-14deg)", transformOrigin: "right" }}>
-          {[85, 60, 75, 50, 88].map((w, i) => <div key={i} className="h-2 rounded-full bg-slate-200" style={{ width: `${w}%`, marginInlineStart: "auto" }} />)}
-          <div className="h-16 rounded-lg bg-gold-400/20 flex items-center justify-center text-gold-600"><Icon name="atom" size={26} /></div>
-        </div>
+    <div className="relative flex items-center justify-center">
+      <Glow color="#f59e0b" />
+      <div className="animate-bob">
+        <PhoneFrame src="/shots/notes-phone.jpeg" alt="مذكرة الدرس داخل تطبيق تفوّق" />
       </div>
-      {/* جوال بـ QR */}
-      <div className="absolute -bottom-10 -right-4 sm:-right-8 w-24 sm:w-28 rounded-[1.4rem] bg-night-950 border-2 border-white/15 p-2.5 shadow-2xl drift" style={{ "--r": "-8deg", "--d": "5.5s" } as React.CSSProperties}>
-        <div className="rounded-xl bg-white p-2 grid grid-cols-4 gap-1">
-          {Array.from({ length: 16 }).map((_, i) => (
-            <div key={i} className={`aspect-square rounded-[2px] ${[0, 1, 4, 5, 2, 8, 11, 13, 14, 15, 6, 9].includes(i) ? "bg-night-950" : "bg-slate-200"}`} />
-          ))}
-        </div>
-        <div className="mt-2 h-1.5 w-8 mx-auto rounded-full bg-white/20" />
+      <div className="absolute -top-4 -right-2 sm:right-6 rounded-xl bg-gold-500 text-night-950 text-[11px] font-black px-3.5 py-2 shadow-xl shadow-gold-500/30 drift flex items-center gap-1.5" style={{ "--r": "-7deg", "--d": "4.5s" } as React.CSSProperties}>
+        <Icon name="download" size={13} /> PDF
       </div>
-      {/* شارة PDF */}
-      <div className="absolute -top-5 -left-3 rounded-xl bg-gold-500 text-night-950 text-[11px] font-black px-3 py-2 shadow-xl drift" style={{ "--r": "6deg", "--d": "4.5s", "--dl": "-2s" } as React.CSSProperties}>
-        PDF
+      <div className="absolute -bottom-3 -left-2 sm:left-4 rounded-2xl bg-night-950/90 backdrop-blur border border-white/15 px-4 py-2.5 shadow-xl drift flex items-center gap-2.5" style={{ "--r": "5deg", "--d": "5.4s", "--dl": "-2s" } as React.CSSProperties}>
+        <span className="w-8 h-8 rounded-lg bg-primary-500/25 text-primary-300 flex items-center justify-center"><Icon name="doc" size={17} /></span>
+        <div><div className="text-[11px] font-black">مذكرة الدرس</div><div className="text-[9px] text-white/45 font-bold">عرض + تحميل</div></div>
       </div>
     </div>
   );
 }
 
-/* فيديوهات: مشغل فيديو */
+/* فيديوهات: شاشة عرض بمشغل الدرس */
 function VideoArt() {
   return (
-    <div className="relative">
-      {/* شمس وقمر عائمان */}
-      <div className="absolute -top-8 right-6 w-12 h-12 rounded-full bg-gold-400 shadow-[0_0_40px_rgba(251,191,36,.5)] drift" style={{ "--d": "5s" } as React.CSSProperties} />
-      <div className="absolute -top-4 left-8 w-9 h-9 rounded-full bg-primary-300 drift" style={{ clipPath: "circle(50%)", "--d": "6.5s", "--dl": "-3s" } as React.CSSProperties} />
-      <div className="absolute -top-4 left-8 w-9 h-9 rounded-full bg-night-900 translate-x-2 -translate-y-1 drift" style={{ "--d": "6.5s", "--dl": "-3s" } as React.CSSProperties} />
-      {/* التابلت */}
-      <div className="animate-bob w-[300px] sm:w-[400px] rounded-2xl bg-night-950 border-2 border-white/15 p-3 shadow-2xl">
-        <div className="rounded-xl overflow-hidden relative aspect-video" style={{ background: "linear-gradient(140deg,#155e75,#0891b2)" }}>
-          <div className="absolute inset-0 grid-pattern opacity-50" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-14 h-14 rounded-full bg-white/95 flex items-center justify-center text-primary-700 shadow-xl">
-              <Icon name="play" size={24} filled />
-            </div>
-          </div>
-          <div className="absolute bottom-2.5 inset-x-3 flex items-center gap-2" dir="ltr">
-            <span className="text-[9px] font-bold text-white/80">07:14</span>
-            <div className="flex-1 h-1 rounded-full bg-white/25"><div className="h-full w-[58%] rounded-full bg-gold-400" /></div>
-            <span className="text-[9px] font-bold text-white/80">12:30</span>
-          </div>
-        </div>
-        <div className="mt-3 flex gap-2">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex-1 rounded-lg bg-white/[.06] p-1.5">
-              <div className="h-8 rounded-md bg-white/10 mb-1.5" />
-              <div className="h-1.5 rounded-full bg-white/15 w-3/4" />
-            </div>
-          ))}
-        </div>
+    <div className="relative flex items-center justify-center">
+      <Glow color="#22d3ee" />
+      <div className="absolute -top-6 right-2 sm:right-8 w-12 h-12 rounded-full bg-gold-400 shadow-[0_0_45px_rgba(251,191,36,.55)] drift" style={{ "--d": "5s" } as React.CSSProperties} />
+      <div className="absolute -bottom-6 left-4 sm:left-10 flex items-center gap-2 rounded-full bg-night-950/90 backdrop-blur border border-white/15 px-4 py-2 shadow-xl drift" style={{ "--r": "4deg", "--d": "6s", "--dl": "-2.5s" } as React.CSSProperties}>
+        <Icon name="play" size={13} className="text-primary-300" filled />
+        <span className="text-[11px] font-black text-white/85">أعدها كثر ما تبي</span>
+      </div>
+      <div className="animate-bob" style={{ transform: "rotate(2deg)" }}>
+        <BrowserFrame src="/shots/lesson.jpeg" alt="صفحة الدرس والفيديو" pos="top" />
       </div>
     </div>
   );
 }
 
-/* اختبارات: جوال كويز + كونفيتي */
+/* اختبارات: جوال بالكويز + كونفيتي */
 function QuizArt() {
   const confetti = [
-    { x: -38, y: -30, c: "#f43f5e", r: "18deg", d: "4.6s" }, { x: 30, y: -46, c: "#fbbf24", r: "-14deg", d: "5.4s" },
-    { x: 285, y: -20, c: "#22d3ee", r: "24deg", d: "5s" }, { x: -30, y: 190, c: "#a78bfa", r: "-20deg", d: "6s" },
-    { x: 300, y: 200, c: "#34d399", r: "10deg", d: "4.2s" }, { x: 140, y: -55, c: "#fb923c", r: "0deg", d: "5.8s" },
+    { x: -36, y: -24, c: "#f43f5e", r: "18deg", d: "4.6s" }, { x: 40, y: -44, c: "#fbbf24", r: "-14deg", d: "5.4s" },
+    { x: 270, y: -18, c: "#22d3ee", r: "24deg", d: "5s" }, { x: -28, y: 250, c: "#a78bfa", r: "-20deg", d: "6s" },
+    { x: 285, y: 240, c: "#34d399", r: "10deg", d: "4.2s" }, { x: 130, y: -52, c: "#fb923c", r: "0deg", d: "5.8s" },
   ];
   return (
-    <div className="relative">
+    <div className="relative flex items-center justify-center">
+      <Glow color="#34d399" />
       {confetti.map((c, i) => (
-        <div key={i} className="absolute w-4 h-4 rounded-md drift" style={{ left: c.x, top: c.y, background: c.c, "--r": c.r, "--d": c.d } as React.CSSProperties} />
+        <div key={i} className="absolute w-4 h-4 rounded-md drift z-10" style={{ left: `calc(50% + ${c.x - 130}px)`, top: c.y, background: c.c, "--r": c.r, "--d": c.d } as React.CSSProperties} />
       ))}
-      <div className="animate-bob w-56 sm:w-64 rounded-[2rem] bg-night-950 border-2 border-white/15 p-4 shadow-2xl">
-        <div className="flex justify-center gap-1.5 mb-4" dir="ltr">
-          {[1, 1, 1, 1, 0, 0, 0].map((v, i) => (
-            <div key={i} className={`w-5 h-5 rounded-full text-[9px] font-black flex items-center justify-center ${v ? "bg-emerald-400 text-night-950" : "bg-white/10 text-white/50"}`}>{i + 1}</div>
-          ))}
-        </div>
-        <div className="rounded-xl bg-white/[.07] p-3.5 mb-3">
-          <div className="h-2.5 rounded-full bg-white/25 w-4/5 mb-2" />
-          <div className="h-2.5 rounded-full bg-white/15 w-3/5" />
-        </div>
-        <div className="space-y-2">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className={`rounded-lg px-3 py-2.5 text-[10px] font-black flex items-center justify-between ${i === 1 ? "bg-primary-500 text-white" : "bg-white/[.06] text-white/60"}`}>
-              <div className="h-1.5 rounded-full bg-current opacity-60" style={{ width: `${60 - i * 12}%` }} />
-              {i === 1 && <Icon name="check" size={12} />}
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-[10px] font-black text-gold-400" dir="ltr">10:05</span>
-          <span className="rounded-full bg-emerald-400/20 text-emerald-300 text-[10px] font-black px-3 py-1" dir="ltr">100%</span>
-        </div>
+      <div className="animate-bob">
+        <PhoneFrame src="/shots/exam-phone.jpeg" alt="اختبار ذكي داخل تطبيق تفوّق" />
+      </div>
+      <div className="absolute top-6 -left-2 sm:left-2 rounded-2xl bg-emerald-400 text-night-950 font-black text-lg px-4 py-2 shadow-xl shadow-emerald-400/30 drift" style={{ "--r": "-6deg", "--d": "5s", "--dl": "-1.5s" } as React.CSSProperties} dir="ltr">
+        100%
       </div>
     </div>
   );
 }
 
-/* معلمين: فقاعات محادثة */
+/* معلمين: شاشة المواد بأسماء المعلمين + فقاعات سؤال وجواب */
 function ChatArt() {
-  const bubbles = [
-    { w: "w-40", me: false, lines: [85, 60] }, { w: "w-48", me: true, lines: [90, 70, 45] },
-    { w: "w-36", me: false, lines: [75, 50] }, { w: "w-44", me: true, lines: [80, 55] },
-  ];
   return (
-    <div className="relative">
-      <div className="absolute -top-6 -right-8 w-16 h-12 rounded-2xl bg-white/[.07] drift" style={{ "--r": "-10deg", "--d": "5s", clipPath: "polygon(0 0,100% 0,100% 78%,38% 78%,22% 100%,26% 78%,0 78%)" } as React.CSSProperties} />
-      <div className="absolute -bottom-4 -left-8 w-14 h-11 rounded-2xl bg-gold-500/25 drift" style={{ "--r": "12deg", "--d": "6s", clipPath: "polygon(0 0,100% 0,100% 76%,70% 76%,82% 100%,76% 76%,0 76%)" } as React.CSSProperties} />
-      <div className="animate-bob w-60 sm:w-72 rounded-[2rem] bg-night-950 border-2 border-white/15 p-4 shadow-2xl space-y-3">
-        {bubbles.map((b, i) => (
-          <div key={i} className={`${b.w} max-w-full rounded-2xl p-3 space-y-1.5 ${b.me ? "bg-primary-600/80 mr-auto rounded-bl-md" : "bg-white/10 ml-auto rounded-br-md"}`}>
-            {b.lines.map((w, j) => (
-              <div key={j} className={`h-2 rounded-full ${b.me ? "bg-white/50" : "bg-white/30"}`} style={{ width: `${w}%` }} />
-            ))}
-          </div>
-        ))}
-        <div className="flex items-center gap-2 pt-1">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-b from-gold-300 to-gold-600 flex items-center justify-center text-night-950 font-black text-sm shrink-0">م</div>
-          <div className="rounded-xl bg-white/10 px-3 py-2 flex gap-1">
-            {[0, 1, 2].map((i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/60 star-dot" style={{ ["--d" as string]: "1.2s", ["--dl" as string]: `${i * 0.25}s`, position: "relative" }} />)}
-          </div>
-        </div>
+    <div className="relative flex items-center justify-center">
+      <Glow color="#a78bfa" />
+      <div className="animate-bob" style={{ transform: "rotate(-2deg)" }}>
+        <BrowserFrame src="/shots/browse.jpeg" alt="المواد والمعلمون في تفوّق" pos="center" />
+      </div>
+      <div className="absolute -top-3 right-0 sm:right-4 rounded-2xl rounded-br-md bg-white/95 text-night-950 px-4 py-2.5 shadow-2xl drift" style={{ "--r": "-4deg", "--d": "5.2s" } as React.CSSProperties}>
+        <div className="text-[11px] font-black">سؤال: معادلة المماس؟</div>
+        <div className="text-[9px] text-slate-500 font-bold mt-0.5">أحمد — قبل دقيقتين</div>
+      </div>
+      <div className="absolute -bottom-4 left-0 sm:left-6 rounded-2xl rounded-bl-md bg-primary-500 px-4 py-2.5 shadow-2xl shadow-primary-500/30 drift flex items-center gap-2.5" style={{ "--r": "4deg", "--d": "5.8s", "--dl": "-2.2s" } as React.CSSProperties}>
+        <span className="w-7 h-7 rounded-full bg-gold-400 text-night-950 flex items-center justify-center text-[10px] font-black shrink-0">م</span>
+        <div className="text-[11px] font-black">تم الرد خلال ٣ دقائق</div>
       </div>
     </div>
   );
 }
 
-/* باقات: صندوق أيقونات المواد */
-function BoxArt({ subjects }: { subjects: { name: string; color: string; icon: string }[] }) {
-  const chips = subjects.slice(0, 12);
+/* باقات: شاشة الباقات + شارة الخصم */
+function BoxArt() {
   return (
-    <div className="relative">
-      <div className="animate-bob rounded-[2rem] bg-gradient-to-b from-white/10 to-white/[.03] border border-white/15 p-5 sm:p-7 shadow-2xl">
-        <div className="grid grid-cols-4 gap-3 sm:gap-4">
-          {chips.map((s, i) => (
-            <div key={`${s.name}-${i}`} className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center drift"
-              style={{ background: `${s.color}26`, color: s.color, border: `1.5px solid ${s.color}55`, "--d": `${4.5 + (i % 4)}s`, "--dl": `${-(i % 5)}s`, "--r": `${(i % 3 - 1) * 5}deg` } as React.CSSProperties}>
-              <Icon name={s.icon} size={24} />
-            </div>
-          ))}
-        </div>
+    <div className="relative flex items-center justify-center">
+      <Glow color="#f59e0b" />
+      <div className="animate-bob" style={{ transform: "rotate(1.5deg)" }}>
+        <BrowserFrame src="/shots/subscription.jpeg" alt="باقات تفوّق" pos="top" />
       </div>
-      <div className="absolute -top-4 -right-4 rounded-full bg-gold-500 text-night-950 font-black text-sm px-4 py-2 shadow-xl shadow-gold-500/30 drift" style={{ "--r": "-8deg", "--d": "4.8s" } as React.CSSProperties} dir="ltr">
+      <div className="absolute -top-4 -right-2 sm:right-6 rounded-full bg-gold-500 text-night-950 font-black text-sm px-4 py-2 shadow-xl shadow-gold-500/40 drift" style={{ "--r": "-8deg", "--d": "4.8s" } as React.CSSProperties} dir="ltr">
         -80%
+      </div>
+      <div className="absolute -bottom-3 -left-2 sm:left-4 rounded-xl bg-night-950/90 backdrop-blur border border-white/15 px-3.5 py-2 shadow-xl drift flex items-center gap-2" style={{ "--r": "5deg", "--d": "5.6s", "--dl": "-1.8s" } as React.CSSProperties}>
+        <span className="text-[10px] font-black text-white/70">KNET</span>
+        <span className="w-px h-3 bg-white/20" />
+        <span className="text-[10px] font-black text-white/70">Visa</span>
       </div>
     </div>
   );

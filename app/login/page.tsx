@@ -15,12 +15,6 @@ const DEMO_ACCOUNTS = [
   { userId: "a1", role: "admin", label: "دخول كمدير", sub: "لوحة التحكم الكاملة", icon: "settings", color: "#f5b329" },
 ];
 
-const GRADE_OPTIONS = [
-  "الصف الرابع — ابتدائي", "الصف الخامس — ابتدائي", "الصف السادس — ابتدائي",
-  "الصف السابع — متوسط", "الصف الثامن — متوسط", "الصف التاسع — متوسط",
-  "الصف العاشر — ثانوي", "الصف الحادي عشر — ثانوي", "الصف الثاني عشر — ثانوي",
-];
-
 type Step = "login" | "otp" | "register";
 
 const inputCls =
@@ -167,7 +161,8 @@ export default function LoginPage() {
                   <p className="text-[#99a8bd] text-sm">دقيقة واحدة وتكون جاهز للتفوق</p>
                 </div>
 
-                <form onSubmit={(e) => { e.preventDefault(); quick("s1", "student"); }} className="space-y-4">
+                <form onSubmit={(e) => { e.preventDefault(); if (login("s1")) router.push("/grades"); }}
+                  className="space-y-4">
                   <div>
                     <label className="block text-sm font-bold text-[#99a8bd] mb-2">اسم الطالب الكامل</label>
                     <input placeholder="مثال: أحمد الكندري" className={inputCls} />
@@ -176,16 +171,7 @@ export default function LoginPage() {
                     <label className="block text-sm font-bold text-[#99a8bd] mb-2">رقم الهاتف</label>
                     <PhoneRow value={phone} onChange={setPhone} />
                   </div>
-                  <div>
-                    <label className="block text-sm font-bold text-[#99a8bd] mb-2">الصف الدراسي</label>
-                    <div className="relative">
-                      <select className={`${inputCls} appearance-none pl-11 text-white/85`} defaultValue="">
-                        <option value="" disabled className="text-slate-800">اختر صفك</option>
-                        {GRADE_OPTIONS.map((g) => <option key={g} className="text-slate-800">{g}</option>)}
-                      </select>
-                      <Icon name="down" size={12} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8e99ab] pointer-events-none" />
-                    </div>
-                  </div>
+                  <p className="text-[11px] text-[#99a8bd]/70 leading-relaxed">في الخطوة التالية هتختار صفك الدراسي من صفحة المراحل</p>
                   <button type="submit"
                     className="w-full h-[58px] rounded-full font-black text-lg text-white bg-[#2072e0] hover:bg-[#1b63c4] shadow-lg shadow-[#2072e0]/25 transition-all active:scale-[.98]">
                     سجّل وابدأ

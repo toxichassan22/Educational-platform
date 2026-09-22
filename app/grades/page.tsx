@@ -17,7 +17,7 @@ export default function GradesPage() {
   const router = useRouter();
 
   const pick = () => {
-    if (me?.role === "student") router.push("/student/browse");
+    if (me?.role === "student") router.push("/student");
     else router.push("/login");
   };
 

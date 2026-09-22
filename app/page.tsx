@@ -157,9 +157,9 @@ export default function Landing() {
 
           {/* اليسار: أدوات الحساب */}
           <div className="flex items-center gap-3 sm:gap-5">
-            <a href="#packages" className="hidden sm:inline-block text-sm font-bold text-white/80 hover:text-white transition-colors">
+            <Link href="/grades" className="hidden sm:inline-block text-sm font-bold text-white/80 hover:text-white transition-colors">
               تسوق
-            </a>
+            </Link>
 
             {/* زر الدولة */}
             <button

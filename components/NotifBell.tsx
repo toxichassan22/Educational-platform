@@ -135,7 +135,7 @@ export function buildNotifs(db: DB, me: User): Notif[] {
   return out.sort((a, b) => b.ts - a.ts).slice(0, 7);
 }
 
-export default function NotifBell() {
+export default function NotifBell({ dark }: { dark?: boolean }) {
   const { db, me } = useStore();
   const [open, setOpen] = useState(false);
   const [seen, setSeen] = useState<number>(0);
@@ -164,7 +164,10 @@ export default function NotifBell() {
   return (
     <div className="relative">
       <button onClick={toggle} title="الإشعارات"
-        className={`relative p-2.5 rounded-xl transition-colors ${open ? "bg-primary-50 text-primary-600" : "text-slate-400 hover:bg-slate-100 hover:text-primary-600"}`}>
+        className={`relative p-2.5 rounded-xl transition-colors ${
+          dark
+            ? open ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#99a8bd] hover:bg-[#1a2130] hover:text-white border border-transparent"
+            : open ? "bg-primary-50 text-primary-600" : "text-slate-400 hover:bg-slate-100 hover:text-primary-600"}`}>
         <Icon name="bell" size={19} />
         {unread > 0 && (
           <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center animate-pop">
@@ -176,26 +179,26 @@ export default function NotifBell() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-12 z-50 w-[21rem] max-w-[85vw] bg-white rounded-2xl shadow-2xl shadow-night-900/20 border border-slate-100 overflow-hidden animate-fade-up">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50/60">
-              <span className="font-black text-sm text-primary-950 flex items-center gap-2">
-                <Icon name="bell" size={15} className="text-primary-600" /> الإشعارات
+          <div className={`absolute left-0 top-12 z-50 w-[21rem] max-w-[85vw] rounded-2xl shadow-2xl shadow-black/40 border overflow-hidden animate-fade-up ${dark ? "bg-[#161c29] border-[#2b3547]" : "bg-white border-slate-100 shadow-night-900/20"}`}>
+            <div className={`flex items-center justify-between px-4 py-3 border-b ${dark ? "border-[#2b3547] bg-[#1a2130]/60" : "border-slate-100 bg-slate-50/60"}`}>
+              <span className={`font-black text-sm flex items-center gap-2 ${dark ? "text-white" : "text-primary-950"}`}>
+                <Icon name="bell" size={15} className={dark ? "text-[#4a9bf5]" : "text-primary-600"} /> الإشعارات
               </span>
-              <span className="text-[10px] font-bold text-slate-400">{notifs.length} إشعار</span>
+              <span className={`text-[10px] font-bold ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>{notifs.length} إشعار</span>
             </div>
             <div className="max-h-[22rem] overflow-y-auto">
               {notifs.length === 0 && (
-                <div className="p-8 text-center text-slate-400 text-sm">لا إشعارات بعد</div>
+                <div className={`p-8 text-center text-sm ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>لا إشعارات بعد</div>
               )}
               {notifs.map((n) => (
-                <div key={n.id} className="flex items-start gap-3 px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50/60 transition-colors">
+                <div key={n.id} className={`flex items-start gap-3 px-4 py-3 border-b last:border-0 transition-colors ${dark ? "border-[#2b3547]/60 hover:bg-[#1a2130]/60" : "border-slate-50 hover:bg-slate-50/60"}`}>
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
                     style={{ background: `${n.color}15`, color: n.color }}>
                     <Icon name={n.icon} size={16} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-bold text-primary-900 leading-relaxed">{n.text}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">{whenLabel(n.ts)}</div>
+                    <div className={`text-xs font-bold leading-relaxed ${dark ? "text-white" : "text-primary-900"}`}>{n.text}</div>
+                    <div className={`text-[10px] mt-0.5 ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>{whenLabel(n.ts)}</div>
                   </div>
                 </div>
               ))}

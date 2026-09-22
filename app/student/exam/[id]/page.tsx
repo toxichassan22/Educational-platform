@@ -4,7 +4,7 @@ import React, { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
-import { Card, Icon, Btn, Badge, Progress } from "@/components/ui";
+import { Icon, DCard } from "@/components/ui";
 import { lessonById, questionsOfLesson, subjectOfLesson, unitById, canAccessLesson, attemptsOfUser, compareAttempts, reviewMistakes, Attempt, Question } from "@/lib/data";
 
 type Phase = "intro" | "taking" | "result";
@@ -77,22 +77,22 @@ function ExamSession({ lessonId }: { lessonId: string }) {
   }, [phase]);
 
   if (!lesson) {
-    return <AppShell role="student"><Card className="p-10 text-center text-slate-400">الاختبار غير موجود</Card></AppShell>;
+    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#99a8bd]">الاختبار غير موجود</DCard></AppShell>;
   }
 
   // حماية المحتوى: الاختبار للمشتركين مثل الدرس
   if (me && !canAccessLesson(db, me.id, lesson)) {
     return (
-      <AppShell role="student">
-        <div className="max-w-lg mx-auto rounded-[2rem] p-10 text-center bg-night-900 animate-fade-up">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-gold-500 text-night-950 flex items-center justify-center mb-4 animate-float">
+      <AppShell role="student" dark>
+        <div className="max-w-lg mx-auto rounded-[2rem] p-10 text-center bg-[#161c29] border border-[#2b3547] animate-fade-up">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#f5b329] text-[#0f1217] flex items-center justify-center mb-4 animate-float">
             <Icon name="lock" size={30} />
           </div>
           <h2 className="text-xl font-black text-white mb-2">الاختبار للمشتركين فقط</h2>
-          <p className="text-white/55 text-sm mb-6">اشترك لتؤدي اختبار «{lesson.title}» وتكسب XP</p>
+          <p className="text-[#99a8bd] text-sm mb-6">اشترك لتؤدي اختبار «{lesson.title}» وتكسب XP</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/student/subscription" className="bg-gold-500 hover:bg-gold-600 text-night-950 px-7 py-3 rounded-2xl font-black text-sm transition-colors">اشترك الآن</Link>
-            <Link href={`/student/lesson/${lessonId}`} className="border border-white/20 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">رجوع</Link>
+            <Link href="/student/subscription" className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-2xl font-black text-sm transition-colors">اشترك الآن</Link>
+            <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1a2130] transition-colors">رجوع</Link>
           </div>
         </div>
       </AppShell>
@@ -108,119 +108,122 @@ function ExamSession({ lessonId }: { lessonId: string }) {
   const mistakes = reviewMistakes(result);
 
   return (
-    <AppShell role="student">
-      <div className="max-w-3xl mx-auto animate-fade-up">
+    <AppShell role="student" dark>
+      <div className="max-w-[860px] mx-auto animate-fade-up">
 
         {/* ===== شاشة البداية ===== */}
         {phase === "intro" && (
-          <div className="rounded-3xl p-8 text-center bg-night-900">
-            <div>
-              <div className="w-20 h-20 mx-auto rounded-2xl bg-gold-500 text-night-950 flex items-center justify-center mb-5 animate-float">
-                <Icon name="target" size={38} />
-              </div>
-              <h1 className="text-2xl font-black text-white mb-2">اختبار درس «{lesson.title}»</h1>
-              <p className="text-white/50 text-sm mb-7">{subject?.name} · {unit?.title}</p>
+          <DCard className="rounded-[24px] p-8 sm:p-10 text-center">
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-[#f5b329] text-[#0f1217] flex items-center justify-center mb-5 animate-float">
+              <Icon name="target" size={38} />
+            </div>
+            <h1 className="text-2xl font-black text-white mb-2">اختبار درس «{lesson.title}»</h1>
+            <p className="text-[#99a8bd] text-sm mb-7">{subject?.name} · {unit?.title}</p>
 
-              <div className="grid grid-cols-3 gap-3 mb-7 max-w-sm mx-auto">
-                <div className="bg-white/[.07] border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-black text-white">{questions.length}</div>
-                  <div className="text-[11px] text-white/50 font-bold">سؤال</div>
-                </div>
-                <div className="bg-white/[.07] border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-black text-white">{Math.ceil(totalSec / 60)}</div>
-                  <div className="text-[11px] text-white/50 font-bold">دقائق</div>
-                </div>
-                <div className="bg-white/[.07] border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-black text-gold-400">+{questions.length * 15}</div>
-                  <div className="text-[11px] text-white/50 font-bold">XP متاح</div>
-                </div>
+            <div className="grid grid-cols-3 gap-3 mb-7 max-w-sm mx-auto">
+              <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
+                <div className="text-2xl font-black text-white">{questions.length}</div>
+                <div className="text-[11px] text-[#99a8bd] font-bold">سؤال</div>
               </div>
-
-              <div className="bg-white/[.07] border border-white/10 rounded-2xl p-3.5 text-xs text-white/70 mb-7 text-right leading-relaxed max-w-md mx-auto">
-                <b className="text-gold-300">تعليمات:</b> الاختبار موقوت ويبدأ فور ضغط «ابدأ». يمكنك التنقل بين الأسئلة أثناء المحاولة؛ لا تغلق الصفحة قبل التسليم. عند انتهاء الوقت تُسلَّم الإجابات تلقائيًا وتُحفظ النتيجة ومراجعتها على هذا المتصفح.
+              <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
+                <div className="text-2xl font-black text-white">{Math.ceil(totalSec / 60)}</div>
+                <div className="text-[11px] text-[#99a8bd] font-bold">دقائق</div>
               </div>
-
-              <div className="flex flex-wrap gap-3 justify-center">
-                {questions.length > 0 ? (
-                  <button onClick={start}
-                    className="bg-gold-500 hover:bg-gold-600 text-night-950 px-10 py-3.5 rounded-2xl font-black transition-colors active:scale-95 flex items-center gap-2">
-                    <Icon name="bolt" size={18} /> ابدأ الاختبار
-                  </button>
-                ) : (
-                  <div className="bg-white/[.07] border border-white/10 rounded-2xl px-6 py-3.5 text-sm font-bold text-white/60">
-                    لا توجد أسئلة لهذا الدرس بعد — راجع المذكرة حاليًا
-                  </div>
-                )}
-                <Link href={`/student/lesson/${lessonId}`}
-                  className="border border-white/20 text-white px-6 py-3.5 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">
-                  رجوع للدرس
-                </Link>
+              <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
+                <div className="text-2xl font-black text-[#f5b329]">+{questions.length * 15}</div>
+                <div className="text-[11px] text-[#99a8bd] font-bold">XP متاح</div>
               </div>
             </div>
-          </div>
+
+            <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-3.5 text-xs text-[#c6cfdd] mb-7 text-right leading-relaxed max-w-md mx-auto">
+              <b className="text-[#f5b329]">تعليمات:</b> الاختبار موقوت ويبدأ فور ضغط «ابدأ». يمكنك التنقل بين الأسئلة أثناء المحاولة؛ لا تغلق الصفحة قبل التسليم. عند انتهاء الوقت تُسلَّم الإجابات تلقائيًا وتُحفظ النتيجة ومراجعتها على هذا المتصفح.
+            </div>
+
+            <div className="flex flex-wrap gap-3 justify-center">
+              {questions.length > 0 ? (
+                <button onClick={start}
+                  className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-10 py-3.5 rounded-full font-black transition-colors active:scale-95 flex items-center gap-2 shadow-lg shadow-[#2072e0]/25">
+                  <Icon name="bolt" size={18} /> ابدأ الاختبار
+                </button>
+              ) : (
+                <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl px-6 py-3.5 text-sm font-bold text-[#99a8bd]">
+                  لا توجد أسئلة لهذا الدرس بعد — راجع المذكرة حاليًا
+                </div>
+              )}
+              <Link href={`/student/lesson/${lessonId}`}
+                className="border border-[#2b3547] text-white px-6 py-3.5 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">
+                رجوع للدرس
+              </Link>
+            </div>
+          </DCard>
         )}
 
         {/* ===== أثناء الاختبار ===== */}
         {phase === "taking" && questions.length > 0 && (
-          <div className="space-y-4">
-            {/* شريط الحالة */}
-            <Card className="p-4 flex items-center gap-4 border border-slate-100 sticky top-[72px] z-30">
-              <div className={`flex items-center gap-2 font-extrabold ${secondsLeft < 60 ? "text-red-500" : "text-primary-800"}`}>
-                <Icon name="clock" size={18} />
-                <span className="text-lg tabular-nums" dir="ltr">{mm}:{ss}</span>
+          <div className="space-y-5">
+            {/* الشريط العلوي: سؤال X من N + بروجرس + المؤقت */}
+            <div className="flex items-center justify-between gap-4 flex-wrap sticky top-[84px] z-30">
+              <div className="space-y-2">
+                <div className="font-bold text-sm">السؤال {current + 1} من {questions.length}</div>
+                <div className="w-56 sm:w-72 h-2 bg-[#2b3547] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#2072e0] rounded-full transition-all" style={{ width: `${(answered / questions.length) * 100}%` }} />
+                </div>
               </div>
-              <div className="flex-1">
-                <Progress value={(answered / questions.length) * 100} />
+              <div className="flex items-center gap-2.5">
+                <span className={`flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-2xl px-4 py-2 font-bold ${secondsLeft < 60 ? "text-[#e04d4d]" : "text-[#f5b329]"}`}>
+                  <Icon name="clock" size={16} />
+                  <span className="tabular-nums" dir="ltr">{mm}:{ss}</span>
+                </span>
+                <button onClick={() => finish(answers)}
+                  className="bg-[#3d1a1a] border border-[#e04d4d]/40 text-[#e04d4d] font-bold text-sm px-4 py-2 rounded-2xl hover:bg-[#e04d4d]/15 transition-colors">
+                  تسليم
+                </button>
               </div>
-              <div className="text-xs font-bold text-slate-500">{answered}/{questions.length}</div>
-              <Btn variant="danger" className="!py-1.5 !px-3 text-xs" onClick={() => finish(answers)}>تسليم</Btn>
-            </Card>
+            </div>
 
-            {/* السؤال */}
-            <Card className="p-6 border border-slate-100" key={current}>
-              <div className="flex items-center justify-between mb-5">
-                <Badge tone="blue">سؤال {current + 1} من {questions.length}</Badge>
-                <Badge tone={questions[current].type === "mcq" ? "amber" : "gray"}>
-                  {questions[current].type === "mcq" ? "اختيار من متعدد" : "صح / خطأ"}
-                </Badge>
-              </div>
+            {/* كارت السؤال */}
+            <DCard className="rounded-[20px] p-7 sm:p-9" key={current}>
+              <h2 className="text-lg sm:text-xl font-black leading-relaxed mb-7">{questions[current].text}</h2>
 
-              <h2 className="text-lg font-bold text-primary-900 leading-relaxed mb-6">{questions[current].text}</h2>
-
-              <div className="space-y-2.5">
+              <div className="space-y-3.5">
                 {questions[current].options.map((opt, oi) => {
                   const selected = answers[current] === oi;
                   return (
                     <button key={oi}
                       onClick={() => setAnswers((a) => a.map((x, i) => (i === current ? oi : x)))}
-                      className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 text-right transition-all ${
-                        selected ? "border-primary-500 bg-primary-50" : "border-slate-200 hover:border-primary-300 hover:bg-slate-50 bg-white"}`}>
-                      <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all ${
-                        selected ? "border-primary-600 bg-primary-600" : "border-slate-300"}`}>
-                        {selected && <Icon name="check" size={14} className="text-white" />}
-                      </div>
-                      <span className={`text-sm font-bold ${selected ? "text-primary-900" : "text-slate-600"}`}>{opt}</span>
+                      className={`w-full flex items-center gap-3.5 px-6 py-4 rounded-2xl border-2 text-right transition-all ${
+                        selected ? "border-[#2072e0] bg-[#1a3454]" : "border-[#2b3547] bg-[#1a2130] hover:border-[#2072e0]/50"}`}>
+                      <span className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                        selected ? "border-[#2072e0]" : "border-[#5a6577]"}`}>
+                        {selected && <span className="w-3 h-3 rounded-full bg-[#2072e0]" />}
+                      </span>
+                      <span className="font-bold">{opt}</span>
                     </button>
                   );
                 })}
               </div>
-            </Card>
+            </DCard>
 
             {/* تنقل + مؤشر الأسئلة */}
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Btn variant="outline" onClick={() => setCurrent((c) => Math.max(0, c - 1))} disabled={current === 0}>السابق</Btn>
+              <button onClick={() => setCurrent((c) => Math.max(0, c - 1))} disabled={current === 0}
+                className="bg-[#161c29] border border-[#2b3547] text-white font-bold text-sm px-7 py-3 rounded-full disabled:opacity-40 hover:bg-[#1a2130] transition-colors">
+                ‹ السابق
+              </button>
               <div className="flex gap-1.5 flex-wrap justify-center">
-                {questions.map((q, i) => (
+                {questions.map((_, i) => (
                   <button key={i} onClick={() => setCurrent(i)}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                      i === current ? "bg-primary-600 text-white scale-110" : answers[i] !== null ? "bg-primary-100 text-primary-700" : "bg-white border border-slate-200 text-slate-400"}`}>
+                      i === current ? "bg-[#2072e0] text-white scale-110" : answers[i] !== null ? "bg-[#1a3454] border border-[#2072e0]/50 text-[#4a9bf5]" : "bg-[#161c29] border border-[#2b3547] text-[#99a8bd]"}`}>
                     {i + 1}
                   </button>
                 ))}
               </div>
               {current === questions.length - 1
-                ? <Btn variant="gold" onClick={() => finish(answers)}>تسليم الاختبار</Btn>
-                : <Btn onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}>التالي</Btn>}
+                ? <button onClick={() => finish(answers)}
+                    className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] font-black text-sm px-7 py-3 rounded-full transition-colors">تسليم الاختبار</button>
+                : <button onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
+                    className="bg-[#2072e0] hover:bg-[#1b63c4] text-white font-bold text-sm px-7 py-3 rounded-full transition-colors">التالي ›</button>}
             </div>
           </div>
         )}
@@ -228,67 +231,65 @@ function ExamSession({ lessonId }: { lessonId: string }) {
         {/* ===== النتيجة ===== */}
         {phase === "result" && (
           <div className="space-y-5">
-            <div className="rounded-3xl p-8 text-center bg-night-900">
-              <div>
-                <div className={`w-24 h-24 mx-auto rounded-2xl flex items-center justify-center mb-4 animate-pop ${
-                  pct >= 80 ? "bg-emerald-500" : pct >= 50 ? "bg-gold-500" : "bg-rose-500"} text-white`}>
-                  <Icon name={pct >= 50 ? "trophy" : "refresh"} size={44} />
-                </div>
-                <div className={`text-6xl font-black mb-1 ${pct >= 80 ? "text-emerald-300" : pct >= 50 ? "text-gold-300" : "text-rose-300"}`}>{pct}%</div>
-                <h2 className="text-xl font-black text-white mb-1">
-                  {pct >= 80 ? "ممتاز! أداء أسطوري" : pct >= 50 ? "جيد — أنت قريب" : "راجع الدرس وحاول مجددًا"}
-                </h2>
-                <p className="text-white/50 text-sm mb-2">أجبت بشكل صحيح على {score} من {questions.length} أسئلة</p>
-                <div className="inline-flex items-center gap-1.5 bg-white/10 rounded-full px-4 py-1.5 text-gold-300 font-black text-sm mb-6">
-                  <Icon name="bolt" size={15} /> +{score * 15} XP
-                </div>
-                <div className="flex gap-3 justify-center flex-wrap">
-                  <button onClick={start} className="bg-gold-500 hover:bg-gold-600 text-night-950 px-7 py-3 rounded-2xl font-black text-sm transition-colors flex items-center gap-2">
-                    <Icon name="refresh" size={15} /> إعادة الاختبار
-                  </button>
-                  <Link href={`/student/lesson/${lessonId}`} className="border border-white/20 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">مراجعة الدرس</Link>
-                  <Link href="/student/reports" className="border border-white/20 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-white/10 transition-colors">تقريري الكامل</Link>
-                </div>
+            <DCard className="rounded-[24px] p-8 text-center">
+              <div className={`w-24 h-24 mx-auto rounded-2xl flex items-center justify-center mb-4 animate-pop ${
+                pct >= 80 ? "bg-emerald-500" : pct >= 50 ? "bg-[#f5b329]" : "bg-rose-500"} text-white`}>
+                <Icon name={pct >= 50 ? "trophy" : "refresh"} size={44} />
               </div>
-            </div>
+              <div className={`text-6xl font-black mb-1 ${pct >= 80 ? "text-emerald-300" : pct >= 50 ? "text-[#f5b329]" : "text-rose-300"}`}>{pct}%</div>
+              <h2 className="text-xl font-black text-white mb-1">
+                {pct >= 80 ? "ممتاز! أداء أسطوري" : pct >= 50 ? "جيد — أنت قريب" : "راجع الدرس وحاول مجددًا"}
+              </h2>
+              <p className="text-[#99a8bd] text-sm mb-2">أجبت بشكل صحيح على {score} من {questions.length} أسئلة</p>
+              <div className="inline-flex items-center gap-1.5 bg-[#1a2130] rounded-full px-4 py-1.5 text-[#f5b329] font-black text-sm mb-6">
+                <Icon name="bolt" size={15} /> +{score * 15} XP
+              </div>
+              <div className="flex gap-3 justify-center flex-wrap">
+                <button onClick={start} className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-7 py-3 rounded-full font-black text-sm transition-colors flex items-center gap-2">
+                  <Icon name="refresh" size={15} /> إعادة الاختبار
+                </button>
+                <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">مراجعة الدرس</Link>
+                <Link href="/student/reports" className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">تقريري الكامل</Link>
+              </div>
+            </DCard>
 
-            <Card className="p-5 sm:p-6 border border-primary-100">
-              <div className="flex items-center gap-2 text-primary-700 font-extrabold mb-3"><Icon name="target" /> خطوتك التالية</div>
+            <DCard className="p-5 sm:p-6">
+              <div className="flex items-center gap-2 text-[#4a9bf5] font-black mb-3"><Icon name="target" /> خطوتك التالية</div>
               {difference !== null && baseline && (
-                <div className="bg-primary-50 rounded-xl p-4 mb-4" role="status">
-                  <div className="text-sm font-bold text-primary-900">المحاولة السابقة {Math.round(baseline.score / baseline.total * 100)}% ← الآن {pct}%</div>
-                  <p className="text-xs text-slate-600 mt-2">{difference > 0 ? `تحسّن بمقدار ${difference} نقطة مئوية` : difference < 0 ? `انخفاض بمقدار ${Math.abs(difference)} نقطة مئوية — راجع الأخطاء ثم حاول مجددًا` : "نفس نتيجة المحاولة السابقة — راجع تفاصيل الإجابات"} · مقارنة لنفس أسئلة الاختبار، وليست مقياسًا شاملًا لإتقان المادة.</p>
+                <div className="bg-[#1a3454] rounded-xl p-4 mb-4" role="status">
+                  <div className="text-sm font-bold text-white">المحاولة السابقة {Math.round(baseline.score / baseline.total * 100)}% ← الآن {pct}%</div>
+                  <p className="text-xs text-[#99a8bd] mt-2">{difference > 0 ? `تحسّن بمقدار ${difference} نقطة مئوية` : difference < 0 ? `انخفاض بمقدار ${Math.abs(difference)} نقطة مئوية — راجع الأخطاء ثم حاول مجددًا` : "نفس نتيجة المحاولة السابقة — راجع تفاصيل الإجابات"} · مقارنة لنفس أسئلة الاختبار، وليست مقياسًا شاملًا لإتقان المادة.</p>
                 </div>
               )}
-              <p className="text-sm text-slate-600 leading-relaxed mb-4">{mistakes.length ? `لديك ${mistakes.length} أسئلة تحتاج مراجعة، بما فيها الأسئلة غير المجابة. جهزنا لك شرح الإجابات وروابط للمذكرة؛ راجعها ثم أعد الاختبار لقياس الفرق.` : "أجبت عن كل الأسئلة بشكل صحيح. انتقل للدرس التالي أو راجع ملخص الدرس لتثبيت فهمك."}</p>
-              <Link href={`/student/lesson/${lessonId}#review`} className="inline-flex items-center gap-2 bg-primary-700 text-white rounded-xl px-5 py-3 text-sm font-bold">
+              <p className="text-sm text-[#99a8bd] leading-relaxed mb-4">{mistakes.length ? `لديك ${mistakes.length} أسئلة تحتاج مراجعة، بما فيها الأسئلة غير المجابة. جهزنا لك شرح الإجابات وروابط للمذكرة؛ راجعها ثم أعد الاختبار لقياس الفرق.` : "أجبت عن كل الأسئلة بشكل صحيح. انتقل للدرس التالي أو راجع ملخص الدرس لتثبيت فهمك."}</p>
+              <Link href={`/student/lesson/${lessonId}#review`} className="inline-flex items-center gap-2 bg-[#2072e0] text-white rounded-xl px-5 py-3 text-sm font-bold">
                 <Icon name="book" size={17} /> {mistakes.length ? "افتح خطة المراجعة" : "العودة إلى الدرس"}
               </Link>
-            </Card>
+            </DCard>
 
             {/* مراجعة الإجابات */}
-            <Card className="p-6 border border-slate-100">
-              <h3 className="font-extrabold text-primary-900 mb-4">مراجعة الإجابات</h3>
+            <DCard className="p-6">
+              <h3 className="font-black mb-4">مراجعة الإجابات</h3>
               <div className="space-y-4">
                 {questions.map((q, i) => {
                   const ok = answers[i] === q.correct;
                   return (
-                    <div key={q.id} className={`rounded-2xl border-2 p-4 ${ok ? "border-emerald-200 bg-emerald-50/40" : "border-red-200 bg-red-50/40"}`}>
+                    <div key={q.id} className={`rounded-2xl border-2 p-4 ${ok ? "border-emerald-500/30 bg-emerald-500/5" : "border-[#e04d4d]/30 bg-[#e04d4d]/5"}`}>
                       <div className="flex items-start gap-3">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${ok ? "bg-emerald-500" : "bg-red-500"} text-white`}>
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${ok ? "bg-emerald-500" : "bg-[#e04d4d]"} text-white`}>
                           <Icon name={ok ? "check" : "x"} size={14} />
                         </div>
                         <div className="flex-1">
-                          <div className="font-bold text-sm text-primary-900 mb-2">{i + 1}. {q.text}</div>
+                          <div className="font-bold text-sm mb-2">{i + 1}. {q.text}</div>
                           <div className="text-xs space-y-1">
-                            <div className={ok ? "text-emerald-700" : "text-red-600"}>
+                            <div className={ok ? "text-emerald-400" : "text-[#e04d4d]"}>
                               إجابتك: <b>{answers[i] !== null ? q.options[answers[i]!] : "— بدون إجابة"}</b>
                             </div>
-                            {!ok && <div className="text-emerald-700">الإجابة الصحيحة: <b>{q.options[q.correct]}</b></div>}
+                            {!ok && <div className="text-emerald-400">الإجابة الصحيحة: <b>{q.options[q.correct]}</b></div>}
                             {q.explanation && (
-                              <div className="mt-2 bg-primary-50/70 border border-primary-100 rounded-xl px-3 py-2 text-primary-800 leading-relaxed flex items-start gap-1.5">
-                                <Icon name="spark" size={13} className="text-primary-500 mt-0.5 shrink-0" />
-                                <span><b className="text-primary-600">الشرح:</b> {q.explanation}</span>
+                              <div className="mt-2 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-[#c6cfdd] leading-relaxed flex items-start gap-1.5">
+                                <Icon name="spark" size={13} className="text-[#4a9bf5] mt-0.5 shrink-0" />
+                                <span><b className="text-[#4a9bf5]">الشرح:</b> {q.explanation}</span>
                               </div>
                             )}
                           </div>
@@ -298,7 +299,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                   );
                 })}
               </div>
-            </Card>
+            </DCard>
           </div>
         )}
       </div>

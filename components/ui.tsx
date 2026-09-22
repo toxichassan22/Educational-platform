@@ -112,23 +112,41 @@ export function Btn({ children, onClick, variant = "primary", className = "", di
   );
 }
 
-export function Modal({ open, onClose, title, children, wide }: {
-  open: boolean; onClose: () => void; title: string; children: React.ReactNode; wide?: boolean;
+export function Modal({ open, onClose, title, children, wide, dark }: {
+  open: boolean; onClose: () => void; title: string; children: React.ReactNode; wide?: boolean; dark?: boolean;
 }) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-      <div className={`relative bg-white w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"}`}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"} ${dark ? "bg-[#161c29] border border-[#2b3547] text-white" : "bg-white"}`}
         onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-primary-900">{title}</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"><Icon name="x" size={18} /></button>
+          <h3 className={`text-lg font-bold ${dark ? "text-white" : "text-primary-900"}`}>{title}</h3>
+          <button onClick={onClose} className={`p-1.5 rounded-lg ${dark ? "hover:bg-white/10 text-[#99a8bd]" : "hover:bg-slate-100 text-slate-500"}`}><Icon name="x" size={18} /></button>
         </div>
         {children}
       </div>
     </div>
   );
+}
+
+// علم الكويت — مرسوم SVG (أخضر/أبيض/أحمر + شبه منحرف أسود)
+export function KuwaitFlag({ w = 22 }: { w?: number }) {
+  const h = w * 0.68;
+  return (
+    <svg viewBox="0 0 30 20" width={w} height={h} className="rounded-[3px] shrink-0">
+      <rect width="30" height="20" fill="#fff" />
+      <rect width="30" height="7" fill="#007a4d" />
+      <rect y="13" width="30" height="7" fill="#ce1126" />
+      <path d="M0 0h10L7 10l3 10H0z" fill="#0d1017" />
+    </svg>
+  );
+}
+
+// كارت داكن — لصفحات المنصة الداخلية (ثيم فيجما)
+export function DCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <div className={`bg-[#161c29] rounded-2xl border border-[#2b3547] ${className}`}>{children}</div>;
 }
 
 export function Stat({ icon, label, value, sub, color = "#0891b2" }: { icon: string; label: string; value: React.ReactNode; sub?: string; color?: string }) {

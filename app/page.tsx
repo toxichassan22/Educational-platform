@@ -3,38 +3,31 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui";
+import { HeroArt, WatermelonArt, BookQrArt, LaptopArt, QuizArt, ChatArt, BoxArt } from "@/components/landing-art";
 
 /* ===================== بيانات الصفحة ===================== */
 
-const TRUST_ITEMS = [
-  { label: "أفضل منصة تعليمية في الكويت", icon: "award", sub: "اختيار الطلبة وأولياء الأمور" },
-  { label: "تقييم 4.8 من 5", icon: "star", sub: "من آلاف الطلبة وأولياء الأمور" },
-  { label: "أوائل الكويت معنا", icon: "medal", sub: "نسب 99% و100% موثقة" },
-  { label: "+10 سنوات خبرة", icon: "clock", sub: "في التعليم الكويتي" },
-  { label: "تغطية كاملة للمنهج الكويتي", icon: "book", sub: "ابتدائي · متوسط · ثانوي" },
-];
-
 const TOP_STUDENTS = [
   {
-    name: "طالبة الصف الثاني عشر",
-    rank: "نسبة 99.9% — القسم العلمي",
-    pct: "99.9%",
-    initials: "ن",
-    quote: "نظمت وقتي مع خطة المراجعة وحللت نماذج السنوات السابقة بدون توتر.",
-  },
-  {
-    name: "طالب الصف الثاني عشر",
-    rank: "نسبة 100% — القسم العلمي",
+    name: "أحمد الكندري",
+    rank: "الأول على الكويت - علمي",
     pct: "100%",
-    initials: "م",
-    quote: "الشرح المرتبط بكل صفحة في المذكرة مع حل النماذج الوزارية صنع الفارق.",
+    initials: "أ",
+    quote: "المذكرات غطّت كل شي، والاختبارات ورّتني ضعفي قبل الامتحان.",
   },
   {
-    name: "طالب الصف العاشر",
-    rank: "تفوق في جميع المواد",
-    pct: "+35%",
+    name: "سارة العتيبي",
+    rank: "الأولى على الكويت - أدبي",
+    pct: "99.9%",
     initials: "س",
-    quote: "أذاكر بأي وقت ومن أي مكان، وتدريب المتابعة عالج نقاط ضعفي.",
+    quote: "كنت أذاكر بالوقت اللي يريحني وأعيد الشرح أكثر من مرة — هذا اللي فرق معي.",
+  },
+  {
+    name: "يوسف المطيري",
+    rank: "الثاني على الكويتيين - علمي",
+    pct: "99.5%",
+    initials: "ي",
+    quote: "أي سؤال يعقّدني أسأله للمعلم ويرد عليّ بسرعة، والتدريب رفع مستواي.",
   },
 ];
 
@@ -66,8 +59,8 @@ const MORE_STUDENTS = [
 const FEATURES = [
   {
     id: "notes",
-    title: "مذكرات شاملة",
-    desc: "مذكرات مرتبة تلخص لك المنهج من أول صفحة لآخرها، بأسلوب مبسط يخليك تستغني عن أي مصدر ثاني.",
+    title: "مذكرات تغطي كل شي",
+    desc: "ملخصات منظمة تغطي منهجك من أوله لآخره — ما تحتاج أي مصدر ثاني.",
     order: "text-first",
     badge: "PDF قابل للطباعة",
     accent: "#22d3ee",
@@ -75,8 +68,8 @@ const FEATURES = [
   },
   {
     id: "video",
-    title: "فيديوهات شرح مميزة",
-    desc: "دروس مسجلة تغطي المذكرة درسًا درسًا، شغّلها في الوقت اللي يناسبك وأعدها بدون أي حدود.",
+    title: "شرح فيديو لكل درس",
+    desc: "دروس مسجلة تشرح المنهج خطوة بخطوة — تعيدها متى تبي وبالوقت اللي يناسبك.",
     order: "img-first",
     badge: "استئناف من حيث توقفت",
     accent: "#a78bfa",
@@ -84,8 +77,8 @@ const FEATURES = [
   },
   {
     id: "quiz",
-    title: "اختبارات ذكية",
-    desc: "اختبارات قصيرة بتصحيح فوري مبنية على أنماط الامتحانات السابقة، تكشف نقاط ضعفك وتبني لك خطة مراجعة.",
+    title: "اختبارات تقيس جاهزيتك",
+    desc: "تدرّب على أسئلة بأسلوب الاختبارات السابقة واكشف نقاط ضعفك قبل يوم الامتحان.",
     order: "text-first",
     badge: "تحليل نقاط القوة والضعف",
     accent: "#34d399",
@@ -93,8 +86,8 @@ const FEATURES = [
   },
   {
     id: "chat",
-    title: "نخبة المعلمين معاك",
-    desc: "معلمون من الصف الأول يشرحون لك كل مادة ويردون على أسئلتك لحد ما توصل للمعلومة.",
+    title: "أميز المعلمين معك",
+    desc: "تواصل مباشر مع معلمين خبرة يجاوبون على أسئلتك ويرشدونك أول بأول.",
     order: "img-first",
     badge: "ردود ومتابعة مستمرة",
     accent: "#fbbf24",
@@ -102,15 +95,23 @@ const FEATURES = [
   },
   {
     id: "box",
-    title: "وفّر أكثر مع باقات تفوّق",
-    desc: "اشتراك واحد يفتح كل مواد صفك الدراسي، بسعر أوفر بكثير من الدروس الخصوصية.",
+    title: "باقات تفوّق توفر عليك أكثر",
+    desc: "اشتراك واحد يفتح كل مواد مرحلتك بسعر أوفر — وفّر حتى 80%.",
     order: "text-first",
     badge: "اشترك وجرب أول درس مجانًا",
     accent: "#60a5fa",
-    highlight: "وفّر لغاية 80%",
+    highlight: "خصم 80%",
     points: ["كل مواد الصف بسعر واحد", "دروس مجانية للتجربة", "إلغاء مرن في أي وقت"],
   },
 ];
+
+const FEATURE_ART: Record<string, React.ReactNode> = {
+  notes: <BookQrArt />,
+  video: <LaptopArt />,
+  quiz: <QuizArt />,
+  chat: <ChatArt />,
+  box: <BoxArt />,
+};
 
 /* نجوم الهيرو */
 const STARS: [number, number, number][] = [
@@ -236,17 +237,21 @@ export default function Landing() {
         <div className="mx-auto max-w-[1440px] w-full px-4 sm:px-8 grid lg:grid-cols-2 items-center gap-10 my-auto">
           {/* الجانب الأيمن: النص والعنوان والزر */}
           <div className="relative z-10 text-center lg:text-right">
+            <div className="rv inline-flex items-center gap-2 rounded-full bg-white/[0.06] border border-white/12 px-4 py-1.5 text-xs font-bold text-amber-300 mb-6">
+              <span>⭐</span>
+              <span>مصمّمة لطلبة الكويت</span>
+            </div>
             <h1 className="rv font-black leading-[1.14] text-[2.6rem] sm:text-6xl xl:text-[4.2rem] text-white">
-              شرح ومذكرات واختبارات
+              كل أدوات التفوق
               <br />
-              <span className="text-gradient">لكل مناهج الكويت</span>
+              <span className="text-gradient">في منصة واحدة</span>
             </h1>
 
             <p
               className="rv mt-6 text-white/70 text-lg sm:text-xl font-medium leading-relaxed max-w-xl mx-auto lg:mx-0 lg:ml-auto"
               style={{ "--rvd": "120ms" } as React.CSSProperties}
             >
-              مذكرات منظمة، شرح مرئي قصير، واختبارات بتصحيح فوري — خطة دراسة واضحة من أول درس حتى ليلة الامتحان
+              ارتقِ بمستواك مع مذكرات تفوّق المنظمة وشروحات الفيديو الواضحة واختبارات تقيس جاهزيتك
             </p>
 
             <div className="rv mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-3" style={{ "--rvd": "200ms" } as React.CSSProperties}>
@@ -256,50 +261,12 @@ export default function Landing() {
               >
                 استكشف المواد
               </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/85 font-bold text-base px-8 py-4 rounded-full transition-all"
-              >
-                ابدأ الآن
-              </Link>
-            </div>
-
-            <div
-              className="rv mt-7 flex items-center justify-center lg:justify-start gap-2.5 text-white/65 text-sm font-bold"
-              style={{ "--rvd": "280ms" } as React.CSSProperties}
-            >
-              <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-amber-400">
-                <Icon name="star" size={14} filled />
-              </span>
-              <span>تقييم 4.8 من 5 من آلاف الطلبة وأولياء الأمور</span>
             </div>
           </div>
 
-          {/* الجانب الأيسر: بطاقة تقدم الطالب */}
+          {/* الجانب الأيسر: دايرة التفوق + silhouette + النسبة */}
           <div className="relative flex items-center justify-center min-h-[380px] sm:min-h-[460px] lg:min-h-[560px]">
-            <div className="relative w-full max-w-[480px]">
-              <div className="absolute inset-0 -m-8 rounded-[3rem] bg-[#1d72fe]/15 blur-3xl" />
-              <div className="relative rounded-[2rem] border border-white/10 bg-[#101d33] p-6 sm:p-7 shadow-2xl animate-bob">
-                <div className="flex items-center justify-between mb-5">
-                  <div className="text-white font-black">لوحة تقدم الطالب</div>
-                  <div className="text-emerald-300 text-xs font-bold">مستمر اليوم</div>
-                </div>
-                <div className="rounded-2xl bg-white/[0.05] p-4 mb-3">
-                  <div className="flex justify-between text-xs font-bold mb-2">
-                    <span className="text-white/80">الرياضيات</span>
-                    <span className="text-[#60a5fa]" dir="ltr">72%</span>
-                  </div>
-                  <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
-                    <div className="h-full w-[72%] rounded-full bg-[#1d72fe]" />
-                  </div>
-                </div>
-                <div className="text-white/70 text-sm font-bold leading-loose">
-                  درس اليوم: المعادلات الخطية
-                  <br />
-                  اختبار قصير مع تصحيح فوري
-                </div>
-              </div>
-            </div>
+            <HeroArt />
           </div>
         </div>
 
@@ -311,50 +278,19 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ===================== شريط الثقة ===================== */}
-      <section id="trust" className="py-14 sm:py-20 border-t border-b border-white/[0.06] bg-[#0b111e]/60">
-        <h2 className="rv text-center text-2xl sm:text-4xl font-black text-white/35 mb-10 px-4">
-          جوائز وأرقام نفتخر فيها
-        </h2>
-
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 sm:gap-8 items-center justify-center text-center">
-            {TRUST_ITEMS.map((a, i) => (
-              <div
-                key={a.label}
-                className="rv flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-white/15 transition-all"
-                style={{ "--rvd": `${i * 80}ms` } as React.CSSProperties}
-              >
-                <div className="w-14 h-14 rounded-full border border-white/10 bg-white/[0.04] flex items-center justify-center text-[#1d72fe]">
-                  <Icon name={a.icon} size={26} filled={a.icon === "star"} />
-                </div>
-                <div>
-                  <div className="font-black text-sm sm:text-base text-white/90">{a.label}</div>
-                  <div className="text-[11px] text-white/40 font-medium mt-0.5">{a.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== منهج على دفعات ===================== */}
+      {/* ===================== البانر الأزرق ===================== */}
       <section className="px-3 sm:px-6 pt-10">
         <div className="rounded-t-[2.5rem] sm:rounded-t-[3.5rem] py-16 sm:py-24 text-center relative overflow-hidden bg-[#1d72fe] text-white shadow-2xl">
-          <div className="relative w-40 h-40 sm:w-52 sm:h-52 mx-auto mb-8">
-            <div className="absolute inset-0 rounded-full bg-white/15" />
-            <div className="absolute inset-4 rounded-full bg-white/15" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Icon name="book" size={72} className="text-white drop-shadow-lg" />
-            </div>
+          <div className="relative mx-auto mb-4 w-fit">
+            <WatermelonArt size={210} />
           </div>
 
-          <h2 className="rv text-3xl sm:text-5xl font-black">ذاكر على دفعات وبدون ضغط</h2>
+          <h2 className="rv text-3xl sm:text-5xl font-black">ذاكر على راحتك</h2>
           <p
             className="rv mt-4 text-white/90 font-bold text-base sm:text-xl max-w-2xl mx-auto px-4"
             style={{ "--rvd": "120ms" } as React.CSSProperties}
           >
-            نقسم كل مادة إلى دروس قصيرة واختبارات سريعة، لتعرف كل يوم ما الذي تدرسه وما الذي أنجزته
+            قسمنا لك المنهج إلى أجزاء بسيطة تنجزها على وقتك وبراحتك
           </p>
         </div>
       </section>
@@ -396,35 +332,14 @@ export default function Landing() {
                 </Link>
               </div>
 
-              {/* بطاقة بصرية أصلية */}
+              {/* رسمة السكشن — SVG أصلية مرسومة */}
               <div
                 className={`flex items-center justify-center min-h-[280px] sm:min-h-[340px] relative ${
                   f.order === "text-first" ? "lg:order-2" : "lg:order-1"
                 }`}
               >
-                <div className="relative w-full max-w-[420px] rounded-[1.75rem] border border-white/10 bg-[#0b1426] p-6 overflow-hidden">
-                  <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-3xl opacity-30" style={{ background: f.accent }} />
-                  <div className="relative flex items-center gap-3 mb-5">
-                    <span className="w-11 h-11 rounded-2xl flex items-center justify-center text-white" style={{ background: f.accent }}>
-                      <Icon name={f.id === "notes" ? "book" : f.id === "video" ? "play" : f.id === "quiz" ? "check" : f.id === "chat" ? "users" : "card"} size={20} />
-                    </span>
-                    <div className="text-white font-black">{f.title}</div>
-                  </div>
-                  {"highlight" in f && f.highlight && (
-                    <div className="relative mb-5 font-black text-4xl sm:text-5xl text-gold-grad pct-shine">
-                      {f.highlight}
-                    </div>
-                  )}
-                  <div className="relative space-y-2.5">
-                    {f.points.map((p, j) => (
-                      <div key={p} className="flex items-center gap-2.5 rounded-xl bg-white/[0.04] border border-white/[0.07] px-3.5 py-2.5">
-                        <span className="text-xs font-black text-white/30" dir="ltr">0{j + 1}</span>
-                        <span className="flex-1 text-sm font-bold text-white/80">{p}</span>
-                        <Icon name="check" size={14} className="text-emerald-400" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <div className="absolute w-64 h-64 rounded-full blur-3xl opacity-20" style={{ background: f.accent }} />
+                <div className="relative animate-bob">{FEATURE_ART[f.id]}</div>
               </div>
             </div>
           </section>
@@ -434,13 +349,13 @@ export default function Landing() {
       {/* ===================== قسم قصص التفوق ===================== */}
       <section id="top-students" className="px-3 sm:px-6 pb-8">
         <div className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#0b111e] border border-white/[0.06] py-14 sm:py-20 px-6">
-          <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">قصص تفوق من طلاب المنصة</h2>
+          <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">تفوق طلبتنا هو قصتنا</h2>
 
           <div className="mx-auto max-w-6xl grid sm:grid-cols-3 gap-6">
             {(showMore ? [...TOP_STUDENTS, ...MORE_STUDENTS] : TOP_STUDENTS).map((s, i) => (
               <div
                 key={s.name}
-                className="rv group rounded-[2rem] overflow-hidden border border-white/10 bg-[#141f36] shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="rv group rounded-[2rem] overflow-hidden border border-purple-300/15 bg-gradient-to-b from-[#2a0a4a] to-[#1b0632] shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 style={{ "--rvd": `${i * 100}ms` } as React.CSSProperties}
               >
                 <div className="relative p-6 text-center">
@@ -587,7 +502,7 @@ export default function Landing() {
           {/* سطر الحقوق السفلي */}
           <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/45">
             <div>
-              تفوّق شركة كويتية مقرها في مدينة الكويت. شروط • الخصوصية
+              تفوّق منصة كويتية مقرها في مدينة الكويت. شروط • الخصوصية
             </div>
             <div>
               تفوّق © جميع الحقوق محفوظة 2026

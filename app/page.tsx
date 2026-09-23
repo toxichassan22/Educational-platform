@@ -12,21 +12,21 @@ const TOP_STUDENTS = [
     name: "أحمد الكندري",
     rank: "الأول على الكويت - علمي",
     pct: "100%",
-    initials: "أ",
+    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
     quote: "المذكرات غطّت كل شي، والاختبارات ورّتني ضعفي قبل الامتحان.",
   },
   {
     name: "سارة العتيبي",
     rank: "الأولى على الكويت - أدبي",
     pct: "99.9%",
-    initials: "س",
+    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
     quote: "كنت أذاكر بالوقت اللي يريحني وأعيد الشرح أكثر من مرة — هذا اللي فرق معي.",
   },
   {
     name: "يوسف المطيري",
     rank: "الثاني على الكويتيين - علمي",
     pct: "99.5%",
-    initials: "ي",
+    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
     quote: "أي سؤال يعقّدني أسأله للمعلم ويرد عليّ بسرعة، والتدريب رفع مستواي.",
   },
 ];
@@ -37,21 +37,21 @@ const MORE_STUDENTS = [
     name: "طالب الصف الحادي عشر",
     rank: "نسبة 98.5% — القسم العلمي",
     pct: "98.5%",
-    initials: "ع",
+    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
     quote: "فيديوهات الشرح القصيرة خلتني أراجع المنهج كاملًا قبل الامتحان بأسبوع.",
   },
   {
     name: "طالبة الصف التاسع",
     rank: "الأولى على المدرسة في الرياضيات",
     pct: "+28%",
-    initials: "ف",
+    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
     quote: "الاختبارات الذكية ورّتني غلطاتي بالضبط، وركزت مراجعتي عليها بس.",
   },
   {
     name: "طالب الصف الثامن",
     rank: "من متعثر إلى متفوق في فصل واحد",
     pct: "+40%",
-    initials: "ي",
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
     quote: "حفظ موضع الفيديو والمذكرات المرتبة خلّوا المذاكرة عادة يومية سهلة.",
   },
 ];
@@ -364,9 +364,14 @@ export default function Landing() {
                     {s.pct}
                   </div>
 
-                  {/* شارة الطالب */}
-                  <div className="relative w-20 h-20 mx-auto mb-4 rounded-full bg-[#1d72fe]/15 border border-[#1d72fe]/30 flex items-center justify-center text-3xl font-black text-white">
-                    {s.initials}
+                  {/* صورة الطالب */}
+                  <div className="relative w-20 h-20 mx-auto mb-4">
+                    <img
+                      src={s.img}
+                      alt={s.name}
+                      loading="lazy"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-[#1d72fe]/40 shadow-lg shadow-[#1d72fe]/20"
+                    />
                   </div>
 
                   <div className="font-black text-xl text-white">{s.name}</div>

@@ -4,7 +4,7 @@ import React from "react";
    رسومات اللاندينج — SVG أصلية مرسومة يدويًا (مطابقة لفيجما)
    ============================================================ */
 
-/* هيرو: دايرة زرقا + silhouette طالب + 99.9% + اسم */
+/* هيرو: دايرة زرقا + صورة طالب متفوق + 99.9% + اسم */
 export function HeroArt() {
   return (
     <div className="relative flex flex-col items-center">
@@ -12,14 +12,14 @@ export function HeroArt() {
         {/* هالة */}
         <div className="absolute inset-0 -m-10 rounded-full bg-[#2072e0]/25 blur-3xl" />
         {/* الدايرة */}
-        <div className="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] rounded-full bg-gradient-to-b from-[#2a7ce8] to-[#1558b8] overflow-hidden shadow-2xl shadow-[#2072e0]/40 border border-white/10">
-          {/* silhouette */}
-          <svg viewBox="0 0 200 200" className="absolute bottom-0 inset-x-0 mx-auto w-[78%]">
-            <circle cx="100" cy="78" r="34" fill="#9cc3f2" />
-            <path d="M100 118c-42 0-66 24-72 82h144c-6-58-30-82-72-82z" fill="#9cc3f2" />
-          </svg>
+        <div className="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] rounded-full overflow-hidden shadow-2xl shadow-[#2072e0]/40 border border-white/10">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
+            alt="طالب متفوق من منصة تفوق"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
           {/* لمعة علوية */}
-          <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/15 to-transparent" />
+          <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
         </div>
         {/* نسبة التفوق فوق الدايرة */}
         <div className="absolute -bottom-5 inset-x-0 text-center">

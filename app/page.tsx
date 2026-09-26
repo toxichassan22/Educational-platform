@@ -522,10 +522,10 @@ export default function Landing() {
             <div>
               <div className="font-black text-white mb-4">المنصة</div>
               <ul className="space-y-2 text-white/60 text-xs font-medium">
-                <li><Link href="#top-students" className="hover:text-white">الطلبة الأوائل</Link></li>
+                <li><Link href="/top-students" className="hover:text-white">الطلبة الأوائل</Link></li>
                 <li><Link href="/bundles" className="hover:text-white">العروض والباقات</Link></li>
                 <li><Link href="/parents" className="hover:text-white">أولياء الأمور</Link></li>
-                <li><Link href="/login" className="hover:text-white">المعلمون</Link></li>
+                <li><Link href="/contact" className="hover:text-white">تواصل معنا</Link></li>
               </ul>
             </div>
             <div>
@@ -566,7 +566,10 @@ export default function Landing() {
           {/* سطر الحقوق السفلي */}
           <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/45">
             <div>
-              تفوّق منصة كويتية مقرها في مدينة الكويت. شروط • الخصوصية
+              تفوّق منصة كويتية مقرها في مدينة الكويت.{" "}
+              <Link href="/terms" className="hover:text-white underline-offset-2 hover:underline">الشروط</Link>
+              {" • "}
+              <Link href="/privacy" className="hover:text-white underline-offset-2 hover:underline">الخصوصية</Link>
             </div>
             <div>
               تفوّق © جميع الحقوق محفوظة 2026

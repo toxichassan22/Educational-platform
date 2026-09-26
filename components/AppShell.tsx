@@ -58,7 +58,7 @@ export default function AppShell({ children, role, dark }: { children: React.Rea
                   return (
                     <Link key={i.href} href={i.href}
                       className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all ${
-                        active ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#99a8bd] hover:text-white"}`}>
+                        active ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#9297a6] hover:text-white"}`}>
                       <Icon name={i.icon} size={16} /> {i.label}
                     </Link>
                   );
@@ -69,7 +69,7 @@ export default function AppShell({ children, role, dark }: { children: React.Rea
             <div className="flex items-center gap-2.5">
               <span className="hidden sm:flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-full px-3.5 py-2">
                 <KuwaitFlag w={22} />
-                <Icon name="down" size={10} className="text-[#8e99ab]" />
+                <Icon name="down" size={10} className="text-[#9297a6]" />
               </span>
               <NotifBell dark />
               <Link href={role === "student" ? "/student/account" : HOME[role]} className="flex items-center gap-2.5 bg-[#161c29] border border-[#2b3547] rounded-full ps-1.5 pe-4 py-1.5 hover:border-[#2072e0]/60 transition-colors">
@@ -90,7 +90,7 @@ export default function AppShell({ children, role, dark }: { children: React.Rea
             const active = pathname === i.href;
             return (
               <Link key={i.href} href={i.href}
-                className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-2xl text-[11px] font-bold transition-all ${active ? "text-[#4a9bf5]" : "text-[#99a8bd]/60"}`}>
+                className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-2xl text-[11px] font-bold transition-all ${active ? "text-[#4a9bf5]" : "text-[#9297a6]/60"}`}>
                 <span className={`p-1.5 rounded-xl transition-all ${active ? "bg-[#2072e0]/20" : ""}`}>
                   <Icon name={i.icon} size={20} />
                 </span>

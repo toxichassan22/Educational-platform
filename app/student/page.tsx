@@ -52,7 +52,7 @@ export default function StudentHome() {
                 style={{ background: `linear-gradient(145deg, ${s.color}, ${s.color}88)` }}>
                 <Icon name={s.icon} size={26} className="text-white drop-shadow" />
               </span>
-              <span className="text-[11px] font-bold text-[#99a8bd] group-hover:text-white transition-colors whitespace-nowrap">{s.name}</span>
+              <span className="text-[11px] font-bold text-[#9297a6] group-hover:text-white transition-colors whitespace-nowrap">{s.name}</span>
             </Link>
           ))}
         </div>
@@ -70,7 +70,7 @@ export default function StudentHome() {
                   <div className="text-[11px] font-bold text-[#33bf6b] mt-0.5">أستاذ {contSubject.teacher}</div>
                 </div>
               </div>
-              <span className="text-xs font-bold text-[#99a8bd] shrink-0" dir="ltr">1:00 pm</span>
+              <span className="text-xs font-bold text-[#9297a6] shrink-0" dir="ltr">1:00 pm</span>
             </div>
           )}
 
@@ -86,7 +86,7 @@ export default function StudentHome() {
                   <div className="text-[11px] font-bold text-[#4a9bf5] mt-0.5">خطة الدراسة — أكمل من حيث توقفت</div>
                 </div>
               </div>
-              <span className="text-xs font-bold text-[#99a8bd] shrink-0" dir="ltr">{continueLesson.durationMin}:00</span>
+              <span className="text-xs font-bold text-[#9297a6] shrink-0" dir="ltr">{continueLesson.durationMin}:00</span>
             </Link>
           ) : (
             <Link href="/student/browse"
@@ -96,7 +96,7 @@ export default function StudentHome() {
               </span>
               <div>
                 <div className="font-bold text-sm text-white">أنهيت كل الدروس المتاحة!</div>
-                <div className="text-[11px] text-[#99a8bd] mt-0.5">تصفح صفوفًا أخرى أو راجع أخطاءك السابقة</div>
+                <div className="text-[11px] text-[#9297a6] mt-0.5">تصفح صفوفًا أخرى أو راجع أخطاءك السابقة</div>
               </div>
             </Link>
           )}
@@ -144,7 +144,7 @@ export default function StudentHome() {
         </div>
 
         {/* شريحة الصف */}
-        <div className="flex items-center gap-3 text-xs font-bold text-[#99a8bd]">
+        <div className="flex items-center gap-3 text-xs font-bold text-[#9297a6]">
           <span>{grade?.name}</span>
           {pkg && <span className="bg-[#2072e0]/15 text-[#4a9bf5] px-2.5 py-1 rounded-full">{pkg.name}</span>}
           <Link href="/grades" className="text-[#4a9bf5] hover:text-white transition-colors">تغيير الصف</Link>

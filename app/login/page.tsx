@@ -18,7 +18,7 @@ const DEMO_ACCOUNTS = [
 type Step = "login" | "otp" | "register";
 
 const inputCls =
-  "w-full bg-[#1a2130] border border-[#2b3547] rounded-2xl px-4 h-[58px] text-base text-white placeholder:text-[#99a8bd]/60 outline-none focus:border-[#2072e0] transition-colors";
+  "w-full bg-[#1a2130] border border-[#2b3547] rounded-2xl px-4 h-[58px] text-base text-white placeholder:text-[#9297a6]/60 outline-none focus:border-[#2072e0] transition-colors";
 
 function PhoneRow({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
@@ -26,7 +26,7 @@ function PhoneRow({ value, onChange }: { value: string; onChange: (v: string) =>
       <div className="flex items-center justify-center gap-2 bg-[#1a2130] border border-[#2b3547] rounded-2xl h-[58px] px-4 shrink-0">
         <KuwaitFlag w={22} />
         <span className="font-bold text-white" dir="ltr">+965</span>
-        <Icon name="down" size={10} className="text-[#8e99ab]" />
+        <Icon name="down" size={10} className="text-[#9297a6]" />
       </div>
       <input value={value} onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, 8))}
         type="tel" inputMode="numeric" placeholder="رقم الهاتف" dir="ltr"
@@ -118,7 +118,7 @@ export default function LoginPage() {
                 <div className="text-center mb-7">
                   <div className="flex justify-center mb-5"><Logo size={52} light /></div>
                   <h1 className="text-[26px] sm:text-3xl font-black text-white mb-2">أدخل رمز التحقق</h1>
-                  <p className="text-[#99a8bd] text-sm">أرسلنا رمزًا مكوّنًا من 4 أرقام إلى <span dir="ltr">+965 ••• •• {phone.slice(-2) || "99"}</span></p>
+                  <p className="text-[#9297a6] text-sm">أرسلنا رمزًا مكوّنًا من 4 أرقام إلى <span dir="ltr">+965 ••• •• {phone.slice(-2) || "99"}</span></p>
                 </div>
 
                 <form onSubmit={submitOtp} className="space-y-5">
@@ -142,9 +142,9 @@ export default function LoginPage() {
                 </form>
 
                 <div className="flex items-center justify-between mt-5 text-sm">
-                  <button onClick={() => setStep("login")} className="font-bold text-[#99a8bd] hover:text-white transition-colors">‹ رجوع</button>
+                  <button onClick={() => setStep("login")} className="font-bold text-[#9297a6] hover:text-white transition-colors">‹ رجوع</button>
                   <button onClick={() => setCountdown(29)} disabled={countdown > 0}
-                    className="font-bold text-[#99a8bd] disabled:opacity-60 transition-colors">
+                    className="font-bold text-[#9297a6] disabled:opacity-60 transition-colors">
                     ما وصلك الرمز؟ إعادة الإرسال {countdown > 0 && <span dir="ltr">(00:{String(countdown).padStart(2, "0")})</span>}
                   </button>
                 </div>
@@ -156,20 +156,20 @@ export default function LoginPage() {
               <>
                 <div className="text-center mb-7">
                   <h1 className="text-[26px] sm:text-3xl font-black text-white mb-2">أنشئ حسابك الجديد</h1>
-                  <p className="text-[#99a8bd] text-sm">دقيقة واحدة وتكون جاهز للتفوق</p>
+                  <p className="text-[#9297a6] text-sm">دقيقة واحدة وتكون جاهز للتفوق</p>
                 </div>
 
                 <form onSubmit={(e) => { e.preventDefault(); if (login("s1")) router.push("/grades"); }}
                   className="space-y-4">
                   <div>
-                    <label className="block text-sm font-bold text-[#99a8bd] mb-2">اسم الطالب الكامل</label>
+                    <label className="block text-sm font-bold text-[#9297a6] mb-2">اسم الطالب الكامل</label>
                     <input placeholder="مثال: أحمد الكندري" className={inputCls} />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-[#99a8bd] mb-2">رقم الهاتف</label>
+                    <label className="block text-sm font-bold text-[#9297a6] mb-2">رقم الهاتف</label>
                     <PhoneRow value={phone} onChange={setPhone} />
                   </div>
-                  <p className="text-[11px] text-[#99a8bd]/70 leading-relaxed">في الخطوة التالية هتختار صفك الدراسي من صفحة المراحل</p>
+                  <p className="text-[11px] text-[#9297a6]/70 leading-relaxed">في الخطوة التالية هتختار صفك الدراسي من صفحة المراحل</p>
                   <button type="submit"
                     className="w-full h-[58px] rounded-full font-black text-lg text-white bg-[#2072e0] hover:bg-[#1b63c4] shadow-lg shadow-[#2072e0]/25 transition-all active:scale-[.98]">
                     سجّل وابدأ
@@ -186,7 +186,7 @@ export default function LoginPage() {
             {/* ===== حسابات الديمو ===== */}
             <div className="flex items-center gap-3 my-6">
               <div className="flex-1 h-px bg-[#2b3547]" />
-              <span className="text-xs text-[#99a8bd]/70 font-bold">أو جرّب الديمو</span>
+              <span className="text-xs text-[#9297a6]/70 font-bold">أو جرّب الديمو</span>
               <div className="flex-1 h-px bg-[#2b3547]" />
             </div>
 
@@ -199,21 +199,21 @@ export default function LoginPage() {
                   </div>
                   <div className="flex-1">
                     <div className="font-bold text-sm text-white">{a.label}</div>
-                    <div className="text-[11px] text-[#99a8bd]/70">{a.sub}</div>
+                    <div className="text-[11px] text-[#9297a6]/70">{a.sub}</div>
                   </div>
-                  <Icon name="back" size={16} className="text-[#99a8bd]/40 group-hover:text-[#4a9bf5] group-hover:-translate-x-0.5 transition-all rotate-180" />
+                  <Icon name="back" size={16} className="text-[#9297a6]/40 group-hover:text-[#4a9bf5] group-hover:-translate-x-0.5 transition-all rotate-180" />
                 </button>
               ))}
             </div>
 
             <button
               onClick={() => { resetDemo(); setResetDone(true); setTimeout(() => setResetDone(false), 2500); }}
-              className="w-full mt-4 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#99a8bd]/60 hover:text-[#99a8bd] transition-colors py-1">
+              className="w-full mt-4 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#9297a6]/60 hover:text-[#9297a6] transition-colors py-1">
               <Icon name="refresh" size={12} /> {resetDone ? "تمت إعادة تعيين بيانات الديمو ✓" : "إعادة تعيين بيانات الديمو"}
             </button>
           </div>
 
-          <p className="text-center text-xs text-[#99a8bd]/50 mt-5">بالتسجيل أنت توافق على شروط الاستخدام وسياسة الخصوصية</p>
+          <p className="text-center text-xs text-[#9297a6]/50 mt-5">بالتسجيل أنت توافق على شروط الاستخدام وسياسة الخصوصية</p>
         </div>
       </div>
     </div>

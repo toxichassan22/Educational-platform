@@ -56,7 +56,7 @@ const FOOTER = () =>
     px: 40,
     text: "علا شركة كويتية مقرها في مدينة الكويت · © 2026 علا جميع الحقوق محفوظة",
     links: "الشروط,الخصوصية,العروض,أولياء الأمور,الطلبة الأوائل",
-    color: "#6b7589",
+    color: "#5f6370",
     align: "center",
     fontSize: 13,
   });
@@ -1240,7 +1240,7 @@ function parentsPage(): PageDoc {
             display: "flex",
             wrap: true,
             justify: "center",
-            color: "#6b7589",
+            color: "#5f6370",
           }),
         ],
       ),

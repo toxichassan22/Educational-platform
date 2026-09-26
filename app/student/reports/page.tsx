@@ -34,7 +34,7 @@ export default function Reports() {
       <div className="space-y-6 animate-fade-up">
         <div>
           <h1 className="text-2xl font-black">تقارير الأداء</h1>
-          <p className="text-[#99a8bd] text-sm">تحليل ذكي لمستواك في كل مادة ودرس</p>
+          <p className="text-[#9297a6] text-sm">تحليل ذكي لمستواك في كل مادة ودرس</p>
         </div>
 
         {/* الملخص */}
@@ -49,12 +49,12 @@ export default function Reports() {
               <div className="absolute inset-0 flex items-center justify-center text-2xl font-black">{totalAvg}%</div>
             </div>
             <div className="font-bold">معدلك العام</div>
-            <div className="text-xs text-[#99a8bd] mt-1">عبر {perSubject.length} مواد مُختبَرة</div>
+            <div className="text-xs text-[#9297a6] mt-1">عبر {perSubject.length} مواد مُختبَرة</div>
           </DCard>
 
           <DCard className="p-5">
             <h3 className="font-black text-[#33bf6b] text-sm mb-3 flex items-center gap-2"><Icon name="award" size={16} /> نقاط القوة</h3>
-            {strengths.length === 0 && <p className="text-xs text-[#99a8bd]">أدِّ مزيدًا من الاختبارات لاكتشاف نقاط قوتك</p>}
+            {strengths.length === 0 && <p className="text-xs text-[#9297a6]">أدِّ مزيدًا من الاختبارات لاكتشاف نقاط قوتك</p>}
             <div className="space-y-2">
               {strengths.map((s) => (
                 <div key={s.subject.id} className="flex items-center justify-between text-sm">
@@ -67,7 +67,7 @@ export default function Reports() {
 
           <DCard className="p-5">
             <h3 className="font-black text-[#e04d4d] text-sm mb-3 flex items-center gap-2"><Icon name="target" size={16} /> تحتاج تركيزًا</h3>
-            {weaknesses.length === 0 && <p className="text-xs text-[#99a8bd]">لا توجد مواد ضعيفة — استمر!</p>}
+            {weaknesses.length === 0 && <p className="text-xs text-[#9297a6]">لا توجد مواد ضعيفة — استمر!</p>}
             <div className="space-y-2">
               {weaknesses.map((s) => (
                 <div key={s.subject.id} className="flex items-center justify-between text-sm">
@@ -83,7 +83,7 @@ export default function Reports() {
         <DCard className="p-6">
           <h2 className="font-black mb-5">أدائك في كل مادة</h2>
           <div className="space-y-4">
-            {perSubject.length === 0 && <p className="text-sm text-[#99a8bd] text-center py-6">لم تُؤدِّ اختبارات بعد — <Link href="/student/browse" className="text-[#4a9bf5] font-bold">ابدأ أول درس</Link></p>}
+            {perSubject.length === 0 && <p className="text-sm text-[#9297a6] text-center py-6">لم تُؤدِّ اختبارات بعد — <Link href="/student/browse" className="text-[#4a9bf5] font-bold">ابدأ أول درس</Link></p>}
             {perSubject.map((s) => (
               <div key={s.subject.id} className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${s.subject.color}20`, color: s.subject.color }}>
@@ -92,7 +92,7 @@ export default function Reports() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="font-bold text-sm">{s.subject.name}</span>
-                    <span className="text-xs text-[#99a8bd]">{s.count} اختبارًا · {s.lessons} دروس</span>
+                    <span className="text-xs text-[#9297a6]">{s.count} اختبارًا · {s.lessons} دروس</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex-1 h-2.5 bg-[#2b3547] rounded-full overflow-hidden">
@@ -112,7 +112,7 @@ export default function Reports() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-right text-xs text-[#99a8bd] border-b border-[#2b3547]">
+                <tr className="text-right text-xs text-[#9297a6] border-b border-[#2b3547]">
                   <th className="pb-3 font-bold">الدرس</th>
                   <th className="pb-3 font-bold">المادة</th>
                   <th className="pb-3 font-bold">الدرجة</th>
@@ -128,14 +128,14 @@ export default function Reports() {
                   return (
                     <tr key={a.id} className="border-b border-[#2b3547]/50 last:border-0">
                       <td className="py-3 font-bold">{l?.title ?? "—"}</td>
-                      <td className="py-3 text-[#99a8bd]">{subj?.name}</td>
+                      <td className="py-3 text-[#9297a6]">{subj?.name}</td>
                       <td className="py-3">
                         <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full" style={{ background: `${tone(p)}18`, color: tone(p) }}>
                           {a.score}/{a.total} ({p}%)
                         </span>
                       </td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{a.date}</td>
-                      <td className="py-3 text-[#99a8bd] text-xs" dir="ltr">{Math.floor(a.timeTakenSec / 60)}:{String(a.timeTakenSec % 60).padStart(2, "0")}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{a.date}</td>
+                      <td className="py-3 text-[#9297a6] text-xs" dir="ltr">{Math.floor(a.timeTakenSec / 60)}:{String(a.timeTakenSec % 60).padStart(2, "0")}</td>
                     </tr>
                   );
                 })}

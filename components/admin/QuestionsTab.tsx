@@ -45,8 +45,8 @@ export default function QuestionsTab() {
               const qc = db.questions.filter((q) => q.lessonId === l.id).length;
               return (
                 <button key={l.id} onClick={() => setLessonId(l.id)}
-                  className={`w-full flex items-center gap-2 p-2.5 rounded-xl text-right text-sm transition-all border ${lessonId === l.id ? "border-[#2072e0] bg-[#2072e0]/10 font-bold text-white" : "border-transparent hover:bg-[#1a2130] text-[#99a8bd]"}`}>
-                  <Icon name="doc" size={14} className="text-[#5b6478] shrink-0" />
+                  className={`w-full flex items-center gap-2 p-2.5 rounded-xl text-right text-sm transition-all border ${lessonId === l.id ? "border-[#2072e0] bg-[#2072e0]/10 font-bold text-white" : "border-transparent hover:bg-[#1a2130] text-[#9297a6]"}`}>
+                  <Icon name="doc" size={14} className="text-[#5f6370] shrink-0" />
                   <span className="flex-1 truncate">{l.title}</span>
                   <Badge tone={qc ? "blue" : "gray"}>{qc}</Badge>
                 </button>
@@ -58,9 +58,9 @@ export default function QuestionsTab() {
 
       <Card className="lg:col-span-3 p-4 border border-[#2b3547] min-h-[300px]">
         {!lessonId ? (
-          <div className="h-full flex flex-col items-center justify-center text-[#5b6478] py-16">
+          <div className="h-full flex flex-col items-center justify-center text-[#5f6370] py-16">
             <Icon name="target" size={40} />
-            <p className="text-sm mt-3 text-[#99a8bd]">اختر درسًا لعرض بنك أسئلته</p>
+            <p className="text-sm mt-3 text-[#9297a6]">اختر درسًا لعرض بنك أسئلته</p>
           </div>
         ) : (
           <>
@@ -77,16 +77,16 @@ export default function QuestionsTab() {
                       <div className="text-sm font-bold text-white mb-1.5">{q.text}</div>
                       <div className="flex flex-wrap gap-1.5">
                         {q.options.map((o, oi) => (
-                          <span key={oi} className={`text-[11px] px-2 py-0.5 rounded-lg ${oi === q.correct ? "bg-emerald-500/15 text-emerald-300 font-bold" : "bg-[#1a2130] text-[#99a8bd]"}`}>{o}</span>
+                          <span key={oi} className={`text-[11px] px-2 py-0.5 rounded-lg ${oi === q.correct ? "bg-emerald-500/15 text-emerald-300 font-bold" : "bg-[#1a2130] text-[#9297a6]"}`}>{o}</span>
                         ))}
                       </div>
                     </div>
                     <Badge tone={q.type === "mcq" ? "amber" : "gray"}>{q.type === "mcq" ? "اختيارات" : "صح/خطأ"}</Badge>
-                    <button onClick={() => deleteQuestion(q.id)} className="p-1 rounded-lg text-[#5b6478] hover:bg-red-500/15 hover:text-red-400"><Icon name="trash" size={14} /></button>
+                    <button onClick={() => deleteQuestion(q.id)} className="p-1 rounded-lg text-[#5f6370] hover:bg-red-500/15 hover:text-red-400"><Icon name="trash" size={14} /></button>
                   </div>
                 </div>
               ))}
-              {questions.length === 0 && <p className="text-xs text-[#99a8bd] text-center py-8">لا أسئلة — أضف أول سؤال</p>}
+              {questions.length === 0 && <p className="text-xs text-[#9297a6] text-center py-8">لا أسئلة — أضف أول سؤال</p>}
             </div>
           </>
         )}
@@ -95,16 +95,16 @@ export default function QuestionsTab() {
       <Modal open={open} onClose={() => setOpen(false)} title="إضافة سؤال جديد" wide>
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-bold text-[#99a8bd] block mb-1">نص السؤال</label>
+            <label className="text-xs font-bold text-[#9297a6] block mb-1">نص السؤال</label>
             <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder="اكتب السؤال…"
               className="w-full border border-[#2b3547] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2072e0] resize-none" />
           </div>
           <div>
-            <label className="text-xs font-bold text-[#99a8bd] block mb-1">نوع السؤال</label>
+            <label className="text-xs font-bold text-[#9297a6] block mb-1">نوع السؤال</label>
             <div className="flex gap-2">
               {(["mcq", "tf"] as const).map((t) => (
                 <button key={t} onClick={() => { setType(t); setCorrect(0); }}
-                  className={`flex-1 py-2 rounded-xl border-2 text-sm font-bold ${type === t ? "border-[#2072e0] bg-[#2072e0]/15 text-[#4a9bf5]" : "border-[#2b3547] text-[#99a8bd]"}`}>
+                  className={`flex-1 py-2 rounded-xl border-2 text-sm font-bold ${type === t ? "border-[#2072e0] bg-[#2072e0]/15 text-[#4a9bf5]" : "border-[#2b3547] text-[#9297a6]"}`}>
                   {t === "mcq" ? "اختيار من متعدد" : "صح / خطأ"}
                 </button>
               ))}
@@ -112,12 +112,12 @@ export default function QuestionsTab() {
           </div>
           {type === "mcq" && (
             <div>
-              <label className="text-xs font-bold text-[#99a8bd] block mb-1">الخيارات (اختر الصحيحة بالضغط على الرقم)</label>
+              <label className="text-xs font-bold text-[#9297a6] block mb-1">الخيارات (اختر الصحيحة بالضغط على الرقم)</label>
               <div className="space-y-2">
                 {opts.map((o, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <button onClick={() => setCorrect(i)}
-                      className={`w-8 h-8 rounded-lg text-xs font-extrabold shrink-0 ${correct === i ? "bg-emerald-500/150 text-white" : "bg-[#1a2130] text-[#99a8bd]"}`}>
+                      className={`w-8 h-8 rounded-lg text-xs font-extrabold shrink-0 ${correct === i ? "bg-emerald-500/150 text-white" : "bg-[#1a2130] text-[#9297a6]"}`}>
                       {i + 1}
                     </button>
                     <input value={o} onChange={(e) => setOpts(opts.map((x, xi) => (xi === i ? e.target.value : x)))} placeholder={`الخيار ${i + 1}`}
@@ -131,7 +131,7 @@ export default function QuestionsTab() {
             <div className="flex gap-2">
               {["صح", "خطأ"].map((o, i) => (
                 <button key={o} onClick={() => setCorrect(i)}
-                  className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-bold ${correct === i ? "border-emerald-400 bg-emerald-500/15 text-emerald-300" : "border-[#2b3547] text-[#99a8bd]"}`}>
+                  className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-bold ${correct === i ? "border-emerald-400 bg-emerald-500/15 text-emerald-300" : "border-[#2b3547] text-[#9297a6]"}`}>
                   {o}
                 </button>
               ))}

@@ -37,17 +37,17 @@ export default function Browse() {
       <div className="space-y-6 animate-fade-up">
         <div>
           <h1 className="text-2xl font-black">تصفح المنهج</h1>
-          <p className="text-[#99a8bd] text-sm">منهج الكويت كامل — المرحلة ← الصف ← المادة ← الدروس</p>
+          <p className="text-[#9297a6] text-sm">منهج الكويت كامل — المرحلة ← الصف ← المادة ← الدروس</p>
         </div>
 
         {/* البحث */}
         <div className="relative">
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8e99ab]"><Icon name="target" size={17} /></span>
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9297a6]"><Icon name="target" size={17} /></span>
           <input value={query} onChange={(e) => setQuery(e.target.value)}
             placeholder="ابحث عن درس أو مادة أو معلم… (مثال: نيوتن، النحو، العتيبي)"
-            className="w-full bg-[#161c29] border border-[#2b3547] rounded-2xl pr-11 pl-4 py-3.5 text-sm text-white placeholder:text-[#99a8bd]/50 outline-none focus:border-[#2072e0] transition-all" />
+            className="w-full bg-[#161c29] border border-[#2b3547] rounded-2xl pr-11 pl-4 py-3.5 text-sm text-white placeholder:text-[#9297a6]/50 outline-none focus:border-[#2072e0] transition-all" />
           {query && (
-            <button onClick={() => setQuery("")} className="absolute left-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-[#212936] text-[#8e99ab] flex items-center justify-center hover:bg-[#2b3547]">
+            <button onClick={() => setQuery("")} className="absolute left-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-[#212936] text-[#9297a6] flex items-center justify-center hover:bg-[#2b3547]">
               <Icon name="x" size={13} />
             </button>
           )}
@@ -56,11 +56,11 @@ export default function Browse() {
         {searching ? (
           /* ===== نتائج البحث ===== */
           <DCard className="rounded-3xl overflow-hidden">
-            <div className="px-5 py-3.5 border-b border-[#2b3547] bg-[#1a2130]/60 text-xs font-bold text-[#99a8bd]">
+            <div className="px-5 py-3.5 border-b border-[#2b3547] bg-[#1a2130]/60 text-xs font-bold text-[#9297a6]">
               {searchResults.length} نتيجة لـ «{q}»
             </div>
             {searchResults.length === 0 && (
-              <div className="p-10 text-center text-[#99a8bd] text-sm">
+              <div className="p-10 text-center text-[#9297a6] text-sm">
                 <Icon name="target" size={36} className="mx-auto mb-3 text-[#2b3547]" />
                 لا توجد نتائج — جرّب كلمة ثانية
               </div>
@@ -73,7 +73,7 @@ export default function Browse() {
                 const done = myAttempts.some((a) => a.lessonId === l.id);
                 return (
                   <Link key={l.id} href={`/student/lesson/${l.id}`} className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-[#1a2130]/60 transition-colors group">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${s?.color ?? "#8e99ab"}20`, color: s?.color ?? "#8e99ab" }}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${s?.color ?? "#9297a6"}20`, color: s?.color ?? "#9297a6" }}>
                       <Icon name="play" size={16} filled />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -82,9 +82,9 @@ export default function Browse() {
                         {l.free && <span className="text-[10px] font-black bg-[#1a3d24] text-[#33bf6b] px-2 py-0.5 rounded-lg">مجاني</span>}
                         {done && <span className="text-[10px] font-black bg-[#1a3d24] text-[#33bf6b] px-2 py-0.5 rounded-lg">مُنجز</span>}
                       </div>
-                      <div className="text-[11px] text-[#99a8bd] mt-0.5">{s?.name} · {u?.title} · {g?.name} · {l.durationMin} دقيقة</div>
+                      <div className="text-[11px] text-[#9297a6] mt-0.5">{s?.name} · {u?.title} · {g?.name} · {l.durationMin} دقيقة</div>
                     </div>
-                    <Icon name="back" size={15} className="text-[#8e99ab]/50 group-hover:text-[#4a9bf5] rotate-180 shrink-0" />
+                    <Icon name="back" size={15} className="text-[#9297a6]/50 group-hover:text-[#4a9bf5] rotate-180 shrink-0" />
                   </Link>
                 );
               })}
@@ -109,7 +109,7 @@ export default function Browse() {
                     <Icon name={t.icon} size={22} />
                   </div>
                   <div className={`font-black text-sm md:text-base ${active ? "text-white" : "text-white"}`}>{s.name}</div>
-                  <div className={`text-[10px] md:text-[11px] mt-0.5 font-bold ${active ? "text-white/60" : "text-[#99a8bd]"}`}>{active ? t.tagline : `${gCount} صفوف`}</div>
+                  <div className={`text-[10px] md:text-[11px] mt-0.5 font-bold ${active ? "text-white/60" : "text-[#9297a6]"}`}>{active ? t.tagline : `${gCount} صفوف`}</div>
                   {me?.gradeId && db.grades.find(g => g.id === me.gradeId)?.stageId === s.id && (
                     <span className={`absolute top-3 left-3 text-[9px] font-black px-2 py-0.5 rounded-full ${active ? "bg-white/20 text-white" : "bg-[#2072e0]/20 text-[#4a9bf5]"}`}>صفك</span>
                   )}
@@ -125,7 +125,7 @@ export default function Browse() {
             const t = stageTheme(stageId);
             return (
               <button key={g.id} onClick={() => setPicked((p) => ({ ...p, grade: g.id }))}
-                className={`px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition-all border ${gradeId === g.id ? "text-white border-transparent" : "bg-[#161c29] text-[#99a8bd] border-[#2b3547] hover:border-[#2072e0]/50"}`}
+                className={`px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition-all border ${gradeId === g.id ? "text-white border-transparent" : "bg-[#161c29] text-[#9297a6] border-[#2b3547] hover:border-[#2072e0]/50"}`}
                 style={gradeId === g.id ? { background: t.color } : {}}>
                 {g.name}
                 {g.id === me?.gradeId && <span className="mr-1.5" style={{ color: t.accent }}>★</span>}
@@ -153,10 +153,10 @@ export default function Browse() {
                     )}
                   </div>
                   <div className="font-black text-lg leading-tight">{s.name}</div>
-                  <div className="text-[#99a8bd] text-[11px] mt-0.5 mb-4">{s.teacher}</div>
+                  <div className="text-[#9297a6] text-[11px] mt-0.5 mb-4">{s.teacher}</div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold text-[#99a8bd] bg-[#212936] px-2.5 py-1 rounded-full">{units.length} وحدات</span>
-                    <span className="text-[11px] font-bold text-[#99a8bd] bg-[#212936] px-2.5 py-1 rounded-full">{lessonsCount} درسًا</span>
+                    <span className="text-[11px] font-bold text-[#9297a6] bg-[#212936] px-2.5 py-1 rounded-full">{units.length} وحدات</span>
+                    <span className="text-[11px] font-bold text-[#9297a6] bg-[#212936] px-2.5 py-1 rounded-full">{lessonsCount} درسًا</span>
                   </div>
                 </div>
               </Link>
@@ -165,7 +165,7 @@ export default function Browse() {
         </div>
 
         {subjects.length === 0 && (
-          <DCard className="rounded-3xl p-12 text-center text-[#99a8bd]">
+          <DCard className="rounded-3xl p-12 text-center text-[#9297a6]">
             <Icon name="grid" size={40} className="mx-auto mb-3 text-[#2b3547]" />
             لا توجد مواد لهذا الصف بعد
           </DCard>

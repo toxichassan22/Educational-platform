@@ -322,7 +322,7 @@ export function defaultProps(type: NodeType): Record<string, PropValue> {
         px: 40,
         text: "© 2026 علا — جميع الحقوق محفوظة",
         links: "الشروط,الخصوصية,العروض,أولياء الأمور,الطلبة الأوائل",
-        color: "#6b7589",
+        color: "#5f6370",
         align: "center",
         fontSize: 13,
       };
@@ -440,7 +440,7 @@ export function defaultProps(type: NodeType): Record<string, PropValue> {
         display: "flex",
         wrap: true,
         justify: "center",
-        color: "#6b7589",
+        color: "#5f6370",
       };
     case "statCircle":
       return {

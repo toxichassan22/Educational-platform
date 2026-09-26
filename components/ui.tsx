@@ -80,7 +80,7 @@ export function Badge({ children, tone = "blue" }: { children: React.ReactNode; 
     red: "bg-red-500/15 text-red-300",
     blue: "bg-[#2072e0]/15 text-[#4a9bf5]",
     amber: "bg-amber-500/15 text-amber-300",
-    gray: "bg-white/10 text-[#99a8bd]",
+    gray: "bg-white/10 text-[#9297a6]",
   };
   return <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${tones[tone]}`}>{children}</span>;
 }
@@ -100,7 +100,7 @@ export function Btn({ children, onClick, variant = "primary", className = "", di
   const v = {
     primary: "text-white bg-[#2072e0] hover:bg-[#1b63c4] shadow-lg shadow-[#2072e0]/25",
     gold: "text-[#0f1217] bg-gold-500 hover:bg-gold-600",
-    ghost: "bg-transparent text-[#99a8bd] hover:bg-white/[0.07] hover:text-white",
+    ghost: "bg-transparent text-[#9297a6] hover:bg-white/[0.07] hover:text-white",
     outline: "border-2 border-[#2072e0] text-[#4a9bf5] hover:bg-[#2072e0]/10",
     danger: "bg-red-500/15 text-red-300 hover:bg-red-500/25",
   };
@@ -123,7 +123,7 @@ export function Modal({ open, onClose, title, children, wide, dark }: {
         onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-white">{title}</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-[#99a8bd]"><Icon name="x" size={18} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-[#9297a6]"><Icon name="x" size={18} /></button>
         </div>
         {children}
       </div>
@@ -157,7 +157,7 @@ export function Stat({ icon, label, value, sub, color = "#2072e0" }: { icon: str
       </div>
       <div>
         <div className="text-2xl font-extrabold text-white leading-tight">{value}</div>
-        <div className="text-xs text-[#99a8bd]">{label}{sub ? ` · ${sub}` : ""}</div>
+        <div className="text-xs text-[#9297a6]">{label}{sub ? ` · ${sub}` : ""}</div>
       </div>
     </Card>
   );

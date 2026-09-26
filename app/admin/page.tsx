@@ -52,7 +52,7 @@ export default function AdminPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-extrabold text-white">لوحة تحكم الإدارة</h1>
-            <p className="text-[#99a8bd] text-sm">إدارة كاملة للمحتوى والمستخدمين والاشتراكات — دون الحاجة للمطوّر</p>
+            <p className="text-[#9297a6] text-sm">إدارة كاملة للمحتوى والمستخدمين والاشتراكات — دون الحاجة للمطوّر</p>
           </div>
           <Btn variant="ghost" className="text-xs" onClick={resetDemo}><Icon name="refresh" size={14} /> إعادة تعيين البيانات التجريبية</Btn>
         </div>
@@ -61,7 +61,7 @@ export default function AdminPage() {
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {TABS.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${tab === t.id ? "bg-[#2072e0] text-white shadow" : "bg-[#161c29] text-[#99a8bd] border border-[#2b3547] hover:border-[#2072e0]/60"}`}>
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${tab === t.id ? "bg-[#2072e0] text-white shadow" : "bg-[#161c29] text-[#9297a6] border border-[#2b3547] hover:border-[#2072e0]/60"}`}>
               <Icon name={t.icon} size={15} /> {t.label}
             </button>
           ))}
@@ -74,22 +74,22 @@ export default function AdminPage() {
               <div className="bg-[#161c29] rounded-2xl p-5 border border-[#2b3547]">
                 <div className="w-10 h-10 rounded-xl bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center mb-3"><Icon name="users" size={19} /></div>
                 <div className="text-2xl font-extrabold text-white">{students.length}</div>
-                <div className="text-xs text-[#99a8bd]">طالب مسجل</div>
+                <div className="text-xs text-[#9297a6]">طالب مسجل</div>
               </div>
               <div className="bg-[#161c29] rounded-2xl p-5 border border-[#2b3547]">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-300 flex items-center justify-center mb-3"><Icon name="check" size={19} /></div>
                 <div className="text-2xl font-extrabold text-white">{activeSubs.length}</div>
-                <div className="text-xs text-[#99a8bd]">اشتراك نشط</div>
+                <div className="text-xs text-[#9297a6]">اشتراك نشط</div>
               </div>
               <div className="bg-[#161c29] rounded-2xl p-5 border border-[#2b3547]">
                 <div className="w-10 h-10 rounded-xl bg-gold-500/15 text-gold-400 flex items-center justify-center mb-3"><Icon name="wallet" size={19} /></div>
                 <div className="text-2xl font-extrabold text-white">{revenue.toFixed(1)} <span className="text-sm">د.ك</span></div>
-                <div className="text-xs text-[#99a8bd]">إجمالي الإيرادات</div>
+                <div className="text-xs text-[#9297a6]">إجمالي الإيرادات</div>
               </div>
               <div className="bg-[#161c29] rounded-2xl p-5 border border-[#2b3547]">
                 <div className="w-10 h-10 rounded-xl bg-violet-500/15 text-violet-300 flex items-center justify-center mb-3"><Icon name="target" size={19} /></div>
                 <div className="text-2xl font-extrabold text-white">{avgScore}%</div>
-                <div className="text-xs text-[#99a8bd]">متوسط درجات الاختبارات</div>
+                <div className="text-xs text-[#9297a6]">متوسط درجات الاختبارات</div>
               </div>
             </div>
 
@@ -97,9 +97,9 @@ export default function AdminPage() {
               <Card className="p-5 border border-[#2b3547]">
                 <h3 className="font-extrabold text-white text-sm mb-4">المحتوى المنشور</h3>
                 <div className="grid grid-cols-3 gap-3 text-center">
-                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.subjects.length}</div><div className="text-[10px] text-[#99a8bd] mt-1">مادة</div></div>
-                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.lessons.length}</div><div className="text-[10px] text-[#99a8bd] mt-1">درس</div></div>
-                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.questions.length}</div><div className="text-[10px] text-[#99a8bd] mt-1">سؤال</div></div>
+                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.subjects.length}</div><div className="text-[10px] text-[#9297a6] mt-1">مادة</div></div>
+                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.lessons.length}</div><div className="text-[10px] text-[#9297a6] mt-1">درس</div></div>
+                  <div className="bg-[#1a2130] rounded-xl p-4"><div className="text-2xl font-extrabold text-white">{db.questions.length}</div><div className="text-[10px] text-[#9297a6] mt-1">سؤال</div></div>
                 </div>
               </Card>
               <Card className="p-5 border border-[#2b3547]">
@@ -108,7 +108,7 @@ export default function AdminPage() {
                   {db.payments.slice(0, 4).map((p) => (
                     <div key={p.id} className="flex items-center justify-between text-sm bg-[#1a2130] rounded-xl px-3 py-2">
                       <span className="font-bold text-white">{userById(db, p.userId)?.name}</span>
-                      <span className="text-xs text-[#99a8bd]">{p.packageName}</span>
+                      <span className="text-xs text-[#9297a6]">{p.packageName}</span>
                       <span className="font-extrabold text-white text-xs">{p.amountKwd} د.ك</span>
                     </div>
                   ))}
@@ -139,11 +139,11 @@ export default function AdminPage() {
                         style={{ height: `${Math.max(x.rev > 0 ? 8 : 3, (x.rev / maxRev) * 100)}%` }} />
                     </div>
                     {x.att > 0 && <div className="w-1.5 h-1.5 rounded-full bg-gold-500" title={`${x.att} اختبار`} />}
-                    <div className="text-[8px] text-[#5b6478] font-bold">{i % 2 === 0 ? x.d.slice(8) : ""}</div>
+                    <div className="text-[8px] text-[#5f6370] font-bold">{i % 2 === 0 ? x.d.slice(8) : ""}</div>
                   </div>
                 ))}
               </div>
-              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[#2b3547] text-[10px] font-bold text-[#99a8bd]">
+              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[#2b3547] text-[10px] font-bold text-[#9297a6]">
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[#2072e0]" /> إيراد اليوم</span>
                 <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-gold-500" /> اختبارات أُديت</span>
               </div>
@@ -164,7 +164,7 @@ export default function AdminPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[560px]">
                 <thead>
-                  <tr className="text-right text-xs text-[#99a8bd] border-b border-[#2b3547]">
+                  <tr className="text-right text-xs text-[#9297a6] border-b border-[#2b3547]">
                     <th className="pb-3 font-bold">الاسم</th><th className="pb-3 font-bold">النوع</th>
                     <th className="pb-3 font-bold">الصف</th><th className="pb-3 font-bold">الاشتراك</th>
                     <th className="pb-3 font-bold">الحالة</th><th className="pb-3 font-bold"></th>
@@ -178,12 +178,12 @@ export default function AdminPage() {
                         <td className="py-3">
                           <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-lg bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center font-bold text-xs">{u.name[0]}</div>
-                            <div><div className="font-bold text-white">{u.name}</div><div className="text-[10px] text-[#99a8bd]" dir="ltr">{u.phone}</div></div>
+                            <div><div className="font-bold text-white">{u.name}</div><div className="text-[10px] text-[#9297a6]" dir="ltr">{u.phone}</div></div>
                           </div>
                         </td>
                         <td className="py-3"><Badge tone={u.role === "parent" ? "amber" : "blue"}>{u.role === "parent" ? "ولي أمر" : "طالب"}</Badge></td>
-                        <td className="py-3 text-[#99a8bd] text-xs">{u.gradeId ? gradeOf(db, u.gradeId)?.name : `${u.childrenIds?.length ?? 0} أبناء`}</td>
-                        <td className="py-3 text-xs text-[#99a8bd]">{s ? packageById(db, s.packageId)?.name : "—"}</td>
+                        <td className="py-3 text-[#9297a6] text-xs">{u.gradeId ? gradeOf(db, u.gradeId)?.name : `${u.childrenIds?.length ?? 0} أبناء`}</td>
+                        <td className="py-3 text-xs text-[#9297a6]">{s ? packageById(db, s.packageId)?.name : "—"}</td>
                         <td className="py-3"><Badge tone={u.active ? "green" : "red"}>{u.active ? "نشط" : "موقوف"}</Badge></td>
                         <td className="py-3">
                           <Btn variant={u.active ? "danger" : "primary"} className="!py-1 !px-3 text-xs" onClick={() => toggleUser(u.id)}>
@@ -214,12 +214,12 @@ export default function AdminPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="font-extrabold text-white">{p.name}</div>
-                        <div className="text-xs text-[#99a8bd]">{p.scope === "subject" ? "مادة واحدة" : p.scope === "stage" ? "مرحلة كاملة" : "كل المنصة"}</div>
+                        <div className="text-xs text-[#9297a6]">{p.scope === "subject" ? "مادة واحدة" : p.scope === "stage" ? "مرحلة كاملة" : "كل المنصة"}</div>
                       </div>
                       {p.popular && <Badge tone="amber">مميزة</Badge>}
                     </div>
-                    <div className="text-2xl font-extrabold text-white mb-3">{p.priceKwd} <span className="text-sm font-normal text-[#99a8bd]">د.ك / {p.period}</span></div>
-                    <div className="text-xs text-[#99a8bd] mb-4">{count} مشترك نشط</div>
+                    <div className="text-2xl font-extrabold text-white mb-3">{p.priceKwd} <span className="text-sm font-normal text-[#9297a6]">د.ك / {p.period}</span></div>
+                    <div className="text-xs text-[#9297a6] mb-4">{count} مشترك نشط</div>
                     <Btn variant="danger" className="w-full !py-1.5 text-xs" onClick={() => deletePackage(p.id)}><Icon name="trash" size={13} /> حذف</Btn>
                   </Card>
                 );
@@ -245,12 +245,12 @@ export default function AdminPage() {
                   <div key={c.code} className="flex items-center gap-2.5 bg-[#1a2130] border border-[#2b3547] rounded-xl px-4 py-2.5">
                     <span className="font-black text-white text-sm" dir="ltr">{c.code}</span>
                     <Badge tone="amber">خصم {c.pct}%</Badge>
-                    <button onClick={() => deleteDiscountCode(c.code)} className="text-[#5b6478] hover:text-red-400 transition-colors">
+                    <button onClick={() => deleteDiscountCode(c.code)} className="text-[#5f6370] hover:text-red-400 transition-colors">
                       <Icon name="trash" size={14} />
                     </button>
                   </div>
                 ))}
-                {db.discountCodes.length === 0 && <p className="text-xs text-[#99a8bd]">لا توجد أكواد — أضف أول كود خصم</p>}
+                {db.discountCodes.length === 0 && <p className="text-xs text-[#9297a6]">لا توجد أكواد — أضف أول كود خصم</p>}
               </div>
             </Card>
           </div>
@@ -267,7 +267,7 @@ export default function AdminPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[600px]">
                 <thead>
-                  <tr className="text-right text-xs text-[#99a8bd] border-b border-[#2b3547]">
+                  <tr className="text-right text-xs text-[#9297a6] border-b border-[#2b3547]">
                     <th className="pb-3 font-bold">#</th><th className="pb-3 font-bold">المشترك</th>
                     <th className="pb-3 font-bold">الباقة</th><th className="pb-3 font-bold">المبلغ</th>
                     <th className="pb-3 font-bold">الطريقة</th><th className="pb-3 font-bold">التاريخ</th><th className="pb-3 font-bold">الحالة</th>
@@ -276,12 +276,12 @@ export default function AdminPage() {
                 <tbody>
                   {db.payments.map((p, i) => (
                     <tr key={p.id} className="border-b border-white/[0.07] last:border-0">
-                      <td className="py-3 text-[#99a8bd] text-xs">{db.payments.length - i}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{db.payments.length - i}</td>
                       <td className="py-3 font-bold text-white">{userById(db, p.userId)?.name}</td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{p.packageName}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{p.packageName}</td>
                       <td className="py-3 font-extrabold text-white">{p.amountKwd} د.ك</td>
                       <td className="py-3"><Badge tone={p.method === "KNET" ? "blue" : "gray"}>{p.method}</Badge></td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{p.date}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{p.date}</td>
                       <td className="py-3"><Badge tone={p.status === "success" ? "green" : p.status === "failed" ? "red" : "amber"}>{p.status === "success" ? "ناجحة" : p.status === "failed" ? "فاشلة" : "معلقة"}</Badge></td>
                     </tr>
                   ))}
@@ -299,7 +299,7 @@ export default function AdminPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[600px]">
                 <thead>
-                  <tr className="text-right text-xs text-[#99a8bd] border-b border-[#2b3547]">
+                  <tr className="text-right text-xs text-[#9297a6] border-b border-[#2b3547]">
                     <th className="pb-3 font-bold">المشترك</th><th className="pb-3 font-bold">الباقة</th>
                     <th className="pb-3 font-bold">البداية</th><th className="pb-3 font-bold">الانتهاء</th>
                     <th className="pb-3 font-bold">الحالة</th>
@@ -309,9 +309,9 @@ export default function AdminPage() {
                   {[...db.subscriptions].sort((a, b) => b.startDate.localeCompare(a.startDate)).map((s) => (
                     <tr key={s.id} className="border-b border-white/[0.07] last:border-0">
                       <td className="py-3 font-bold text-white">{userById(db, s.userId)?.name}</td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{packageById(db, s.packageId)?.name}</td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{s.startDate}</td>
-                      <td className="py-3 text-[#99a8bd] text-xs">{s.endDate}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{packageById(db, s.packageId)?.name}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{s.startDate}</td>
+                      <td className="py-3 text-[#9297a6] text-xs">{s.endDate}</td>
                       <td className="py-3"><Badge tone={s.status === "active" ? "green" : "gray"}>{s.status === "active" ? "نشط" : "منتهي"}</Badge></td>
                     </tr>
                   ))}
@@ -329,12 +329,12 @@ export default function AdminPage() {
               className="w-full border border-[#2b3547] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2072e0]" />
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-bold text-[#99a8bd] block mb-1">السعر (د.ك)</label>
+                <label className="text-xs font-bold text-[#9297a6] block mb-1">السعر (د.ك)</label>
                 <input type="number" value={pkgPrice} onChange={(e) => setPkgPrice(+e.target.value)} dir="ltr"
                   className="w-full border border-[#2b3547] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2072e0] text-left" />
               </div>
               <div>
-                <label className="text-xs font-bold text-[#99a8bd] block mb-1">المدة</label>
+                <label className="text-xs font-bold text-[#9297a6] block mb-1">المدة</label>
                 <select value={pkgPeriod} onChange={(e) => setPkgPeriod(e.target.value)}
                   className="w-full border border-[#2b3547] rounded-xl px-3 py-2.5 text-sm bg-[#161c29] outline-none">
                   <option>شهريًا</option><option>فصليًا</option><option>سنويًا</option>

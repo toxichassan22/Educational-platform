@@ -29,7 +29,21 @@
   --color-purple-uula: #3b0764;
   --color-purple-uula-dark: #24053e;
 
-  --font-sans: "Alexandria", "Segoe UI", Tahoma, Arial, sans-serif;
+  /* التوكنز الدلالية — المصدر الوحيد lib/theme.ts (C). أي قيمة موسومة
+     [uula] لها شاهد في ‎.playwright-capture/tokens-report.txt */
+  --color-ink: #fafbff; /* [uula] النص الأساسي */
+  --color-muted: #9297a6; /* [uula] النص الثانوي */
+  --color-muted-2: #5f6370; /* [uula] النص الهامشي */
+  --color-brand: #2072e0; /* [uula] الأزرق الرئيسي */
+  --color-bg: #0f1217;
+  --color-surface: #161c29;
+  --color-surface-2: #1a2130;
+  --color-line: #2b3547;
+
+  /* الخط الفعلي = Tajawal المحمّل عبر next/font في app/layout.tsx
+     تحت الاسم --font-body. كان الاسم --font-sans متصادمًا مع هذا السطر
+     وقيمة "Alexandria" غير المحمّلة، فيقع body على خط النظام. */
+  --font-sans: var(--font-body), "Segoe UI", Tahoma, Arial, sans-serif;
 }
 
 html {
@@ -38,14 +52,15 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: #0f1217;
-  color: #fafbff;
+  background: var(--color-bg);
+  color: var(--color-ink);
 }
 
+/* سكرولبار داكن — كان فاتحًا (#cbd5e1) فيبقي بقعة رمادية على الثيم الداكن */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-thumb { background: #2b3547; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #3d4a61; }
 
 /* ===== حركات ===== */
 @keyframes fadeUp {
@@ -98,8 +113,9 @@ body {
 }
 
 /* ===== أدوات ===== */
+/* هوية uula: أزرق أحادي + ذهبي — بلا سيان */
 .text-gradient {
-  background: linear-gradient(90deg, #4a9bf5, #67e8f9);
+  background: linear-gradient(90deg, #4a9bf5, #2072e0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -178,9 +194,10 @@ body {
 }
 
 /* هالة الكوكب النابضة */
+/* هالة الكوكب النابضة — أزرق العلامة بدل السيان الخارج عن الهوية */
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 90px 10px rgba(34,211,238,.30), 0 0 200px 60px rgba(8,145,178,.14); }
-  50% { box-shadow: 0 0 130px 30px rgba(34,211,238,.42), 0 0 260px 90px rgba(8,145,178,.20); }
+  0%, 100% { box-shadow: 0 0 90px 10px rgba(32,114,224,.30), 0 0 200px 60px rgba(21,83,168,.14); }
+  50% { box-shadow: 0 0 130px 30px rgba(32,114,224,.42), 0 0 260px 90px rgba(21,83,168,.20); }
 }
 .orb-glow { animation: glowPulse 5.5s ease-in-out infinite; }
 

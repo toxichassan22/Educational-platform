@@ -281,12 +281,12 @@ function NodeView(props: {
         <footer style={style} className={`${ring} ${selRing}`} {...wrapDnd}>
           <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
             {links.map((l) => (
-              <a key={l} href="#" onClick={(e) => e.preventDefault()} style={{ color: str(node.props.color, "#6b7589"), textDecoration: "none", fontSize: 14 }}>
+              <a key={l} href="#" onClick={(e) => e.preventDefault()} style={{ color: str(node.props.color, "#5f6370"), textDecoration: "none", fontSize: 14 }}>
                 {l}
               </a>
             ))}
           </div>
-          <p style={{ margin: 0, textAlign: "center", color: str(node.props.color, "#6b7589"), fontSize: num(node.props.fontSize, 13) }}>
+          <p style={{ margin: 0, textAlign: "center", color: str(node.props.color, "#5f6370"), fontSize: num(node.props.fontSize, 13) }}>
             {str(node.props.text)}
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 18, opacity: 0.55, fontSize: 12 }}>
@@ -632,7 +632,7 @@ function NodeView(props: {
           <div style={{ fontSize: 14, fontWeight: 800, color: str(node.props.color, "#e2e8f0"), textAlign: "center" }}>
             {str(node.props.title)}
           </div>
-          <div style={{ fontSize: 12, color: "#6b7589", textAlign: "center" }}>{str(node.props.desc)}</div>
+          <div style={{ fontSize: 12, color: "#5f6370", textAlign: "center" }}>{str(node.props.desc)}</div>
         </div>
       );
       break;
@@ -721,7 +721,7 @@ function NodeView(props: {
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 14, color: "#fff" }}>{str(node.props.name)}</div>
-              <div style={{ fontSize: 12, color: "#6b7589" }}>{str(node.props.meta)}</div>
+              <div style={{ fontSize: 12, color: "#5f6370" }}>{str(node.props.meta)}</div>
             </div>
           </footer>
         </blockquote>
@@ -813,7 +813,7 @@ function NodeView(props: {
                 padding: "8px 16px",
                 fontSize: 13,
                 fontWeight: 700,
-                color: str(node.props.color, "#6b7589"),
+                color: str(node.props.color, "#5f6370"),
                 background: "rgba(255,255,255,.03)",
               }}
             >

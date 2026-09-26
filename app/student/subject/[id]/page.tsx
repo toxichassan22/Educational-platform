@@ -18,7 +18,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
   const grade = subject ? gradeOf(db, subject.gradeId) : null;
 
   if (!subject) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#99a8bd]">المادة غير موجودة</DCard></AppShell>;
+    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">المادة غير موجودة</DCard></AppShell>;
   }
 
   const bestAttempt = (lessonId: string) => {
@@ -41,8 +41,8 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
 
         {/* مسار التنقل */}
         <div className="flex items-center gap-2.5 text-sm">
-          <Link href="/student" className="text-[#99a8bd] font-bold hover:text-white transition-colors">الرئيسية</Link>
-          <span className="text-[#99a8bd] font-bold">‹</span>
+          <Link href="/student" className="text-[#9297a6] font-bold hover:text-white transition-colors">الرئيسية</Link>
+          <span className="text-[#9297a6] font-bold">‹</span>
           <span className="text-white font-bold">{subject.name}</span>
         </div>
 
@@ -70,9 +70,9 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
             <span className="w-11 h-11 rounded-xl bg-[#f5b329]/15 text-[#f5b329] flex items-center justify-center text-xl shrink-0">🧈</span>
             <div className="flex-1">
               <div className="font-bold text-white">زبدة المادة</div>
-              <div className="text-[11px] font-bold text-[#99a8bd] mt-0.5">ملخص مركز لأهم ما في المنهج</div>
+              <div className="text-[11px] font-bold text-[#9297a6] mt-0.5">ملخص مركز لأهم ما في المنهج</div>
             </div>
-            <Icon name="back" size={16} className="text-[#99a8bd] group-hover:-translate-x-1 transition-transform" />
+            <Icon name="back" size={16} className="text-[#9297a6] group-hover:-translate-x-1 transition-transform" />
           </Link>
         )}
 
@@ -89,8 +89,8 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
                     {ui + 1}
                   </span>
                   <div className="flex-1 text-right font-bold">{u.title}</div>
-                  <span className="text-[12px] font-bold text-[#99a8bd]">{lessons.length} دروس</span>
-                  <Icon name="down" size={14} className={`text-[#8e99ab] transition-transform ${open ? "rotate-180" : ""}`} />
+                  <span className="text-[12px] font-bold text-[#9297a6]">{lessons.length} دروس</span>
+                  <Icon name="down" size={14} className={`text-[#9297a6] transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
 
                 {open && (
@@ -106,18 +106,18 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
                             state === "done" ? "bg-[#1a3d24] text-[#33bf6b]"
                             : state === "now" ? "bg-[#1a2e4d] text-[#2072e0]"
-                            : "bg-[#212936] text-[#8e99ab]"}`}>
+                            : "bg-[#212936] text-[#9297a6]"}`}>
                             {state === "lock" ? <Icon name="lock" size={15} />
                               : state === "done" ? <Icon name="check" size={17} />
                               : <Icon name="play" size={14} filled />}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`font-bold flex items-center gap-2 flex-wrap ${locked ? "text-[#99a8bd]" : "text-white"}`}>
+                            <div className={`font-bold flex items-center gap-2 flex-wrap ${locked ? "text-[#9297a6]" : "text-white"}`}>
                               {l.title}
                               {l.free && <span className="text-[11px] font-black bg-[#1a3d24] text-[#33bf6b] px-2 py-0.5 rounded-lg">مجاني</span>}
-                              {locked && <span className="text-[10px] font-black bg-[#212936] text-[#8e99ab] px-2 py-0.5 rounded-lg">للمشتركين</span>}
+                              {locked && <span className="text-[10px] font-black bg-[#212936] text-[#9297a6] px-2 py-0.5 rounded-lg">للمشتركين</span>}
                             </div>
-                            <div className="text-[13px] text-[#99a8bd] mt-1">فيديو · {l.durationMin} دقيقة
+                            <div className="text-[13px] text-[#9297a6] mt-1">فيديو · {l.durationMin} دقيقة
                               {questionsOfLesson(db, l.id).length > 0 && <span> · {questionsOfLesson(db, l.id).length} أسئلة</span>}
                             </div>
                           </div>

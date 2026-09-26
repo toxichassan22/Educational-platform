@@ -78,7 +78,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
   }, [phase]);
 
   if (!lesson) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#99a8bd]">الاختبار غير موجود</DCard></AppShell>;
+    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">الاختبار غير موجود</DCard></AppShell>;
   }
 
   // حماية المحتوى: الاختبار للمشتركين مثل الدرس
@@ -90,7 +90,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
             <Icon name="lock" size={30} />
           </div>
           <h2 className="text-xl font-black text-white mb-2">الاختبار للمشتركين فقط</h2>
-          <p className="text-[#99a8bd] text-sm mb-6">اشترك لتؤدي اختبار «{lesson.title}» وتكسب XP</p>
+          <p className="text-[#9297a6] text-sm mb-6">اشترك لتؤدي اختبار «{lesson.title}» وتكسب XP</p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/student/subscription" className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-2xl font-black text-sm transition-colors">اشترك الآن</Link>
             <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1a2130] transition-colors">رجوع</Link>
@@ -119,20 +119,20 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               <Icon name="target" size={38} />
             </div>
             <h1 className="text-2xl font-black text-white mb-2">اختبار درس «{lesson.title}»</h1>
-            <p className="text-[#99a8bd] text-sm mb-7">{subject?.name} · {unit?.title}</p>
+            <p className="text-[#9297a6] text-sm mb-7">{subject?.name} · {unit?.title}</p>
 
             <div className="grid grid-cols-3 gap-3 mb-7 max-w-sm mx-auto">
               <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
                 <div className="text-2xl font-black text-white">{questions.length}</div>
-                <div className="text-[11px] text-[#99a8bd] font-bold">سؤال</div>
+                <div className="text-[11px] text-[#9297a6] font-bold">سؤال</div>
               </div>
               <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
                 <div className="text-2xl font-black text-white">{Math.ceil(totalSec / 60)}</div>
-                <div className="text-[11px] text-[#99a8bd] font-bold">دقائق</div>
+                <div className="text-[11px] text-[#9297a6] font-bold">دقائق</div>
               </div>
               <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-4">
                 <div className="text-2xl font-black text-[#f5b329]">+{questions.length * 15}</div>
-                <div className="text-[11px] text-[#99a8bd] font-bold">XP متاح</div>
+                <div className="text-[11px] text-[#9297a6] font-bold">XP متاح</div>
               </div>
             </div>
 
@@ -147,7 +147,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                   <Icon name="bolt" size={18} /> ابدأ الاختبار
                 </button>
               ) : (
-                <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl px-6 py-3.5 text-sm font-bold text-[#99a8bd]">
+                <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl px-6 py-3.5 text-sm font-bold text-[#9297a6]">
                   لا توجد أسئلة لهذا الدرس بعد — راجع المذكرة حاليًا
                 </div>
               )}
@@ -172,7 +172,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="text-xs font-bold text-[#99a8bd]">السؤال {current + 1} من {questions.length}</span>
+                <span className="text-xs font-bold text-[#9297a6]">السؤال {current + 1} من {questions.length}</span>
                 <span className={`flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-2xl px-4 py-2 font-bold ${secondsLeft < 60 ? "text-[#e04d4d]" : "text-[#f5b329]"}`}>
                   <Icon name="clock" size={16} />
                   <span className="tabular-nums" dir="ltr">{mm}:{ss}</span>
@@ -256,7 +256,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                 {questions.map((_, i) => (
                   <button key={i} onClick={() => { setCurrent(i); setShowExplain(false); }}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                      i === current ? "bg-[#2072e0] text-white scale-110" : answers[i] !== null ? "bg-[#1a3454] border border-[#2072e0]/50 text-[#4a9bf5]" : "bg-[#161c29] border border-[#2b3547] text-[#99a8bd]"}`}>
+                      i === current ? "bg-[#2072e0] text-white scale-110" : answers[i] !== null ? "bg-[#1a3454] border border-[#2072e0]/50 text-[#4a9bf5]" : "bg-[#161c29] border border-[#2b3547] text-[#9297a6]"}`}>
                     {i + 1}
                   </button>
                 ))}
@@ -282,7 +282,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               <h2 className="text-xl font-black text-white mb-1">
                 {pct >= 80 ? "ممتاز! أداء أسطوري" : pct >= 50 ? "جيد — أنت قريب" : "راجع الدرس وحاول مجددًا"}
               </h2>
-              <p className="text-[#99a8bd] text-sm mb-2">أجبت بشكل صحيح على {score} من {questions.length} أسئلة</p>
+              <p className="text-[#9297a6] text-sm mb-2">أجبت بشكل صحيح على {score} من {questions.length} أسئلة</p>
               <div className="inline-flex items-center gap-1.5 bg-[#1a2130] rounded-full px-4 py-1.5 text-[#f5b329] font-black text-sm mb-6">
                 <Icon name="bolt" size={15} /> +{score * 15} XP
               </div>
@@ -300,10 +300,10 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               {difference !== null && baseline && (
                 <div className="bg-[#1a3454] rounded-xl p-4 mb-4" role="status">
                   <div className="text-sm font-bold text-white">المحاولة السابقة {Math.round(baseline.score / baseline.total * 100)}% ← الآن {pct}%</div>
-                  <p className="text-xs text-[#99a8bd] mt-2">{difference > 0 ? `تحسّن بمقدار ${difference} نقطة مئوية` : difference < 0 ? `انخفاض بمقدار ${Math.abs(difference)} نقطة مئوية — راجع الأخطاء ثم حاول مجددًا` : "نفس نتيجة المحاولة السابقة — راجع تفاصيل الإجابات"} · مقارنة لنفس أسئلة الاختبار، وليست مقياسًا شاملًا لإتقان المادة.</p>
+                  <p className="text-xs text-[#9297a6] mt-2">{difference > 0 ? `تحسّن بمقدار ${difference} نقطة مئوية` : difference < 0 ? `انخفاض بمقدار ${Math.abs(difference)} نقطة مئوية — راجع الأخطاء ثم حاول مجددًا` : "نفس نتيجة المحاولة السابقة — راجع تفاصيل الإجابات"} · مقارنة لنفس أسئلة الاختبار، وليست مقياسًا شاملًا لإتقان المادة.</p>
                 </div>
               )}
-              <p className="text-sm text-[#99a8bd] leading-relaxed mb-4">{mistakes.length ? `لديك ${mistakes.length} أسئلة تحتاج مراجعة، بما فيها الأسئلة غير المجابة. جهزنا لك شرح الإجابات وروابط للمذكرة؛ راجعها ثم أعد الاختبار لقياس الفرق.` : "أجبت عن كل الأسئلة بشكل صحيح. انتقل للدرس التالي أو راجع ملخص الدرس لتثبيت فهمك."}</p>
+              <p className="text-sm text-[#9297a6] leading-relaxed mb-4">{mistakes.length ? `لديك ${mistakes.length} أسئلة تحتاج مراجعة، بما فيها الأسئلة غير المجابة. جهزنا لك شرح الإجابات وروابط للمذكرة؛ راجعها ثم أعد الاختبار لقياس الفرق.` : "أجبت عن كل الأسئلة بشكل صحيح. انتقل للدرس التالي أو راجع ملخص الدرس لتثبيت فهمك."}</p>
               <Link href={`/student/lesson/${lessonId}#review`} className="inline-flex items-center gap-2 bg-[#2072e0] text-white rounded-xl px-5 py-3 text-sm font-bold">
                 <Icon name="book" size={17} /> {mistakes.length ? "افتح خطة المراجعة" : "العودة إلى الدرس"}
               </Link>

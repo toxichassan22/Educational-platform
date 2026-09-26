@@ -33,7 +33,7 @@ export default function GradesPage() {
           <div className="flex items-center gap-2.5">
             <span className="hidden sm:flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-full px-3.5 py-2">
               <KuwaitFlag w={22} />
-              <Icon name="down" size={10} className="text-[#8e99ab]" />
+              <Icon name="down" size={10} className="text-[#9297a6]" />
             </span>
             {me ? (
               <Link href={me.role === "student" ? "/student" : me.role === "parent" ? "/parent" : "/admin"}

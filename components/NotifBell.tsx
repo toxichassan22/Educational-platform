@@ -166,7 +166,7 @@ export default function NotifBell({ dark }: { dark?: boolean }) {
       <button onClick={toggle} title="الإشعارات"
         className={`relative p-2.5 rounded-xl transition-colors ${
           dark
-            ? open ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#99a8bd] hover:bg-[#1a2130] hover:text-white border border-transparent"
+            ? open ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#9297a6] hover:bg-[#1a2130] hover:text-white border border-transparent"
             : open ? "bg-primary-50 text-primary-600" : "text-slate-400 hover:bg-slate-100 hover:text-primary-600"}`}>
         <Icon name="bell" size={19} />
         {unread > 0 && (
@@ -184,11 +184,11 @@ export default function NotifBell({ dark }: { dark?: boolean }) {
               <span className={`font-black text-sm flex items-center gap-2 ${dark ? "text-white" : "text-primary-950"}`}>
                 <Icon name="bell" size={15} className={dark ? "text-[#4a9bf5]" : "text-primary-600"} /> الإشعارات
               </span>
-              <span className={`text-[10px] font-bold ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>{notifs.length} إشعار</span>
+              <span className={`text-[10px] font-bold ${dark ? "text-[#9297a6]" : "text-slate-400"}`}>{notifs.length} إشعار</span>
             </div>
             <div className="max-h-[22rem] overflow-y-auto">
               {notifs.length === 0 && (
-                <div className={`p-8 text-center text-sm ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>لا إشعارات بعد</div>
+                <div className={`p-8 text-center text-sm ${dark ? "text-[#9297a6]" : "text-slate-400"}`}>لا إشعارات بعد</div>
               )}
               {notifs.map((n) => (
                 <div key={n.id} className={`flex items-start gap-3 px-4 py-3 border-b last:border-0 transition-colors ${dark ? "border-[#2b3547]/60 hover:bg-[#1a2130]/60" : "border-slate-50 hover:bg-slate-50/60"}`}>
@@ -198,7 +198,7 @@ export default function NotifBell({ dark }: { dark?: boolean }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className={`text-xs font-bold leading-relaxed ${dark ? "text-white" : "text-primary-900"}`}>{n.text}</div>
-                    <div className={`text-[10px] mt-0.5 ${dark ? "text-[#99a8bd]" : "text-slate-400"}`}>{whenLabel(n.ts)}</div>
+                    <div className={`text-[10px] mt-0.5 ${dark ? "text-[#9297a6]" : "text-slate-400"}`}>{whenLabel(n.ts)}</div>
                   </div>
                 </div>
               ))}

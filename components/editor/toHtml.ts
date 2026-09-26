@@ -52,11 +52,11 @@ export function nodeToHtml(n: ENode): string {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean)
-        .map((l) => `<a href="#" style="color:${esc(str(n.props.color, "#6b7589"))};text-decoration:none;font-size:14px">${esc(l)}</a>`)
+        .map((l) => `<a href="#" style="color:${esc(str(n.props.color, "#5f6370"))};text-decoration:none;font-size:14px">${esc(l)}</a>`)
         .join("");
       return `<footer${styleAttr(n)}>
   <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">${links}</div>
-  <p style="margin:0;text-align:center;color:${esc(str(n.props.color, "#6b7589"))};font-size:${num(n.props.fontSize, 13)}px">${esc(str(n.props.text))}</p>
+  <p style="margin:0;text-align:center;color:${esc(str(n.props.color, "#5f6370"))};font-size:${num(n.props.fontSize, 13)}px">${esc(str(n.props.text))}</p>
   <div style="display:flex;gap:16px;justify-content:center;margin-top:18px;opacity:.55;font-size:12px"><span>Apple Pay</span><span>KNET</span></div>
 </footer>`;
     }
@@ -152,7 +152,7 @@ export function nodeToHtml(n: ENode): string {
       })}">
   <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(160deg,#1a2340,#121a30);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:24px">${esc(str(n.props.icon, "🏆"))}</div>
   <div style="font-size:14px;font-weight:800;color:${esc(str(n.props.color, "#e2e8f0"))};text-align:center">${esc(str(n.props.title))}</div>
-  <div style="font-size:12px;color:#6b7589;text-align:center">${esc(str(n.props.desc))}</div>
+  <div style="font-size:12px;color:#5f6370;text-align:center">${esc(str(n.props.desc))}</div>
 </div>`;
     case "teacherCard":
       return `<article${styleAttr(n)}>
@@ -175,7 +175,7 @@ export function nodeToHtml(n: ENode): string {
     <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff">${esc(str(n.props.name, "?").slice(0, 1))}</div>
     <div>
       <div style="font-weight:800;font-size:14px;color:#fff">${esc(str(n.props.name))}</div>
-      <div style="font-size:12px;color:#6b7589">${esc(str(n.props.meta))}</div>
+      <div style="font-size:12px;color:#5f6370">${esc(str(n.props.meta))}</div>
     </div>
   </footer>
 </blockquote>`;
@@ -201,7 +201,7 @@ export function nodeToHtml(n: ENode): string {
       const spans = items
         .map(
           (it) =>
-            `<span style="border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;color:${esc(str(n.props.color, "#6b7589"))};background:rgba(255,255,255,.03)">${esc(it)}</span>`,
+            `<span style="border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;color:${esc(str(n.props.color, "#5f6370"))};background:rgba(255,255,255,.03)">${esc(it)}</span>`,
         )
         .join("");
       return `<div${styleAttr(n)}>${spans}</div>`;

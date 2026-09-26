@@ -4,7 +4,9 @@ import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 
 const tajawal = Tajawal({
-  variable: "--font-sans",
+  // ‎--font-body وليس --font-sans: الاسم الأخير تحوزه Tailwind عبر @theme في
+  // globals.css، والتصادم كان يجعل body يقع على خط احتياطي بدل Tajawal.
+  variable: "--font-body",
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "700", "800", "900"],
 });

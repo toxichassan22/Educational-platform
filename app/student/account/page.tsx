@@ -35,7 +35,7 @@ export default function AccountPage() {
             {me.name[0]}
           </div>
           <div className="text-2xl font-black">{me.name}</div>
-          <div className="text-sm font-bold text-[#99a8bd]" dir="ltr">+965 {me.phone}</div>
+          <div className="text-sm font-bold text-[#9297a6]" dir="ltr">+965 {me.phone}</div>
           <div className="bg-[#1a3454] border border-[#2072e0] rounded-2xl px-4 py-2 text-[13px] font-bold text-[#4a9bf5]">
             {grade?.name}{pkg ? ` · ${pkg.name}` : " · بدون اشتراك"}
           </div>
@@ -46,11 +46,11 @@ export default function AccountPage() {
           {items.map((it) => {
             const inner = (
               <>
-                <span className="w-8 h-8 rounded-lg bg-[#212936] flex items-center justify-center shrink-0 text-[#8e99ab]">
+                <span className="w-8 h-8 rounded-lg bg-[#212936] flex items-center justify-center shrink-0 text-[#9297a6]">
                   <Icon name={it.icon} size={16} />
                 </span>
                 <span className="flex-1 font-bold">{it.label}</span>
-                <Icon name="back" size={14} className="text-[#8e99ab] rotate-180" />
+                <Icon name="back" size={14} className="text-[#9297a6] rotate-180" />
               </>
             );
             const cls = "w-full flex items-center gap-3.5 bg-[#161c29] border border-[#2b3547] rounded-2xl px-5 h-[62px] hover:border-[#2072e0]/60 transition-colors";
@@ -66,7 +66,7 @@ export default function AccountPage() {
           <Icon name="logout" size={18} /> تسجيل الخروج
         </button>
 
-        <p className="text-center text-[13px] text-[#99a8bd]/50">تفوّق © 2026 · الإصدار 1.0</p>
+        <p className="text-center text-[13px] text-[#9297a6]/50">تفوّق © 2026 · الإصدار 1.0</p>
       </div>
     </AppShell>
   );

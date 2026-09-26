@@ -22,7 +22,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
   const unit = lesson && unitById(db, lesson.unitId);
 
   if (!lesson) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#99a8bd]">التدريب غير موجود</DCard></AppShell>;
+    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">التدريب غير موجود</DCard></AppShell>;
   }
 
   if (me && !canAccessLesson(db, me.id, lesson)) {
@@ -61,18 +61,18 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
             <div>
               <div className="inline-block bg-[#8e5cf0]/15 text-[#b592f7] text-[11px] font-black px-3 py-1 rounded-full mb-3">تدريب متابعة — أسئلة مختلفة عن الاختبار</div>
               <h1 className="text-xl md:text-2xl font-black text-white mb-1">{lesson.title}</h1>
-              <p className="text-[#99a8bd] text-sm">{subject?.name} · {unit?.title}</p>
+              <p className="text-[#9297a6] text-sm">{subject?.name} · {unit?.title}</p>
             </div>
             <span className="text-[11px] font-black bg-[#3d321a] text-[#f5b329] px-2.5 py-1 rounded-full">{answered}/{questions.length}</span>
           </div>
-          <p className="relative text-[#99a8bd]/70 text-xs mt-4">أسئلة تدريبية على نفس نقاط الدرس — نتيجتها لا تُحتسب في تقاريرك، والاختبار الكامل هو مقياس التقدم.</p>
+          <p className="relative text-[#9297a6]/70 text-xs mt-4">أسئلة تدريبية على نفس نقاط الدرس — نتيجتها لا تُحتسب في تقاريرك، والاختبار الكامل هو مقياس التقدم.</p>
         </DCard>
 
         {questions.length === 0 && (
           <DCard className="p-8 text-center">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center mb-4"><Icon name="target" size={26} /></div>
             <h2 className="font-black mb-2">لا يوجد تدريب متخصص لهذا الدرس بعد</h2>
-            <p className="text-sm text-[#99a8bd] mb-5">يمكنك إعادة الاختبار الكامل أو مراجعة المذكرة.</p>
+            <p className="text-sm text-[#9297a6] mb-5">يمكنك إعادة الاختبار الكامل أو مراجعة المذكرة.</p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link href={`/student/exam/${lessonId}`} className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-full font-black text-sm transition-colors">إعادة الاختبار</Link>
               <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">العودة للدرس</Link>
@@ -88,7 +88,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
             <DCard key={q.id} className={`p-5 sm:p-6 !border-2 transition-colors ${done ? (ok ? "!border-emerald-500/40" : "!border-[#e04d4d]/40") : ""}`}>
               <div className="flex items-center gap-2 mb-3">
                 <span className={`text-[11px] font-black px-2.5 py-0.5 rounded-full ${done ? (ok ? "bg-[#1a3d24] text-[#33bf6b]" : "bg-[#3d1a1a] text-[#e04d4d]") : "bg-[#2072e0]/15 text-[#4a9bf5]"}`}>سؤال {i + 1}</span>
-                <span className="text-[11px] font-black bg-[#212936] text-[#99a8bd] px-2.5 py-0.5 rounded-full">{q.type === "mcq" ? "اختيار" : "صح / خطأ"}</span>
+                <span className="text-[11px] font-black bg-[#212936] text-[#9297a6] px-2.5 py-0.5 rounded-full">{q.type === "mcq" ? "اختيار" : "صح / خطأ"}</span>
               </div>
               <h2 className="font-bold leading-relaxed mb-4">{q.text}</h2>
               <div className="grid sm:grid-cols-2 gap-2">
@@ -133,14 +133,14 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
           </button>
         )}
         {questions.length > 0 && !done && answered < questions.length && (
-          <p className="text-center text-xs text-[#99a8bd]">أجب على جميع الأسئلة لعرض التصحيح</p>
+          <p className="text-center text-xs text-[#9297a6]">أجب على جميع الأسئلة لعرض التصحيح</p>
         )}
 
         {done && (
           <DCard className="rounded-3xl p-7 text-center animate-fade-up">
             <div className={`text-5xl font-black mb-1 ${pct >= 80 ? "text-emerald-300" : pct >= 50 ? "text-[#f5b329]" : "text-rose-300"}`}>{pct}%</div>
-            <p className="text-[#99a8bd] text-sm mb-1">أصبت {score} من {questions.length} في التدريب</p>
-            <p className="text-[#99a8bd]/60 text-xs mb-6">{pct >= 80 ? "مستوى ممتاز — جاهز لإعادة الاختبار الكامل" : "راجع الأقسام المحددة في المذكرة ثم أعد الاختبار الكامل لقياس تحسّنك"}</p>
+            <p className="text-[#9297a6] text-sm mb-1">أصبت {score} من {questions.length} في التدريب</p>
+            <p className="text-[#9297a6]/60 text-xs mb-6">{pct >= 80 ? "مستوى ممتاز — جاهز لإعادة الاختبار الكامل" : "راجع الأقسام المحددة في المذكرة ثم أعد الاختبار الكامل لقياس تحسّنك"}</p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link href={`/student/exam/${lessonId}`} className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-7 py-3 rounded-full font-black text-sm transition-colors flex items-center gap-2">
                 <Icon name="target" size={15} /> إعادة الاختبار الكامل

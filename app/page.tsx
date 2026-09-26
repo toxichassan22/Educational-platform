@@ -322,7 +322,7 @@ export default function Landing() {
                 </span>
                 <span>
                   <span className="block text-sm font-black text-white">{a.title}</span>
-                  <span className="block text-[11px] font-bold text-[#99a8bd] mt-0.5">{a.sub}</span>
+                  <span className="block text-[11px] font-bold text-[#9297a6] mt-0.5">{a.sub}</span>
                 </span>
               </div>
             ))}
@@ -426,7 +426,7 @@ export default function Landing() {
                   </div>
                   <div className="absolute bottom-3 inset-x-0 text-center px-4">
                     <div className="font-black text-lg text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.name}</div>
-                    <div className="text-[#99a8bd] text-xs font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.rank}</div>
+                    <div className="text-[#9297a6] text-xs font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.rank}</div>
                   </div>
                 </div>
 

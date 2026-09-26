@@ -443,7 +443,7 @@ function NodeView(props: {
           >
             {str(node.props.value, "100%")}
           </div>
-          <div style={{ fontSize: 13, color: "#94a3b8", marginTop: 10, maxWidth: 200, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 13, color: "#9297a6", marginTop: 10, maxWidth: 200, lineHeight: 1.5 }}>
             {str(node.props.label)}
           </div>
         </div>
@@ -697,7 +697,7 @@ function NodeView(props: {
               margin: 0,
               fontSize: 15,
               lineHeight: 1.9,
-              color: str(node.props.color, "#cbd5e1"),
+              color: str(node.props.color, "#fafbff"),
             }}
           >
             {str(node.props.quote)}
@@ -773,7 +773,7 @@ function NodeView(props: {
               }}
               style={{
                 background: y === active ? "#2563eb" : "rgba(255,255,255,.06)",
-                color: y === active ? "#fff" : "#94a3b8",
+                color: y === active ? "#fff" : "#9297a6",
                 border: y === active ? "1px solid #3b82f6" : "1px solid rgba(255,255,255,.1)",
                 borderRadius: 999,
                 padding: "8px 20px",

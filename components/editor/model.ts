@@ -395,7 +395,7 @@ export function defaultProps(type: NodeType): Record<string, PropValue> {
         color: "#fff",
         radius: 22,
         p: 0,
-        img: "https://placehold.co/480x360/1e293b/94a3b8?text=Teacher",
+        img: "https://placehold.co/480x360/1e293b/9297a6?text=Teacher",
         border: "1px solid rgba(255,255,255,.06)",
       };
     case "testimonial":
@@ -404,7 +404,7 @@ export function defaultProps(type: NodeType): Record<string, PropValue> {
         name: "خالد الكندري",
         meta: "العاشرة — علمي",
         bg: "linear-gradient(160deg,#101b36 0%,#0b1224 100%)",
-        color: "#cbd5e1",
+        color: "#fafbff",
         radius: 20,
         p: 24,
         border: "1px solid rgba(255,255,255,.06)",

@@ -103,7 +103,7 @@ export default function Subscription() {
                   {p.features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm">
                       <span className="font-black text-[#33bf6b]">✓</span>
-                      <span className="text-[#c6cfdd]">{f}</span>
+                      <span className="text-[#fafbff]">{f}</span>
                     </li>
                   ))}
                 </ul>

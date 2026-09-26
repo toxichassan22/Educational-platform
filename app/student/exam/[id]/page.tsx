@@ -136,7 +136,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               </div>
             </div>
 
-            <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-3.5 text-xs text-[#c6cfdd] mb-7 text-right leading-relaxed max-w-md mx-auto">
+            <div className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-3.5 text-xs text-[#fafbff] mb-7 text-right leading-relaxed max-w-md mx-auto">
               <b className="text-[#f5b329]">تعليمات:</b> الاختبار موقوت ويبدأ فور ضغط «ابدأ». يمكنك التنقل بين الأسئلة أثناء المحاولة؛ لا تغلق الصفحة قبل التسليم. عند انتهاء الوقت تُسلَّم الإجابات تلقائيًا وتُحفظ النتيجة ومراجعتها على هذا المتصفح.
             </div>
 
@@ -196,7 +196,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                   // بعد الاختيار: الصح يتلوّن أخضر والغلط المختار أحمر — مثل UULA
                   const cls = !answeredThis
                     ? selected ? "border-[#2072e0] bg-[#1a3454]" : "border-[#2b3547] bg-[#1a2130] hover:border-[#2072e0]/50"
-                    : isCorrect ? "border-[#22c55e] bg-[#22c55e]/10"
+                    : isCorrect ? "border-[#33bf6b] bg-[#33bf6b]/10"
                     : selected ? "border-[#e04d4d] bg-[#e04d4d]/10"
                     : "border-[#2b3547] bg-[#1a2130] opacity-60";
                   return (
@@ -204,7 +204,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                       onClick={() => setAnswers((a) => a.map((x, i) => (i === current ? oi : x)))}
                       className={`w-full flex items-center gap-3.5 px-6 py-4 rounded-2xl border-2 text-right transition-all ${cls}`}>
                       {answeredThis && isCorrect ? (
-                        <span className="w-[22px] h-[22px] rounded-full bg-[#22c55e] flex items-center justify-center shrink-0">
+                        <span className="w-[22px] h-[22px] rounded-full bg-[#33bf6b] flex items-center justify-center shrink-0">
                           <Icon name="check" size={12} className="text-white" />
                         </span>
                       ) : answeredThis && selected ? (
@@ -227,7 +227,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               {answers[current] !== null && (
                 <div className="flex items-center justify-between mt-6 pt-5 border-t border-[#2b3547]/50">
                   {answers[current] === questions[current].correct ? (
-                    <span className="font-black text-[#22c55e]">صح يا بطل!</span>
+                    <span className="font-black text-[#33bf6b]">صح يا بطل!</span>
                   ) : (
                     <span className="font-black text-[#e04d4d]">إجابة غير صحيحة</span>
                   )}
@@ -240,7 +240,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                 </div>
               )}
               {answers[current] !== null && showExplain && questions[current].explanation && (
-                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">
+                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-4 py-3 text-sm text-[#fafbff] leading-relaxed">
                   <b className="text-[#4a9bf5]">الشرح:</b> {questions[current].explanation}
                 </div>
               )}
@@ -263,9 +263,9 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               </div>
               {current === questions.length - 1
                 ? <button onClick={() => finish(answers)}
-                    className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-black text-sm px-7 py-3 rounded-full transition-colors">تسليم الاختبار</button>
+                    className="bg-[#33bf6b] hover:bg-[#2a9d58] text-white font-black text-sm px-7 py-3 rounded-full transition-colors">تسليم الاختبار</button>
                 : <button onClick={() => { setCurrent((c) => Math.min(questions.length - 1, c + 1)); setShowExplain(false); }}
-                    className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-black text-sm px-8 py-3 rounded-full transition-colors">السؤال التالي</button>}
+                    className="bg-[#33bf6b] hover:bg-[#2a9d58] text-white font-black text-sm px-8 py-3 rounded-full transition-colors">السؤال التالي</button>}
             </div>
           </div>
         )}
@@ -329,7 +329,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
                             </div>
                             {!ok && <div className="text-emerald-400">الإجابة الصحيحة: <b>{q.options[q.correct]}</b></div>}
                             {q.explanation && (
-                              <div className="mt-2 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-[#c6cfdd] leading-relaxed flex items-start gap-1.5">
+                              <div className="mt-2 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-[#fafbff] leading-relaxed flex items-start gap-1.5">
                                 <Icon name="spark" size={13} className="text-[#4a9bf5] mt-0.5 shrink-0" />
                                 <span><b className="text-[#4a9bf5]">الشرح:</b> {q.explanation}</span>
                               </div>

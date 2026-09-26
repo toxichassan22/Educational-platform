@@ -218,7 +218,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
           </a>
           <Link href={`/student/exam/${lesson.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
             <span className="w-11 h-11 rounded-xl bg-[#2d2144] flex items-center justify-center shrink-0">
-              <Icon name="target" size={16} className="text-[#a78bfa]" />
+              <Icon name="target" size={16} className="text-[#b79bf7]" />
             </span>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm">اختبار الدرس</div>
@@ -308,7 +308,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
                 {sec.points && (
                   <ul className="space-y-1.5 mr-8">
                     {sec.points.map((p, j) => (
-                      <li key={j} className="text-sm text-[#c6cfdd] flex items-start gap-2">
+                      <li key={j} className="text-sm text-[#fafbff] flex items-start gap-2">
                         <Icon name="check" size={14} className="text-[#33bf6b] mt-1 shrink-0" /> {p}
                       </li>
                     ))}
@@ -341,7 +341,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
                       className="shrink-0 text-[10px] font-black bg-[#2072e0]/20 text-[#4a9bf5] px-2 py-1 rounded-md hover:bg-[#2072e0]/30 transition-colors" dir="ltr">
                       {formatTime(n.seconds)}
                     </button>
-                    <span className="flex-1 text-[#c6cfdd] text-xs">{n.text}</span>
+                    <span className="flex-1 text-[#fafbff] text-xs">{n.text}</span>
                     <button onClick={() => removeStudyNote(n.id)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#9297a6] hover:text-[#e04d4d] transition-all">
                       <Icon name="trash" size={13} />
                     </button>
@@ -368,12 +368,12 @@ function LessonContent({ lessonId }: { lessonId: string }) {
               <div key={i} className="px-5 py-4 space-y-3">
                 <div className="flex items-start gap-3">
                   <span className="w-8 h-8 rounded-full bg-[#2b3547] flex items-center justify-center text-xs font-black shrink-0">{me?.name?.[0] ?? "ط"}</span>
-                  <div className="flex-1 bg-[#1a2130] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">{qa.q}</div>
+                  <div className="flex-1 bg-[#1a2130] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#fafbff] leading-relaxed">{qa.q}</div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="w-8 h-8 rounded-full bg-[#2072e0] flex items-center justify-center text-[11px] font-black text-white shrink-0">ت</span>
                   <div className="flex-1">
-                    <div className="bg-[#16233c] border border-[#2072e0]/25 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">{qa.a}</div>
+                    <div className="bg-[#16233c] border border-[#2072e0]/25 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#fafbff] leading-relaxed">{qa.a}</div>
                     <div className="flex gap-3 mt-2 pr-2">
                       <button className="text-[#9297a6] hover:text-[#33bf6b] transition-colors"><Icon name="check" size={14} /></button>
                     </div>

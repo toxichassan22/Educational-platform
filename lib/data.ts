@@ -408,9 +408,85 @@ export function seedDB(): DB {
 }
 
 // ===================== مساعدات =====================
+// ===================== صفحات التسوق حسب الصف =====================
+// ملاحظة: IDs عربية → أي param يحتاج decodeURIComponent قبل البحث (انظر AGENTS.md).
+
 export function gradeOf(db: DB, gradeId?: string) {
   return db.grades.find((g) => g.id === gradeId);
 }
+
+/** بيانات صف + مواده + إحصاءات المنهج — تُستخدم في grades/[id] و bundles/[id] */
+export interface GradeShop {
+  gradeId: string;
+  gradeName: string;
+  stageName: string;
+  stageId: string;
+  subjects: Subject[];
+  unitsCount: number;
+  lessonsCount: number;
+  questionsCount: number;
+  teachers: string[];
+  freeLessons: number;
+}
+
+export function gradeShop(db: DB, gradeId: string): GradeShop | null {
+  const grade = gradeOf(db, gradeId);
+  if (!grade) return null;
+  const stage = stageOfGrade(db, gradeId);
+  const subjects = subjectsOfGrade(db, gradeId);
+  const units = subjects.flatMap((s) => unitsOfSubject(db, s.id));
+  const lessons = units.flatMap((u) => lessonsOfUnit(db, u.id));
+  const questions = lessons.flatMap((l) => questionsOfLesson(db, l.id));
+  return {
+    gradeId: grade.id,
+    gradeName: grade.name,
+    stageName: stage?.name ?? "",
+    stageId: stage?.id ?? "",
+    subjects,
+    unitsCount: units.length,
+    lessonsCount: lessons.length,
+    questionsCount: questions.length,
+    teachers: [...new Set(subjects.map((s) => s.teacher))],
+    freeLessons: lessons.filter((l) => l.free).length,
+  };
+}
+
+/** عروض التسوق — مشتقة من باقات db بدون كتابة (تُعرض في /bundles و /bundles/[id]) */
+export interface BundleOffer {
+  packageId: string;
+  name: string;
+  scope: Package["scope"];
+  priceKwd: number;
+  period: string;
+  features: string[];
+  popular?: boolean;
+  /** سعر قبل الخصم للعرض التوفيري (محسوب: 5× الشهري للباقة الشاملة) */
+  wasPriceKwd: number | null;
+  savePct: number | null;
+}
+
+export function bundleOffers(db: DB): BundleOffer[] {
+  return db.packages.map((p) => {
+    if (p.scope === "all") {
+      const was = Math.round(p.priceKwd * 5);
+      return {
+        packageId: p.id, name: p.name, scope: p.scope, priceKwd: p.priceKwd,
+        period: p.period, features: p.features, popular: p.popular,
+        wasPriceKwd: was, savePct: Math.round((1 - p.priceKwd / was) * 100),
+      };
+    }
+    return {
+      packageId: p.id, name: p.name, scope: p.scope, priceKwd: p.priceKwd,
+      period: p.period, features: p.features, popular: p.popular,
+      wasPriceKwd: null, savePct: null,
+    };
+  });
+}
+
+export function bundleOffer(db: DB, packageId: string): BundleOffer | null {
+  return bundleOffers(db).find((o) => o.packageId === packageId) ?? null;
+}
+
 export function stageOfGrade(db: DB, gradeId?: string) {
   const g = gradeOf(db, gradeId);
   return db.stages.find((s) => s.id === g?.stageId);

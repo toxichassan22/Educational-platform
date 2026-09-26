@@ -10,8 +10,8 @@ import { HeroArt, WatermelonArt, BookQrArt, LaptopArt, QuizArt, ChatArt, BoxArt 
 const NAV_LINKS = [
   { label: "المنصة", href: "#features" },
   { label: "المتفوقون", href: "#top-students" },
-  { label: "العروض", href: "#packages" },
-  { label: "أولياء الأمور", href: "/login" },
+  { label: "العروض", href: "/bundles" },
+  { label: "أولياء الأمور", href: "/parents" },
 ];
 
 const AWARDS = [
@@ -285,10 +285,16 @@ export default function Landing() {
 
             <div className="rv mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-3" style={{ "--rvd": "200ms" } as React.CSSProperties}>
               <Link
-                href="/student/browse"
+                href="/grades"
                 className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-lg px-10 py-4 rounded-full transition-all hover:scale-[1.03] shadow-xl shadow-[#2072e0]/35 active:scale-95"
               >
                 استكشف المواد
+              </Link>
+              <Link
+                href="/bundles"
+                className="inline-flex items-center gap-2 border-2 border-white/25 hover:border-white/60 text-white font-bold text-lg px-10 py-4 rounded-full transition-all"
+              >
+                شوف العروض
               </Link>
             </div>
           </div>
@@ -352,8 +358,9 @@ export default function Landing() {
         {FEATURES.map((f) => (
           <section
             key={f.id}
-            id={f.id === "box" ? "packages" : undefined}
+            id={f.id === "box" ? undefined : undefined}
             className="rv rounded-[2rem] sm:rounded-[2.75rem] bg-[#161c29] border border-white/[0.06] overflow-hidden shadow-2xl"
+            data-feature={f.id}
           >
             <div className="mx-auto max-w-6xl px-6 sm:px-12 py-14 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">
               {/* النص والأزرار */}
@@ -377,7 +384,7 @@ export default function Landing() {
                   ))}
                 </ul>
                 <Link
-                  href="/student/browse"
+                  href="/grades"
                   className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-sm sm:text-base px-9 py-3.5 rounded-full transition-all hover:scale-[1.04] shadow-lg shadow-[#2072e0]/30 active:scale-95"
                 >
                   استكشف المواد
@@ -446,7 +453,7 @@ export default function Landing() {
               <Icon name="down" size={14} className={`transition-transform ${showMore ? "rotate-180" : ""}`} />
             </button>
             <Link
-              href="/login"
+              href="/grades"
               className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-sm px-8 py-3 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#2072e0]/30"
             >
               ابدأ قصتك معنا
@@ -516,17 +523,17 @@ export default function Landing() {
               <div className="font-black text-white mb-4">المنصة</div>
               <ul className="space-y-2 text-white/60 text-xs font-medium">
                 <li><Link href="#top-students" className="hover:text-white">الطلبة الأوائل</Link></li>
-                <li><Link href="#packages" className="hover:text-white">العروض والباقات</Link></li>
-                <li><Link href="/login" className="hover:text-white">أولياء الأمور</Link></li>
+                <li><Link href="/bundles" className="hover:text-white">العروض والباقات</Link></li>
+                <li><Link href="/parents" className="hover:text-white">أولياء الأمور</Link></li>
                 <li><Link href="/login" className="hover:text-white">المعلمون</Link></li>
               </ul>
             </div>
             <div>
               <div className="font-black text-white mb-4">المراحل التعليمية</div>
               <ul className="space-y-2 text-white/60 text-xs font-medium">
-                <li><Link href="/student/browse" className="hover:text-white">المرحلة الثانوية</Link></li>
-                <li><Link href="/student/browse" className="hover:text-white">المرحلة المتوسطة</Link></li>
-                <li><Link href="/student/browse" className="hover:text-white">المرحلة الابتدائية</Link></li>
+                <li><Link href="/grades" className="hover:text-white">المرحلة الثانوية</Link></li>
+                <li><Link href="/grades" className="hover:text-white">المرحلة المتوسطة</Link></li>
+                <li><Link href="/grades" className="hover:text-white">المرحلة الابتدائية</Link></li>
               </ul>
             </div>
             <div>
@@ -575,7 +582,7 @@ export default function Landing() {
           href="https://wa.me/96500000000"
           target="_blank"
           rel="noreferrer"
-          className="w-14 h-14 rounded-full bg-[#22c55e] hover:bg-[#16a34a] text-white flex items-center justify-center shadow-2xl shadow-[#22c55e]/50 hover:scale-110 active:scale-95 transition-all"
+          className="w-14 h-14 rounded-full bg-[#33bf6b] hover:bg-[#2a9d58] text-white flex items-center justify-center shadow-2xl shadow-[#33bf6b]/50 hover:scale-110 active:scale-95 transition-all"
           aria-label="تواصل معنا واتساب"
         >
           <Icon name="wa" size={26} />

@@ -58,7 +58,7 @@ export default function Reports() {
             <div className="space-y-2">
               {strengths.map((s) => (
                 <div key={s.subject.id} className="flex items-center justify-between text-sm">
-                  <span className="font-bold text-[#c6cfdd]">{s.subject.name}</span>
+                  <span className="font-bold text-[#fafbff]">{s.subject.name}</span>
                   <span className="text-[11px] font-black bg-[#1a3d24] text-[#33bf6b] px-2.5 py-0.5 rounded-full">{s.avg}%</span>
                 </div>
               ))}
@@ -71,7 +71,7 @@ export default function Reports() {
             <div className="space-y-2">
               {weaknesses.map((s) => (
                 <div key={s.subject.id} className="flex items-center justify-between text-sm">
-                  <span className="font-bold text-[#c6cfdd]">{s.subject.name}</span>
+                  <span className="font-bold text-[#fafbff]">{s.subject.name}</span>
                   <span className="text-[11px] font-black bg-[#3d1a1a] text-[#e04d4d] px-2.5 py-0.5 rounded-full">{s.avg}%</span>
                 </div>
               ))}

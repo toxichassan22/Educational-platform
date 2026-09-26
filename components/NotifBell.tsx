@@ -94,7 +94,7 @@ export function buildNotifs(db: DB, me: User): Notif[] {
         const days = Math.max(0, Math.ceil((ts(sub.endDate) - Date.now()) / DAY));
         if (days <= 30) out.push({ id: `sub-${sub.id}`, icon: "wallet", color: "#d97706", text: `اشتراك ${k.name.split(" ")[0]} ينتهي خلال ${days} يومًا`, ts: ts(sub.startDate) + DAY });
       } else {
-        out.push({ id: `nosub-${k.id}`, icon: "wallet", color: "#94a3b8", text: `${k.name.split(" ")[0]} بدون اشتراك — الدروس المجانية فقط متاحة`, ts: Date.now() - DAY });
+        out.push({ id: `nosub-${k.id}`, icon: "wallet", color: "#9297a6", text: `${k.name.split(" ")[0]} بدون اشتراك — الدروس المجانية فقط متاحة`, ts: Date.now() - DAY });
       }
     });
     // مدفوعات الأبناء

@@ -28,9 +28,9 @@ const IMG = {
   watermelon: "https://placehold.co/240x200/1a6ef5/ffffff?text=UULA",
   graduation: "https://placehold.co/160x160/12182b/60a5fa?text=Uni",
   aptitude: "https://placehold.co/160x160/12182b/60a5fa?text=Qiyas",
-  teacher1: "https://placehold.co/480x360/1e293b/94a3b8?text=T1",
-  teacher2: "https://placehold.co/480x360/1e293b/94a3b8?text=T2",
-  teacher3: "https://placehold.co/480x360/1e293b/94a3b8?text=T3",
+  teacher1: "https://placehold.co/480x360/1e293b/9297a6?text=T1",
+  teacher2: "https://placehold.co/480x360/1e293b/9297a6?text=T2",
+  teacher3: "https://placehold.co/480x360/1e293b/9297a6?text=T3",
 };
 
 const NAV = () =>
@@ -362,7 +362,7 @@ function homePage(): PageDoc {
                   n("text", {
                     text: "ارفع درجاتك مع مذكرات علا الشاملة وفيديوهاتها المميزة واختباراتها الذكية",
                     fontSize: 18,
-                    color: "#94a3b8",
+                    color: "#9297a6",
                     lineHeight: 1.85,
                     align: "right",
                   }),
@@ -878,7 +878,7 @@ function topStudentsPage(): PageDoc {
                   n("text", {
                     text: "انضم لآلاف الطلبة الذين حققوا نتائج استثنائية مع علا",
                     fontSize: 16,
-                    color: "#94a3b8",
+                    color: "#9297a6",
                     align: "right",
                   }),
                   CTA("ابدأ معنا"),
@@ -918,7 +918,7 @@ function topStudentsPage(): PageDoc {
                 name,
                 meta: "خريج علا",
                 bg: "linear-gradient(160deg,#101b36 0%,#0b1224 100%)",
-                color: "#cbd5e1",
+                color: "#fafbff",
                 radius: 20,
                 p: 24,
                 border: "1px solid rgba(255,255,255,.06)",
@@ -988,8 +988,8 @@ function parentsPage(): PageDoc {
                 meta,
                 score,
                 bg: `linear-gradient(165deg,${i === 1 ? "#1e3a5f" : "#152040"} 0%,#0d1530 100%)`,
-                accent: i === 1 ? "#60a5fa" : "#94a3b8",
-                img: `https://placehold.co/320x400/${i === 1 ? "1e3a5f" : "0f172a"}/94a3b8?text=0${i + 1}`,
+                accent: i === 1 ? "#60a5fa" : "#9297a6",
+                img: `https://placehold.co/320x400/${i === 1 ? "1e3a5f" : "0f172a"}/9297a6?text=0${i + 1}`,
                 border: i === 1 ? "2px solid rgba(96,165,250,.35)" : "1px solid rgba(255,255,255,.08)",
                 radius: 20,
                 p: 14,
@@ -1014,7 +1014,7 @@ function parentsPage(): PageDoc {
           n("text", {
             text: "ارقب تقدم أبنائك مع تقارير مفصلة وتواصل مباشر مع المعلمين",
             fontSize: 17,
-            color: "#94a3b8",
+            color: "#9297a6",
             align: "center",
             position: "relative",
             z: 1,

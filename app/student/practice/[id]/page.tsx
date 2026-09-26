@@ -59,7 +59,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
           <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-[#8e5cf0]/15 blur-3xl" />
           <div className="relative flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <div className="inline-block bg-[#8e5cf0]/15 text-[#b592f7] text-[11px] font-black px-3 py-1 rounded-full mb-3">تدريب متابعة — أسئلة مختلفة عن الاختبار</div>
+              <div className="inline-block bg-[#8e5cf0]/15 text-[#b79bf7] text-[11px] font-black px-3 py-1 rounded-full mb-3">تدريب متابعة — أسئلة مختلفة عن الاختبار</div>
               <h1 className="text-xl md:text-2xl font-black text-white mb-1">{lesson.title}</h1>
               <p className="text-[#9297a6] text-sm">{subject?.name} · {unit?.title}</p>
             </div>
@@ -103,7 +103,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
                         isCorrect ? "border-emerald-500 bg-emerald-500/10 text-emerald-300"
                         : isWrongPick ? "border-[#e04d4d] bg-[#e04d4d]/10 text-[#e04d4d]"
                         : selected ? "border-[#2072e0] bg-[#1a3454] text-white"
-                        : "border-[#2b3547] text-[#c6cfdd] hover:border-[#2072e0]/50 hover:bg-[#1a2130]"}`}>
+                        : "border-[#2b3547] text-[#fafbff] hover:border-[#2072e0]/50 hover:bg-[#1a2130]"}`}>
                       <span className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${
                         isCorrect ? "border-emerald-500 bg-emerald-500 text-white"
                         : isWrongPick ? "border-[#e04d4d] bg-[#e04d4d] text-white"
@@ -116,7 +116,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
                 })}
               </div>
               {done && q.explanation && (
-                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-xs text-[#c6cfdd] leading-relaxed flex items-start gap-1.5">
+                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-xs text-[#fafbff] leading-relaxed flex items-start gap-1.5">
                   <Icon name="spark" size={13} className="text-[#4a9bf5] mt-0.5 shrink-0" />
                   <span><b className="text-[#4a9bf5]">الشرح:</b> {q.explanation}</span>
                 </div>

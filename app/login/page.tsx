@@ -106,7 +106,7 @@ export default function LoginPage() {
                 </form>
 
                 <button onClick={() => setStep("register")}
-                  className="w-full text-center mt-5 text-sm font-bold text-[#73a7f2] hover:text-[#4a9bf5] transition-colors">
+                  className="w-full text-center mt-5 text-sm font-bold text-[#4a9bf5] hover:text-[#fafbff] transition-colors">
                   لسه معندكش حساب؟ أنشئ حساب جديد
                 </button>
               </>
@@ -177,7 +177,7 @@ export default function LoginPage() {
                 </form>
 
                 <button onClick={() => setStep("login")}
-                  className="w-full text-center mt-5 text-sm font-bold text-[#73a7f2] hover:text-[#4a9bf5] transition-colors">
+                  className="w-full text-center mt-5 text-sm font-bold text-[#4a9bf5] hover:text-[#fafbff] transition-colors">
                   عندك حساب؟ سجّل دخولك
                 </button>
               </>

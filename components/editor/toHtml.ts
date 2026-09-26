@@ -96,7 +96,7 @@ export function nodeToHtml(n: ENode): string {
     case "statCircle":
       return `<div${styleAttr(n)}>
   <div style="font-size:${num(n.props.fontSize, 72)}px;font-weight:900;color:${esc(str(n.props.color, "#fff"))};line-height:1.1;text-shadow:0 8px 30px rgba(0,0,0,.5)">${esc(str(n.props.value, "100%"))}</div>
-  <div style="font-size:13px;color:#94a3b8;margin-top:10px;max-width:200px;line-height:1.5">${esc(str(n.props.label))}</div>
+  <div style="font-size:13px;color:#9297a6;margin-top:10px;max-width:200px;line-height:1.5">${esc(str(n.props.label))}</div>
 </div>`;
     case "gradeCard": {
       const radius = num(n.props.radius, 28);
@@ -170,7 +170,7 @@ export function nodeToHtml(n: ENode): string {
 </article>`;
     case "testimonial":
       return `<blockquote${styleAttr(n)} style="${cssString({ ...styleRecord(n), margin: "0" })}">
-  <p style="margin:0;font-size:15px;line-height:1.9;color:${esc(str(n.props.color, "#cbd5e1"))}">${esc(str(n.props.quote))}</p>
+  <p style="margin:0;font-size:15px;line-height:1.9;color:${esc(str(n.props.color, "#fafbff"))}">${esc(str(n.props.quote))}</p>
   <footer style="margin-top:16px;display:flex;align-items:center;gap:10px">
     <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff">${esc(str(n.props.name, "?").slice(0, 1))}</div>
     <div>
@@ -188,7 +188,7 @@ export function nodeToHtml(n: ENode): string {
       const btns = years
         .map((y) => {
           const on = y === active;
-          return `<button type="button" style="background:${on ? "#2563eb" : "rgba(255,255,255,.06)"};color:${on ? "#fff" : "#94a3b8"};border:1px solid ${on ? "#3b82f6" : "rgba(255,255,255,.1)"};border-radius:999px;padding:8px 20px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit">${esc(y)}</button>`;
+          return `<button type="button" style="background:${on ? "#2563eb" : "rgba(255,255,255,.06)"};color:${on ? "#fff" : "#9297a6"};border:1px solid ${on ? "#3b82f6" : "rgba(255,255,255,.1)"};border-radius:999px;padding:8px 20px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit">${esc(y)}</button>`;
         })
         .join("");
       return `<div${styleAttr(n)}>${btns}</div>`;

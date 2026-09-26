@@ -16,9 +16,10 @@ export default function GradesPage() {
   const { db, me } = useStore();
   const router = useRouter();
 
-  const pick = () => {
-    if (me?.role === "student") router.push("/student");
-    else router.push("/login");
+  const pick = (gradeId: string) => {
+    // مسار التسوق العام أولًا (مثل صفحة الصف في UULA) — ثم الدخول للدراسة
+    if (me?.role === "student") router.push(`/grades/${encodeURIComponent(gradeId)}`);
+    else router.push(`/grades/${encodeURIComponent(gradeId)}`);
   };
 
   return (
@@ -60,7 +61,7 @@ export default function GradesPage() {
           {db.grades.map((g) => {
             const hasArt = g.order >= 4 && g.order <= 12;
             return (
-              <button key={g.id} onClick={pick} title={g.name}
+              <button key={g.id} onClick={() => pick(g.id)} title={g.name}
                 className="aspect-square bg-[#1a2030] hover:bg-[#1f2637] border border-white/[0.05] rounded-[26px] flex items-center justify-center transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group">
                 {hasArt ? (
                   <img
@@ -83,7 +84,7 @@ export default function GradesPage() {
         <h2 className="text-2xl sm:text-3xl font-black mt-16 mb-7 text-right">مرحلة أخرى</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
           {EXTRAS.map((x) => (
-            <button key={x.name} onClick={pick}
+            <button key={x.name} onClick={() => router.push("/bundles")}
               className="aspect-square bg-[#1a2030] hover:bg-[#1f2637] border border-white/[0.05] rounded-[26px] p-5 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group text-right">
               <span className="font-black text-base sm:text-lg">{x.name}</span>
               <img src={x.img} alt={x.name} loading="lazy" className="w-2/3 h-auto self-start drop-shadow-2xl group-hover:scale-105 transition-transform" />

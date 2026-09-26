@@ -55,7 +55,7 @@ export function HeroArt() {
         {/* الدايرة */}
         <div className="relative mt-12 sm:mt-16 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[460px] lg:h-[460px] rounded-full overflow-hidden shadow-2xl shadow-[#2072e0]/40 border border-white/10 bg-[#2072e0]">
           <img
-            src={A("st-leen.webp")}
+            src={A("st-leen-clean.webp")}
             alt="لين حربات — الأولى على الكويت"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />

@@ -92,21 +92,21 @@ const SUBJECTS_BY_STAGE: Record<string, { name: string; icon: string; color: str
     { name: "التربية الإسلامية", icon: "star", color: "#f59e0b" },
   ],
   mid: [
-    { name: "اللغة العربية", icon: "book", color: "#16658a" },
+    { name: "اللغة العربية", icon: "book", color: "#4a9bf5" },
     { name: "الرياضيات", icon: "calc", color: "#7c3aed" },
     { name: "العلوم", icon: "flask", color: "#059669" },
-    { name: "اللغة الإنجليزية", icon: "globe", color: "#dc2626" },
-    { name: "الدراسات الاجتماعية", icon: "map", color: "#0891b2" },
-    { name: "التربية الإسلامية", icon: "star", color: "#b45309" },
+    { name: "اللغة الإنجليزية", icon: "globe", color: "#f87171" },
+    { name: "الدراسات الاجتماعية", icon: "map", color: "#38bdf8" },
+    { name: "التربية الإسلامية", icon: "star", color: "#f59e0b" },
   ],
   high: [
-    { name: "اللغة العربية", icon: "book", color: "#16658a" },
+    { name: "اللغة العربية", icon: "book", color: "#4a9bf5" },
     { name: "الرياضيات", icon: "calc", color: "#7c3aed" },
     { name: "الفيزياء", icon: "atom", color: "#2563eb" },
     { name: "الكيمياء", icon: "flask", color: "#059669" },
     { name: "الأحياء", icon: "leaf", color: "#16a34a" },
-    { name: "اللغة الإنجليزية", icon: "globe", color: "#dc2626" },
-    { name: "التربية الإسلامية", icon: "star", color: "#b45309" },
+    { name: "اللغة الإنجليزية", icon: "globe", color: "#f87171" },
+    { name: "التربية الإسلامية", icon: "star", color: "#f59e0b" },
   ],
 };
 

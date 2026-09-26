@@ -29,7 +29,7 @@ export function HeroArt() {
         </div>
 
         {/* الدايرة */}
-        <div className="relative mt-12 sm:mt-16 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[460px] lg:h-[460px] rounded-full overflow-hidden shadow-2xl shadow-[#2072e0]/40 border border-white/10 bg-[#1d72fe]">
+        <div className="relative mt-12 sm:mt-16 w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[460px] lg:h-[460px] rounded-full overflow-hidden shadow-2xl shadow-[#2072e0]/40 border border-white/10 bg-[#2072e0]">
           <img
             src={src}
             onError={() => {

@@ -99,7 +99,7 @@ const FEATURES = [
     desc: "اشتراك واحد يفتح كل مواد مرحلتك بسعر أوفر — وفّر حتى 80%.",
     order: "text-first",
     badge: "اشترك وجرب أول درس مجانًا",
-    accent: "#60a5fa",
+    accent: "#4a9bf5",
     highlight: "خصم 80%",
     points: ["كل مواد الصف بسعر واحد", "دروس مجانية للتجربة", "إلغاء مرن في أي وقت"],
   },
@@ -140,13 +140,13 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#080e1a] text-white overflow-x-clip selection:bg-[#1d72fe] selection:text-white">
+    <div className="min-h-screen bg-[#0f1217] text-white overflow-x-clip selection:bg-[#2072e0] selection:text-white">
       {/* ===================== الهيدر الثابت ===================== */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-[#080e1a]/85 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="fixed top-0 inset-x-0 z-50 bg-[#0f1217]/85 backdrop-blur-md border-b border-white/[0.06]">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-8 h-[74px] flex items-center justify-between">
           {/* اليمين: اللوجو */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#1d72fe] flex items-center justify-center font-black text-white text-xl shadow-lg shadow-[#1d72fe]/30">
+            <div className="w-10 h-10 rounded-xl bg-[#2072e0] flex items-center justify-center font-black text-white text-xl shadow-lg shadow-[#2072e0]/30">
               ت
             </div>
             <div className="flex flex-col">
@@ -174,7 +174,7 @@ export default function Landing() {
             {/* زر ادخل */}
             <Link
               href="/login"
-              className="group flex items-center gap-2 rounded-full border-2 border-[#1d72fe] text-white hover:bg-[#1d72fe] px-5 py-2 text-sm font-black transition-all shadow-md shadow-[#1d72fe]/20"
+              className="group flex items-center gap-2 rounded-full border-2 border-[#2072e0] text-white hover:bg-[#2072e0] px-5 py-2 text-sm font-black transition-all shadow-md shadow-[#2072e0]/20"
             >
               <Icon name="back" size={15} className="group-hover:-translate-x-1 transition-transform" />
               <span>ادخل</span>
@@ -186,7 +186,7 @@ export default function Landing() {
       {/* ===================== نافذة اختيار الدولة ===================== */}
       {countryModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-up">
-          <div className="w-full max-w-sm rounded-3xl bg-[#0f172a] border border-white/10 p-6 shadow-2xl relative">
+          <div className="w-full max-w-sm rounded-3xl bg-[#161c29] border border-white/10 p-6 shadow-2xl relative">
             <button
               onClick={() => setCountryModal(false)}
               className="absolute top-4 left-4 p-1.5 rounded-full hover:bg-white/10 text-white/60"
@@ -197,18 +197,18 @@ export default function Landing() {
             <p className="text-xs text-white/50 text-center mb-6">يعتمد المنهج والعملة على اختيار دولتك</p>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.05] border border-[#1d72fe] text-white text-sm font-bold">
+              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.05] border border-[#2072e0] text-white text-sm font-bold">
                 <div className="flex items-center gap-2.5">
                   <KuwaitFlag />
                   <span>دولة الكويت (KWD)</span>
                 </div>
-                <Icon name="check" size={16} className="text-[#1d72fe]" />
+                <Icon name="check" size={16} className="text-[#2072e0]" />
               </div>
             </div>
 
             <button
               onClick={() => setCountryModal(false)}
-              className="w-full mt-6 py-3 rounded-full bg-[#1d72fe] hover:bg-[#1560e0] font-black text-sm text-white transition-all shadow-lg shadow-[#1d72fe]/30"
+              className="w-full mt-6 py-3 rounded-full bg-[#2072e0] hover:bg-[#1b63c4] font-black text-sm text-white transition-all shadow-lg shadow-[#2072e0]/30"
             >
               حفظ
             </button>
@@ -257,7 +257,7 @@ export default function Landing() {
             <div className="rv mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-3" style={{ "--rvd": "200ms" } as React.CSSProperties}>
               <Link
                 href="/student/browse"
-                className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-lg px-10 py-4 rounded-full transition-all hover:scale-[1.03] shadow-xl shadow-[#1d72fe]/35 active:scale-95"
+                className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-lg px-10 py-4 rounded-full transition-all hover:scale-[1.03] shadow-xl shadow-[#2072e0]/35 active:scale-95"
               >
                 استكشف المواد
               </Link>
@@ -280,7 +280,7 @@ export default function Landing() {
 
       {/* ===================== البانر الأزرق ===================== */}
       <section className="px-3 sm:px-6 pt-10">
-        <div className="rounded-t-[2.5rem] sm:rounded-t-[3.5rem] py-16 sm:py-24 text-center relative overflow-hidden bg-[#1d72fe] text-white shadow-2xl">
+        <div className="rounded-t-[2.5rem] sm:rounded-t-[3.5rem] py-16 sm:py-24 text-center relative overflow-hidden bg-[#2072e0] text-white shadow-2xl">
           <div className="relative mx-auto mb-4 w-fit">
             <WatermelonArt size={210} />
           </div>
@@ -301,7 +301,7 @@ export default function Landing() {
           <section
             key={f.id}
             id={f.id === "box" ? "packages" : undefined}
-            className="rv rounded-[2rem] sm:rounded-[2.75rem] bg-[#0f172a] border border-white/[0.06] overflow-hidden shadow-2xl"
+            className="rv rounded-[2rem] sm:rounded-[2.75rem] bg-[#161c29] border border-white/[0.06] overflow-hidden shadow-2xl"
           >
             <div className="mx-auto max-w-6xl px-6 sm:px-12 py-14 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">
               {/* النص والأزرار */}
@@ -310,7 +310,7 @@ export default function Landing() {
                   f.order === "text-first" ? "lg:text-right lg:order-1" : "lg:text-right lg:order-2"
                 }`}
               >
-                <div className="inline-block px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-xs font-bold text-[#60a5fa] mb-4">
+                <div className="inline-block px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-xs font-bold text-[#4a9bf5] mb-4">
                   {f.badge}
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black mb-5 text-white">{f.title}</h2>
@@ -326,7 +326,7 @@ export default function Landing() {
                 </ul>
                 <Link
                   href="/student/browse"
-                  className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-sm sm:text-base px-9 py-3.5 rounded-full transition-all hover:scale-[1.04] shadow-lg shadow-[#1d72fe]/30 active:scale-95"
+                  className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-sm sm:text-base px-9 py-3.5 rounded-full transition-all hover:scale-[1.04] shadow-lg shadow-[#2072e0]/30 active:scale-95"
                 >
                   استكشف المواد
                 </Link>
@@ -348,14 +348,14 @@ export default function Landing() {
 
       {/* ===================== قسم قصص التفوق ===================== */}
       <section id="top-students" className="px-3 sm:px-6 pb-8">
-        <div className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#0b111e] border border-white/[0.06] py-14 sm:py-20 px-6">
+        <div className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#12161f] border border-white/[0.06] py-14 sm:py-20 px-6">
           <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">تفوق طلبتنا هو قصتنا</h2>
 
           <div className="mx-auto max-w-6xl grid sm:grid-cols-3 gap-6">
             {(showMore ? [...TOP_STUDENTS, ...MORE_STUDENTS] : TOP_STUDENTS).map((s, i) => (
               <div
                 key={s.name}
-                className="rv group rounded-[2rem] overflow-hidden border border-purple-300/15 bg-gradient-to-b from-[#2a0a4a] to-[#1b0632] shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="rv group rounded-[2rem] overflow-hidden border border-[#2b3547] bg-gradient-to-b from-[#232c4a] to-[#161c29] shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 style={{ "--rvd": `${i * 100}ms` } as React.CSSProperties}
               >
                 <div className="relative p-6 text-center">
@@ -370,7 +370,7 @@ export default function Landing() {
                       src={s.img}
                       alt={s.name}
                       loading="lazy"
-                      className="w-20 h-20 rounded-full object-cover border-2 border-[#1d72fe]/40 shadow-lg shadow-[#1d72fe]/20"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-[#2072e0]/40 shadow-lg shadow-[#2072e0]/20"
                     />
                   </div>
 
@@ -395,7 +395,7 @@ export default function Landing() {
             </button>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-[#1d72fe] hover:bg-[#1560e0] text-white font-black text-sm px-8 py-3 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#1d72fe]/30"
+              className="inline-flex items-center gap-2 bg-[#2072e0] hover:bg-[#1b63c4] text-white font-black text-sm px-8 py-3 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#2072e0]/30"
             >
               ابدأ قصتك معنا
             </Link>
@@ -404,7 +404,7 @@ export default function Landing() {
       </section>
 
       {/* ===================== الفوتر ===================== */}
-      <footer className="bg-[#060b14] border-t border-white/[0.08] text-white pt-14 pb-10">
+      <footer className="bg-[#0a0d13] border-t border-white/[0.08] text-white pt-14 pb-10">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 pb-12 border-b border-white/[0.08]">
             {/* أزرار التواصل الاجتماعي */}
@@ -420,7 +420,7 @@ export default function Landing() {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/[0.06] hover:bg-[#1d72fe] flex items-center justify-center text-white/70 hover:text-white transition-all"
+                  className="w-10 h-10 rounded-full bg-white/[0.06] hover:bg-[#2072e0] flex items-center justify-center text-white/70 hover:text-white transition-all"
                   aria-label={s.label}
                 >
                   <Icon name={s.icon} size={16} />
@@ -481,7 +481,7 @@ export default function Landing() {
               <div className="font-black text-white mb-4">تواصل معنا</div>
               <ul className="space-y-2 text-white/60 text-xs font-medium">
                 <li>
-                  <button onClick={() => setChatOpen(true)} className="hover:text-[#1d72fe] flex items-center gap-1.5">
+                  <button onClick={() => setChatOpen(true)} className="hover:text-[#2072e0] flex items-center gap-1.5">
                     <Icon name="chat" size={14} />
                     <span>محادثة أونلاين</span>
                   </button>
@@ -530,17 +530,17 @@ export default function Landing() {
         </a>
         <button
           onClick={() => setChatOpen(!chatOpen)}
-          className="w-14 h-14 rounded-full bg-[#1d72fe] hover:bg-[#1560e0] text-white flex items-center justify-center shadow-2xl shadow-[#1d72fe]/50 hover:scale-110 active:scale-95 transition-all"
+          className="w-14 h-14 rounded-full bg-[#2072e0] hover:bg-[#1b63c4] text-white flex items-center justify-center shadow-2xl shadow-[#2072e0]/50 hover:scale-110 active:scale-95 transition-all"
           aria-label="محادثة الدعم الفني"
         >
           {chatOpen ? <Icon name="x" size={24} /> : <Icon name="chat" size={24} />}
         </button>
 
         {chatOpen && (
-          <div className="absolute bottom-16 left-0 w-80 sm:w-96 rounded-3xl bg-[#0f172a] border border-white/15 p-5 shadow-2xl animate-fade-up text-white">
+          <div className="absolute bottom-16 left-0 w-80 sm:w-96 rounded-3xl bg-[#161c29] border border-white/15 p-5 shadow-2xl animate-fade-up text-white">
             <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#1d72fe] flex items-center justify-center font-black text-sm">
+                <div className="w-8 h-8 rounded-full bg-[#2072e0] flex items-center justify-center font-black text-sm">
                   ت
                 </div>
                 <div>
@@ -570,11 +570,11 @@ export default function Landing() {
                   value={chatMsg}
                   onChange={(e) => setChatMsg(e.target.value)}
                   placeholder="اكتب رسالتك هنا..."
-                  className="flex-1 bg-white/10 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-white/40 outline-none focus:border-[#1d72fe]"
+                  className="flex-1 bg-white/10 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-white/40 outline-none focus:border-[#2072e0]"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#1d72fe] hover:bg-[#1560e0] text-white text-xs font-bold transition-colors"
+                  className="px-4 py-2 rounded-xl bg-[#2072e0] hover:bg-[#1b63c4] text-white text-xs font-bold transition-colors"
                 >
                   إرسال
                 </button>

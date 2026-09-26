@@ -71,23 +71,23 @@ export function Icon({ name, size = 20, className = "", filled }: { name: string
 
 // ===================== مكونات =====================
 export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`bg-white rounded-2xl shadow-[0_1px_4px_rgba(15,40,60,.07)] ${className}`}>{children}</div>;
+  return <div className={`bg-[#161c29] rounded-2xl border border-[#2b3547] ${className}`}>{children}</div>;
 }
 
 export function Badge({ children, tone = "blue" }: { children: React.ReactNode; tone?: "green" | "red" | "blue" | "amber" | "gray" }) {
   const tones = {
-    green: "bg-emerald-100 text-emerald-700",
-    red: "bg-red-100 text-red-700",
-    blue: "bg-primary-100 text-primary-700",
-    amber: "bg-amber-100 text-amber-700",
-    gray: "bg-slate-100 text-slate-600",
+    green: "bg-emerald-500/15 text-emerald-300",
+    red: "bg-red-500/15 text-red-300",
+    blue: "bg-[#2072e0]/15 text-[#4a9bf5]",
+    amber: "bg-amber-500/15 text-amber-300",
+    gray: "bg-white/10 text-[#99a8bd]",
   };
   return <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${tones[tone]}`}>{children}</span>;
 }
 
-export function Progress({ value, color = "#0891b2", h = 8 }: { value: number; color?: string; h?: number }) {
+export function Progress({ value, color = "#2072e0", h = 8 }: { value: number; color?: string; h?: number }) {
   return (
-    <div className="w-full bg-slate-100 rounded-full overflow-hidden" style={{ height: h }}>
+    <div className="w-full bg-[#1a2130] rounded-full overflow-hidden" style={{ height: h }}>
       <div className="h-full rounded-full transition-all duration-700" style={{ width: `${Math.min(100, Math.max(0, value))}%`, background: color }} />
     </div>
   );
@@ -98,11 +98,11 @@ export function Btn({ children, onClick, variant = "primary", className = "", di
   variant?: "primary" | "ghost" | "gold" | "danger" | "outline"; type?: "button" | "submit";
 }) {
   const v = {
-    primary: "text-white bg-primary-600 hover:bg-primary-700",
-    gold: "text-night-950 bg-gold-500 hover:bg-gold-600",
-    ghost: "bg-transparent text-primary-700 hover:bg-primary-50",
-    outline: "border-2 border-primary-500 text-primary-700 hover:bg-primary-50",
-    danger: "bg-red-50 text-red-600 hover:bg-red-100",
+    primary: "text-white bg-[#2072e0] hover:bg-[#1b63c4] shadow-lg shadow-[#2072e0]/25",
+    gold: "text-[#0f1217] bg-gold-500 hover:bg-gold-600",
+    ghost: "bg-transparent text-[#99a8bd] hover:bg-white/[0.07] hover:text-white",
+    outline: "border-2 border-[#2072e0] text-[#4a9bf5] hover:bg-[#2072e0]/10",
+    danger: "bg-red-500/15 text-red-300 hover:bg-red-500/25",
   };
   return (
     <button type={type} onClick={onClick} disabled={disabled}
@@ -119,11 +119,11 @@ export function Modal({ open, onClose, title, children, wide, dark }: {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"} ${dark ? "bg-[#161c29] border border-[#2b3547] text-white" : "bg-white"}`}
+      <div className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"} bg-[#161c29] border border-[#2b3547] text-white`}
         onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className={`text-lg font-bold ${dark ? "text-white" : "text-primary-900"}`}>{title}</h3>
-          <button onClick={onClose} className={`p-1.5 rounded-lg ${dark ? "hover:bg-white/10 text-[#99a8bd]" : "hover:bg-slate-100 text-slate-500"}`}><Icon name="x" size={18} /></button>
+          <h3 className="text-lg font-bold text-white">{title}</h3>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-[#99a8bd]"><Icon name="x" size={18} /></button>
         </div>
         {children}
       </div>
@@ -149,15 +149,15 @@ export function DCard({ children, className = "" }: { children: React.ReactNode;
   return <div className={`bg-[#161c29] rounded-2xl border border-[#2b3547] ${className}`}>{children}</div>;
 }
 
-export function Stat({ icon, label, value, sub, color = "#0891b2" }: { icon: string; label: string; value: React.ReactNode; sub?: string; color?: string }) {
+export function Stat({ icon, label, value, sub, color = "#2072e0" }: { icon: string; label: string; value: React.ReactNode; sub?: string; color?: string }) {
   return (
     <Card className="p-5 flex items-center gap-4">
       <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${color}18`, color }}>
         <Icon name={icon} size={22} />
       </div>
       <div>
-        <div className="text-2xl font-extrabold text-primary-900 leading-tight">{value}</div>
-        <div className="text-xs text-slate-500">{label}{sub ? ` · ${sub}` : ""}</div>
+        <div className="text-2xl font-extrabold text-white leading-tight">{value}</div>
+        <div className="text-xs text-[#99a8bd]">{label}{sub ? ` · ${sub}` : ""}</div>
       </div>
     </Card>
   );
@@ -166,8 +166,8 @@ export function Stat({ icon, label, value, sub, color = "#0891b2" }: { icon: str
 export function Logo({ size = 36, light }: { size?: number; light?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="relative flex items-center justify-center font-black text-white shadow-lg shadow-primary-500/30"
-        style={{ width: size, height: size, borderRadius: size * 0.32, background: "#1d72fe", fontSize: size * 0.5 }}>
+      <div className="relative flex items-center justify-center font-black text-white shadow-lg shadow-[#2072e0]/30"
+        style={{ width: size, height: size, borderRadius: size * 0.32, background: "#2072e0", fontSize: size * 0.5 }}>
         ت
         <div className="absolute -top-1 -left-1 rounded-full bg-gold-400" style={{ width: size * 0.28, height: size * 0.28, opacity: .9 }} />
       </div>

@@ -336,7 +336,7 @@ export default function Landing() {
       <section className="px-3 sm:px-6 pt-10">
         <div className="rounded-t-[2.5rem] sm:rounded-t-[3.5rem] py-16 sm:py-24 text-center relative overflow-hidden bg-[#2072e0] text-white shadow-2xl">
           <div className="relative mx-auto mb-4 w-fit">
-            <WatermelonArt size={210} />
+            <WatermelonArt />
           </div>
 
           <h2 className="rv text-3xl sm:text-5xl font-black">ادرس وانت مرتاح</h2>

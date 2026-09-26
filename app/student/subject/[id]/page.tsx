@@ -46,32 +46,50 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
           <span className="text-white font-bold">{subject.name}</span>
         </div>
 
-        {/* هيدر المادة */}
-        <div className="flex items-center gap-5 flex-wrap">
-          <div className="w-[72px] h-[72px] rounded-[18px] flex items-center justify-center shrink-0" style={{ background: `${subject.color}22`, color: subject.color }}>
-            <Icon name={subject.icon} size={34} />
-          </div>
-          <div className="flex-1 min-w-[200px]">
-            <h1 className="text-2xl sm:text-3xl font-black">{subject.name} — {grade?.name}</h1>
-            <div className="text-[#99a8bd] font-bold text-sm mt-1.5">{totalLessons} درسًا · أ/ {subject.teacher}</div>
-          </div>
-          <div className="bg-[#161c29] border border-[#2b3547] rounded-2xl px-6 py-3 text-center">
-            <div className="text-xs font-bold text-[#99a8bd] mb-0.5">نسبة الإنجاز</div>
-            <div className="text-2xl font-black text-[#33bf6b]">{pct}%</div>
+        {/* هيدر المادة — عنوان كبير مثل صفحة المادة في UULA */}
+        <div className="rounded-[26px] p-7 sm:p-9 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${subject.color} 0%, ${subject.color}66 60%, #141a26 140%)` }}>
+          <div className="flex items-center gap-5 flex-wrap relative">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 shadow-xl">
+              <Icon name={subject.icon} size={34} className="text-white drop-shadow-lg" />
+            </div>
+            <div className="flex-1 min-w-[200px]">
+              <h1 className="text-3xl sm:text-4xl font-black text-white drop-shadow">{subject.name}</h1>
+              <div className="text-white/80 font-bold text-sm mt-1.5">{grade?.name} · {totalLessons} درسًا · أ/ {subject.teacher}</div>
+            </div>
+            <div className="bg-black/25 backdrop-blur rounded-2xl px-6 py-3 text-center">
+              <div className="text-xs font-bold text-white/70 mb-0.5">نسبة الإنجاز</div>
+              <div className="text-2xl font-black text-white">{pct}%</div>
+            </div>
           </div>
         </div>
 
-        {/* الوحدات والدروس */}
-        <div className="space-y-5">
-          {units.map((u) => {
+        {/* زبدة المادة — ملخص المنهج */}
+        {allLessons[0] && (
+          <Link href={`/student/lesson/${allLessons[0].id}#notes`}
+            className="flex items-center gap-4 bg-[#161c29] border border-white/[0.05] rounded-2xl px-5 py-4 hover:border-[#f5b329]/50 transition-colors group">
+            <span className="w-11 h-11 rounded-xl bg-[#f5b329]/15 text-[#f5b329] flex items-center justify-center text-xl shrink-0">🧈</span>
+            <div className="flex-1">
+              <div className="font-bold text-white">زبدة المادة</div>
+              <div className="text-[11px] font-bold text-[#99a8bd] mt-0.5">ملخص مركز لأهم ما في المنهج</div>
+            </div>
+            <Icon name="back" size={16} className="text-[#99a8bd] group-hover:-translate-x-1 transition-transform" />
+          </Link>
+        )}
+
+        {/* الوحدات والدروس — صفوف مرقّمة مثل UULA */}
+        <div className="space-y-3">
+          {units.map((u, ui) => {
             const lessons = lessonsOfUnit(db, u.id);
             const open = openUnit === u.id;
             return (
-              <DCard key={u.id} className="overflow-hidden rounded-[18px]">
+              <DCard key={u.id} className="overflow-hidden rounded-2xl">
                 <button onClick={() => setOpenUnit(open ? null : u.id)}
-                  className="w-full flex items-center gap-3.5 px-6 py-[18px] hover:bg-[#1a2130]/60 transition-colors">
-                  <div className="flex-1 text-right font-black text-lg">{u.title}</div>
-                  <span className="text-[13px] font-bold text-[#99a8bd]">{lessons.length} دروس</span>
+                  className="w-full flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/60 transition-colors">
+                  <span className="w-8 h-8 rounded-full bg-[#1a2e4d] text-[#4a9bf5] flex items-center justify-center text-sm font-black shrink-0 border border-[#2072e0]/30">
+                    {ui + 1}
+                  </span>
+                  <div className="flex-1 text-right font-bold">{u.title}</div>
+                  <span className="text-[12px] font-bold text-[#99a8bd]">{lessons.length} دروس</span>
                   <Icon name="down" size={14} className={`text-[#8e99ab] transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
 

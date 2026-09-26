@@ -35,6 +35,13 @@ function LessonContent({ lessonId }: { lessonId: string }) {
   const [seconds, setSeconds] = useState(0);
   const [noteDraft, setNoteDraft] = useState("");
   const [reviewTarget, setReviewTarget] = useState<number | null>(null);
+  const [qaDraft, setQaDraft] = useState("");
+  const [qaList, setQaList] = useState<{ q: string; a: string }[]>([
+    {
+      q: "أستاذ شلون حسبت سرعة السيارة؟",
+      a: `حياك الله! يمكنك استخدام هذه المعادلة (S = D / T: السرعة تساوي المسافة (D) على الزمن (T — راجع قسم المعادلات في المذكرة بالأسفل.`,
+    },
+  ]);
   const notes = lesson && me ? (db.studyNotes ?? []).filter((n) => n.userId === me.id && n.lessonId === lesson.id) : [];
   const saved = lesson && me ? (db.lessonProgress ?? []).find((p) => p.userId === me.id && p.lessonId === lesson.id) : undefined;
   const resumable = !!(saved && lesson && saved.videoUrl === lesson.videoUrl && duration && saved.position > 10 && saved.position < duration - 10);
@@ -156,9 +163,10 @@ function LessonContent({ lessonId }: { lessonId: string }) {
           </video>
         </div>
 
-        {/* ===== العنوان + الأكشنز ===== */}
+        {/* ===== العنوان + بيلز الأفعال — مثل صفحة الدرس في UULA ===== */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
+            <div className="text-[11px] font-black text-[#4a9bf5] mb-1">درس</div>
             <h1 className="text-xl sm:text-2xl font-black">{lesson.title}</h1>
             <div className="text-[#99a8bd] font-bold text-sm mt-1.5 flex items-center gap-2.5 flex-wrap">
               <span>{unit?.title} · أ/ {subject?.teacher}</span>
@@ -166,23 +174,59 @@ function LessonContent({ lessonId }: { lessonId: string }) {
               {best !== null && <span className="text-[#33bf6b]">أفضل نتيجة {best}%</span>}
             </div>
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <a href="#notes"
-              className="flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-2xl px-5 py-3.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
-              <Icon name="doc" size={18} className="text-[#8e99ab]" /> المذكرة
+              className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
+              <Icon name="doc" size={16} className="text-[#8e99ab]" /> المذكرة
             </a>
             <Link href={`/student/exam/${lesson.id}`}
-              className="flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-2xl px-5 py-3.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
-              <Icon name="target" size={18} className="text-[#8e99ab]" /> {myAttempts.length ? "أعد الاختبار" : "اختبر نفسك"}
+              className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
+              <Icon name="chat" size={16} className="text-[#8e99ab]" /> أسئلة
             </Link>
             {practiceQuestions.length > 0 && (
               <Link href={`/student/practice/${lesson.id}`}
-                className="flex items-center gap-2 bg-[#8e5cf0] hover:bg-[#7c4de0] rounded-2xl px-5 py-3.5 font-bold text-sm text-white transition-colors">
-                <Icon name="bolt" size={18} /> تدريب متابعة
+                className="flex items-center gap-2 bg-[#8e5cf0] hover:bg-[#7c4de0] rounded-full px-5 py-2.5 font-bold text-sm text-white transition-colors">
+                <Icon name="bolt" size={16} /> تدريب متابعة
               </Link>
             )}
           </div>
         </div>
+
+        {/* ===== محتوى الدرس — قائمة أجزاء مثل UULA ===== */}
+        <DCard className="rounded-2xl divide-y divide-[#2b3547]/60 overflow-hidden">
+          <div className="flex items-center gap-4 px-5 py-4">
+            <span className="w-11 h-11 rounded-xl bg-[#1a2e4d] flex items-center justify-center shrink-0">
+              <Icon name="play" size={16} filled className="text-[#4a9bf5]" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm">درس {lesson.title}</div>
+              <div className="text-[11px] text-[#99a8bd] mt-0.5">فيديو شرح</div>
+            </div>
+            <span className="flex items-center gap-1.5 text-xs font-bold text-[#99a8bd] shrink-0" dir="ltr">
+              <Icon name="clock" size={13} /> {lesson.durationMin}:00
+            </span>
+          </div>
+          <a href="#notes" className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
+            <span className="w-11 h-11 rounded-xl bg-[#1a3d24] flex items-center justify-center shrink-0">
+              <Icon name="doc" size={16} className="text-[#33bf6b]" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm">المذكرة الشاملة</div>
+              <div className="text-[11px] text-[#99a8bd] mt-0.5">ملخص الدرس قابل للطباعة</div>
+            </div>
+            <Icon name="back" size={15} className="text-[#99a8bd] shrink-0" />
+          </a>
+          <Link href={`/student/exam/${lesson.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
+            <span className="w-11 h-11 rounded-xl bg-[#2d2144] flex items-center justify-center shrink-0">
+              <Icon name="target" size={16} className="text-[#a78bfa]" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm">اختبار الدرس</div>
+              <div className="text-[11px] text-[#99a8bd] mt-0.5">{questions.length} سؤال · {myAttempts.length ? "أعد المحاولة" : "لم يُحَل بعد"}</div>
+            </div>
+            <Icon name="back" size={15} className="text-[#99a8bd] shrink-0" />
+          </Link>
+        </DCard>
 
         {/* استكمال المشاهدة */}
         {resumable && saved && (
@@ -305,6 +349,50 @@ function LessonContent({ lessonId }: { lessonId: string }) {
                 ))}
               </div>
             )}
+          </div>
+        </DCard>
+
+        {/* ===== اسأل معلمك — Q&A مثل UULA ===== */}
+        <DCard className="rounded-2xl overflow-hidden">
+          <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2b3547]/60">
+            <span className="w-9 h-9 rounded-full bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center">
+              <Icon name="chat" size={16} />
+            </span>
+            <div>
+              <div className="font-bold text-sm">اسأل معلمك</div>
+              <div className="text-[10px] text-[#33bf6b] font-bold">يرد خلال دقائق عادة</div>
+            </div>
+          </div>
+          <div className="divide-y divide-[#2b3547]/40">
+            {qaList.map((qa, i) => (
+              <div key={i} className="px-5 py-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <span className="w-8 h-8 rounded-full bg-[#2b3547] flex items-center justify-center text-xs font-black shrink-0">{me?.name?.[0] ?? "ط"}</span>
+                  <div className="flex-1 bg-[#1a2130] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">{qa.q}</div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="w-8 h-8 rounded-full bg-[#2072e0] flex items-center justify-center text-[11px] font-black text-white shrink-0">ت</span>
+                  <div className="flex-1">
+                    <div className="bg-[#16233c] border border-[#2072e0]/25 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">{qa.a}</div>
+                    <div className="flex gap-3 mt-2 pr-2">
+                      <button className="text-[#99a8bd] hover:text-[#33bf6b] transition-colors"><Icon name="check" size={14} /></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="px-5 py-4 border-t border-[#2b3547]/60 flex gap-2">
+            <input value={qaDraft} onChange={(e) => setQaDraft(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
+              placeholder="اكتب سؤالك عن الدرس…"
+              className="flex-1 bg-[#1a2130] border border-[#2b3547] rounded-full px-4 py-2.5 text-sm text-white placeholder:text-[#99a8bd]/50 outline-none focus:border-[#2072e0]" />
+            <button
+              onClick={() => { if (qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
+              disabled={!qaDraft.trim()}
+              className="bg-[#2072e0] hover:bg-[#1b63c4] disabled:opacity-40 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-colors">
+              إرسال
+            </button>
           </div>
         </DCard>
 

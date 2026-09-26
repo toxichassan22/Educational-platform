@@ -30,6 +30,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [startTs, setStartTs] = useState(0);
+  const [showExplain, setShowExplain] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const totalSec = Math.max(60, questions.length * 45);
@@ -158,18 +159,20 @@ function ExamSession({ lessonId }: { lessonId: string }) {
           </DCard>
         )}
 
-        {/* ===== أثناء الاختبار ===== */}
+        {/* ===== أثناء الاختبار — تصحيح فوري بستايل UULA ===== */}
         {phase === "taking" && questions.length > 0 && (
           <div className="space-y-5">
-            {/* الشريط العلوي: سؤال X من N + بروجرس + المؤقت */}
+            {/* الشريط العلوي: «اختبار» + بيل المستوى + المؤقت */}
             <div className="flex items-center justify-between gap-4 flex-wrap sticky top-[84px] z-30">
-              <div className="space-y-2">
-                <div className="font-bold text-sm">السؤال {current + 1} من {questions.length}</div>
-                <div className="w-56 sm:w-72 h-2 bg-[#2b3547] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#2072e0] rounded-full transition-all" style={{ width: `${(answered / questions.length) * 100}%` }} />
-                </div>
+              <div className="flex items-center gap-3">
+                <span className="font-black">اختبار</span>
+                <span className="flex items-center gap-1.5 bg-[#8e5cf0]/20 border border-[#8e5cf0]/40 text-[#b79bf7] text-[11px] font-black px-3 py-1 rounded-full">
+                  <Icon name="bolt" size={11} />
+                  {current < questions.length / 3 ? "سهل" : current < (questions.length * 2) / 3 ? "متوسط" : "صعب"}
+                </span>
               </div>
               <div className="flex items-center gap-2.5">
+                <span className="text-xs font-bold text-[#99a8bd]">السؤال {current + 1} من {questions.length}</span>
                 <span className={`flex items-center gap-2 bg-[#161c29] border border-[#2b3547] rounded-2xl px-4 py-2 font-bold ${secondsLeft < 60 ? "text-[#e04d4d]" : "text-[#f5b329]"}`}>
                   <Icon name="clock" size={16} />
                   <span className="tabular-nums" dir="ltr">{mm}:{ss}</span>
@@ -187,32 +190,71 @@ function ExamSession({ lessonId }: { lessonId: string }) {
 
               <div className="space-y-3.5">
                 {questions[current].options.map((opt, oi) => {
+                  const answeredThis = answers[current] !== null;
                   const selected = answers[current] === oi;
+                  const isCorrect = oi === questions[current].correct;
+                  // بعد الاختيار: الصح يتلوّن أخضر والغلط المختار أحمر — مثل UULA
+                  const cls = !answeredThis
+                    ? selected ? "border-[#2072e0] bg-[#1a3454]" : "border-[#2b3547] bg-[#1a2130] hover:border-[#2072e0]/50"
+                    : isCorrect ? "border-[#22c55e] bg-[#22c55e]/10"
+                    : selected ? "border-[#e04d4d] bg-[#e04d4d]/10"
+                    : "border-[#2b3547] bg-[#1a2130] opacity-60";
                   return (
-                    <button key={oi}
+                    <button key={oi} disabled={answeredThis}
                       onClick={() => setAnswers((a) => a.map((x, i) => (i === current ? oi : x)))}
-                      className={`w-full flex items-center gap-3.5 px-6 py-4 rounded-2xl border-2 text-right transition-all ${
-                        selected ? "border-[#2072e0] bg-[#1a3454]" : "border-[#2b3547] bg-[#1a2130] hover:border-[#2072e0]/50"}`}>
-                      <span className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                        selected ? "border-[#2072e0]" : "border-[#5a6577]"}`}>
-                        {selected && <span className="w-3 h-3 rounded-full bg-[#2072e0]" />}
-                      </span>
+                      className={`w-full flex items-center gap-3.5 px-6 py-4 rounded-2xl border-2 text-right transition-all ${cls}`}>
+                      {answeredThis && isCorrect ? (
+                        <span className="w-[22px] h-[22px] rounded-full bg-[#22c55e] flex items-center justify-center shrink-0">
+                          <Icon name="check" size={12} className="text-white" />
+                        </span>
+                      ) : answeredThis && selected ? (
+                        <span className="w-[22px] h-[22px] rounded-full bg-[#e04d4d] flex items-center justify-center shrink-0">
+                          <Icon name="x" size={12} className="text-white" />
+                        </span>
+                      ) : (
+                        <span className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                          selected ? "border-[#2072e0]" : "border-[#5a6577]"}`}>
+                          {selected && <span className="w-3 h-3 rounded-full bg-[#2072e0]" />}
+                        </span>
+                      )}
                       <span className="font-bold">{opt}</span>
                     </button>
                   );
                 })}
               </div>
+
+              {/* الفيدباك الفوري: صح يا بطل + اشرح لي */}
+              {answers[current] !== null && (
+                <div className="flex items-center justify-between mt-6 pt-5 border-t border-[#2b3547]/50">
+                  {answers[current] === questions[current].correct ? (
+                    <span className="font-black text-[#22c55e]">صح يا بطل!</span>
+                  ) : (
+                    <span className="font-black text-[#e04d4d]">إجابة غير صحيحة</span>
+                  )}
+                  {questions[current].explanation && (
+                    <button onClick={() => setShowExplain((s) => !s)}
+                      className="flex items-center gap-1.5 text-sm font-bold text-[#4a9bf5] hover:text-white transition-colors">
+                      <Icon name="chat" size={15} /> اشرح لي!
+                    </button>
+                  )}
+                </div>
+              )}
+              {answers[current] !== null && showExplain && questions[current].explanation && (
+                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-4 py-3 text-sm text-[#c6cfdd] leading-relaxed">
+                  <b className="text-[#4a9bf5]">الشرح:</b> {questions[current].explanation}
+                </div>
+              )}
             </DCard>
 
             {/* تنقل + مؤشر الأسئلة */}
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <button onClick={() => setCurrent((c) => Math.max(0, c - 1))} disabled={current === 0}
+              <button onClick={() => { setCurrent((c) => Math.max(0, c - 1)); setShowExplain(false); }} disabled={current === 0}
                 className="bg-[#161c29] border border-[#2b3547] text-white font-bold text-sm px-7 py-3 rounded-full disabled:opacity-40 hover:bg-[#1a2130] transition-colors">
                 ‹ السابق
               </button>
               <div className="flex gap-1.5 flex-wrap justify-center">
                 {questions.map((_, i) => (
-                  <button key={i} onClick={() => setCurrent(i)}
+                  <button key={i} onClick={() => { setCurrent(i); setShowExplain(false); }}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
                       i === current ? "bg-[#2072e0] text-white scale-110" : answers[i] !== null ? "bg-[#1a3454] border border-[#2072e0]/50 text-[#4a9bf5]" : "bg-[#161c29] border border-[#2b3547] text-[#99a8bd]"}`}>
                     {i + 1}
@@ -221,9 +263,9 @@ function ExamSession({ lessonId }: { lessonId: string }) {
               </div>
               {current === questions.length - 1
                 ? <button onClick={() => finish(answers)}
-                    className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] font-black text-sm px-7 py-3 rounded-full transition-colors">تسليم الاختبار</button>
-                : <button onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
-                    className="bg-[#2072e0] hover:bg-[#1b63c4] text-white font-bold text-sm px-7 py-3 rounded-full transition-colors">التالي ›</button>}
+                    className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-black text-sm px-7 py-3 rounded-full transition-colors">تسليم الاختبار</button>
+                : <button onClick={() => { setCurrent((c) => Math.min(questions.length - 1, c + 1)); setShowExplain(false); }}
+                    className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-black text-sm px-8 py-3 rounded-full transition-colors">السؤال التالي</button>}
             </div>
           </div>
         )}

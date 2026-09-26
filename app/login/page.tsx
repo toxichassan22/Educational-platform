@@ -87,15 +87,13 @@ export default function LoginPage() {
 
       <div className="flex-1 flex items-center justify-center px-4 py-10 relative">
         <div className="w-full max-w-md">
-          <div className="bg-[#161c29] border border-[#2b3547] rounded-[2rem] p-7 sm:p-8 animate-fade-up shadow-2xl shadow-black/40">
+          <div className="animate-fade-up">
 
-            {/* ===== شاشة الدخول ===== */}
+            {/* ===== شاشة الدخول — مينيمال مثل UULA enter ===== */}
             {step === "login" && (
               <>
-                <div className="text-center mb-7">
-                  <div className="flex justify-center mb-5"><Logo size={52} light /></div>
-                  <h1 className="text-[26px] sm:text-3xl font-black text-white mb-2">حياك الله في تفوّق</h1>
-                  <p className="text-[#99a8bd] text-sm">سجّل دخولك برقم هاتفك وابدأ رحلة التفوق</p>
+                <div className="text-center mb-8">
+                  <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">أدخل رقم التلفون</h1>
                 </div>
 
                 <form onSubmit={submitLogin} className="space-y-4">

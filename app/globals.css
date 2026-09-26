@@ -195,6 +195,10 @@ body {
 }
 .animate-bob { animation: bobTilt 6s ease-in-out infinite; }
 
+/* إخفاء سكرولبار الصفوف الأفقية */
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
 /* قرص «المنهج على دفعات» — يدور ببطء */
 .pie-spin { animation: spinSlow 40s linear infinite; }
 @keyframes wedgeIn {

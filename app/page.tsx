@@ -23,24 +23,24 @@ const AWARDS = [
 
 const TOP_STUDENTS = [
   {
-    name: "أحمد الكندري",
+    name: "يوسف عبدالعزيز",
     rank: "الأول على الكويت - علمي",
     pct: "100%",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500w=200&q=80q=80",
+    img: "/uula/st-yousef.webp",
     quote: "المذكرات غطّت كل شي، والاختبارات ورّتني ضعفي قبل الامتحان.",
   },
   {
-    name: "سارة العتيبي",
-    rank: "الأولى على الكويت - أدبي",
-    pct: "99.9%",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500w=200&q=80q=80",
+    name: "سليم مسيكة",
+    rank: "الأول على الكويت - علمي",
+    pct: "100%",
+    img: "/uula/st-saleem.webp",
     quote: "كنت أذاكر بالوقت اللي يريحني وأعيد الشرح أكثر من مرة — هذا اللي فرق معي.",
   },
   {
-    name: "يوسف المطيري",
+    name: "جمانة النجدي",
     rank: "الثاني على الكويتيين - علمي",
-    pct: "99.5%",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500w=200&q=80q=80",
+    pct: "99.99%",
+    img: "/uula/st-jumana.webp",
     quote: "أي سؤال يعقّدني أسأله للمعلم ويرد عليّ بسرعة، والتدريب رفع مستواي.",
   },
 ];
@@ -48,24 +48,24 @@ const TOP_STUDENTS = [
 /* قصص إضافية تظهر عند «اعرض المزيد» */
 const MORE_STUDENTS = [
   {
-    name: "طالب الصف الحادي عشر",
+    name: "لين ناصر",
     rank: "نسبة 98.5% — القسم العلمي",
     pct: "98.5%",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500w=200&q=80q=80",
+    img: "/uula/st-leen-nasser.webp",
     quote: "فيديوهات الشرح القصيرة خلتني أراجع المنهج كاملًا قبل الامتحان بأسبوع.",
   },
   {
-    name: "طالبة الصف التاسع",
+    name: "نور كندري",
     rank: "الأولى على المدرسة في الرياضيات",
     pct: "+28%",
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500w=200&q=80q=80",
+    img: "/uula/st-nour.webp",
     quote: "الاختبارات الذكية ورّتني غلطاتي بالضبط، وركزت مراجعتي عليها بس.",
   },
   {
-    name: "طالب الصف الثامن",
+    name: "يوسف درويش",
     rank: "من متعثر إلى متفوق في فصل واحد",
     pct: "+40%",
-    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500w=200&q=80q=80",
+    img: "/uula/st-yousef-d.webp",
     quote: "حفظ موضع الفيديو والمذكرات المرتبة خلّوا المذاكرة عادة يومية سهلة.",
   },
 ];
@@ -241,6 +241,12 @@ export default function Landing() {
 
       {/* ===================== الهيرو (1:1 Hero) ===================== */}
       <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden">
+        {/* خلفية سماء UULA الأصلية */}
+        <img
+          src="/uula/hero.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+        />
         {/* نجوم الليل */}
         {STARS.map(([x, y, s], i) => (
           <span
@@ -304,9 +310,9 @@ export default function Landing() {
       {/* ===================== شريط الجوائز — «١٠ سنين من الإنجازات والتفوق» ===================== */}
       <section id="trust" className="px-4 sm:px-8 pb-6">
         <div className="rv mx-auto max-w-6xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] border border-white/12 px-5 py-2 text-sm font-black text-gold-300 mb-8">
-            <Icon name="trophy" size={16} />
-            <span>10 سنين من الإنجازات والتفوق</span>
+          <div className="flex items-center justify-center gap-3 sm:gap-5 mb-8">
+            <img src="/uula/top10.png" alt="" className="h-16 sm:h-24 w-auto drop-shadow-2xl" />
+            <h2 className="text-2xl sm:text-4xl font-black text-white">سنين من الإنجازات والتفوق</h2>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             {AWARDS.map((a, i) => (
@@ -542,10 +548,10 @@ export default function Landing() {
             </div>
             <div>
               <div className="font-black text-white mb-4">وسائل الدفع المعتمدة</div>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-lg bg-white/10 text-xs font-black text-sky-400 border border-white/10">KNET</span>
-                <span className="px-3 py-1 rounded-lg bg-white/10 text-xs font-black text-white border border-white/10">Apple Pay</span>
-                <span className="px-3 py-1 rounded-lg bg-white/10 text-xs font-black text-amber-300 border border-white/10">Visa</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                {["knet", "apple-pay", "visa", "mastercard", "mada"].map((p) => (
+                  <img key={p} src={`/uula/${p}.png`} alt={p} className="h-7 w-auto rounded-md bg-white px-1.5 py-1" />
+                ))}
               </div>
             </div>
           </div>

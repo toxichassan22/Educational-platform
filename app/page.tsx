@@ -7,26 +7,40 @@ import { HeroArt, WatermelonArt, BookQrArt, LaptopArt, QuizArt, ChatArt, BoxArt 
 
 /* ===================== بيانات الصفحة ===================== */
 
+const NAV_LINKS = [
+  { label: "المنصة", href: "#features" },
+  { label: "المتفوقون", href: "#top-students" },
+  { label: "العروض", href: "#packages" },
+  { label: "أولياء الأمور", href: "/login" },
+];
+
+const AWARDS = [
+  { icon: "award", title: "جائزة أفضل منصة تعليمية", sub: "في الكويت" },
+  { icon: "star", title: "4.8", sub: "متوسط التقييم" },
+  { icon: "medal", title: "جائزة الابتكار التعليمي", sub: "لحلول التعلم الرقمي" },
+  { icon: "shield", title: "محتوى معتمد", sub: "مطابق للمنهج الكويتي" },
+];
+
 const TOP_STUDENTS = [
   {
     name: "أحمد الكندري",
     rank: "الأول على الكويت - علمي",
     pct: "100%",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "المذكرات غطّت كل شي، والاختبارات ورّتني ضعفي قبل الامتحان.",
   },
   {
     name: "سارة العتيبي",
     rank: "الأولى على الكويت - أدبي",
     pct: "99.9%",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "كنت أذاكر بالوقت اللي يريحني وأعيد الشرح أكثر من مرة — هذا اللي فرق معي.",
   },
   {
     name: "يوسف المطيري",
     rank: "الثاني على الكويتيين - علمي",
     pct: "99.5%",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "أي سؤال يعقّدني أسأله للمعلم ويرد عليّ بسرعة، والتدريب رفع مستواي.",
   },
 ];
@@ -37,21 +51,21 @@ const MORE_STUDENTS = [
     name: "طالب الصف الحادي عشر",
     rank: "نسبة 98.5% — القسم العلمي",
     pct: "98.5%",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "فيديوهات الشرح القصيرة خلتني أراجع المنهج كاملًا قبل الامتحان بأسبوع.",
   },
   {
     name: "طالبة الصف التاسع",
     rank: "الأولى على المدرسة في الرياضيات",
     pct: "+28%",
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "الاختبارات الذكية ورّتني غلطاتي بالضبط، وركزت مراجعتي عليها بس.",
   },
   {
     name: "طالب الصف الثامن",
     rank: "من متعثر إلى متفوق في فصل واحد",
     pct: "+40%",
-    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500w=200&q=80q=80",
     quote: "حفظ موضع الفيديو والمذكرات المرتبة خلّوا المذاكرة عادة يومية سهلة.",
   },
 ];
@@ -59,7 +73,7 @@ const MORE_STUDENTS = [
 const FEATURES = [
   {
     id: "notes",
-    title: "مذكرات تغطي كل شي",
+    title: "مذكرات شاملة",
     desc: "ملخصات منظمة تغطي منهجك من أوله لآخره — ما تحتاج أي مصدر ثاني.",
     order: "text-first",
     badge: "PDF قابل للطباعة",
@@ -68,7 +82,7 @@ const FEATURES = [
   },
   {
     id: "video",
-    title: "شرح فيديو لكل درس",
+    title: "فيديوهات شرح مميزة",
     desc: "دروس مسجلة تشرح المنهج خطوة بخطوة — تعيدها متى تبي وبالوقت اللي يناسبك.",
     order: "img-first",
     badge: "استئناف من حيث توقفت",
@@ -77,7 +91,7 @@ const FEATURES = [
   },
   {
     id: "quiz",
-    title: "اختبارات تقيس جاهزيتك",
+    title: "اختبارات ذكية",
     desc: "تدرّب على أسئلة بأسلوب الاختبارات السابقة واكشف نقاط ضعفك قبل يوم الامتحان.",
     order: "text-first",
     badge: "تحليل نقاط القوة والضعف",
@@ -86,7 +100,7 @@ const FEATURES = [
   },
   {
     id: "chat",
-    title: "أميز المعلمين معك",
+    title: "نخبة المعلمين معاك",
     desc: "تواصل مباشر مع معلمين خبرة يجاوبون على أسئلتك ويرشدونك أول بأول.",
     order: "img-first",
     badge: "ردود ومتابعة مستمرة",
@@ -95,7 +109,7 @@ const FEATURES = [
   },
   {
     id: "box",
-    title: "باقات تفوّق توفر عليك أكثر",
+    title: "وفّر أكثر مع باقات تفوّق",
     desc: "اشتراك واحد يفتح كل مواد مرحلتك بسعر أوفر — وفّر حتى 80%.",
     order: "text-first",
     badge: "اشترك وجرب أول درس مجانًا",
@@ -154,6 +168,15 @@ export default function Landing() {
               <span className="text-[10px] text-white/50 font-bold tracking-widest mt-1">TAFAWWOQ</span>
             </div>
           </Link>
+
+          {/* الوسط: روابط التنقل — زي UULA */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {NAV_LINKS.map((l) => (
+              <a key={l.label} href={l.href} className="text-sm font-bold text-white/75 hover:text-white transition-colors">
+                {l.label}
+              </a>
+            ))}
+          </nav>
 
           {/* اليسار: أدوات الحساب */}
           <div className="flex items-center gap-3 sm:gap-5">
@@ -242,16 +265,16 @@ export default function Landing() {
               <span>مصمّمة لطلبة الكويت</span>
             </div>
             <h1 className="rv font-black leading-[1.14] text-[2.6rem] sm:text-6xl xl:text-[4.2rem] text-white">
-              كل أدوات التفوق
+              كل اللي تحتاجه للتفوق
               <br />
-              <span className="text-gradient">في منصة واحدة</span>
+              <span className="text-gradient">بمكان واحد</span>
             </h1>
 
             <p
               className="rv mt-6 text-white/70 text-lg sm:text-xl font-medium leading-relaxed max-w-xl mx-auto lg:mx-0 lg:ml-auto"
               style={{ "--rvd": "120ms" } as React.CSSProperties}
             >
-              ارتقِ بمستواك مع مذكرات تفوّق المنظمة وشروحات الفيديو الواضحة واختبارات تقيس جاهزيتك
+              ارفع درجاتك مع مذكرات تفوّق الشاملة وفيديوهاتها المميزة واختباراتها الذكية
             </p>
 
             <div className="rv mt-9 flex flex-wrap items-center justify-center lg:justify-start gap-3" style={{ "--rvd": "200ms" } as React.CSSProperties}>
@@ -278,6 +301,29 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ===================== شريط الجوائز — «١٠ سنين من الإنجازات والتفوق» ===================== */}
+      <section id="trust" className="px-4 sm:px-8 pb-6">
+        <div className="rv mx-auto max-w-6xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] border border-white/12 px-5 py-2 text-sm font-black text-gold-300 mb-8">
+            <Icon name="trophy" size={16} />
+            <span>10 سنين من الإنجازات والتفوق</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+            {AWARDS.map((a, i) => (
+              <div key={a.title} className="rv flex items-center gap-3 text-right" style={{ "--rvd": `${i * 90}ms` } as React.CSSProperties}>
+                <span className="w-11 h-11 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-gold-400">
+                  <Icon name={a.icon} size={20} />
+                </span>
+                <span>
+                  <span className="block text-sm font-black text-white">{a.title}</span>
+                  <span className="block text-[11px] font-bold text-[#99a8bd] mt-0.5">{a.sub}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===================== البانر الأزرق ===================== */}
       <section className="px-3 sm:px-6 pt-10">
         <div className="rounded-t-[2.5rem] sm:rounded-t-[3.5rem] py-16 sm:py-24 text-center relative overflow-hidden bg-[#2072e0] text-white shadow-2xl">
@@ -285,7 +331,7 @@ export default function Landing() {
             <WatermelonArt size={210} />
           </div>
 
-          <h2 className="rv text-3xl sm:text-5xl font-black">ذاكر على راحتك</h2>
+          <h2 className="rv text-3xl sm:text-5xl font-black">ادرس وانت مرتاح</h2>
           <p
             className="rv mt-4 text-white/90 font-bold text-base sm:text-xl max-w-2xl mx-auto px-4"
             style={{ "--rvd": "120ms" } as React.CSSProperties}
@@ -349,38 +395,38 @@ export default function Landing() {
       {/* ===================== قسم قصص التفوق ===================== */}
       <section id="top-students" className="px-3 sm:px-6 pb-8">
         <div className="rounded-[2rem] sm:rounded-[2.75rem] bg-[#12161f] border border-white/[0.06] py-14 sm:py-20 px-6">
-          <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">تفوق طلبتنا هو قصتنا</h2>
+          <h2 className="rv text-center text-3xl sm:text-5xl font-black mb-12 text-white">نجاحكم نجاحنا</h2>
 
           <div className="mx-auto max-w-6xl grid sm:grid-cols-3 gap-6">
             {(showMore ? [...TOP_STUDENTS, ...MORE_STUDENTS] : TOP_STUDENTS).map((s, i) => (
               <div
                 key={s.name}
-                className="rv group rounded-[2rem] overflow-hidden border border-[#2b3547] bg-gradient-to-b from-[#232c4a] to-[#161c29] shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                className="rv group rounded-[2rem] overflow-hidden border border-[#2b3547] bg-[#161c29] shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 style={{ "--rvd": `${i * 100}ms` } as React.CSSProperties}
               >
-                <div className="relative p-6 text-center">
-                  {/* نسبة التفوق */}
-                  <div className="font-black text-4xl sm:text-5xl text-white tracking-tight mb-4" dir="ltr">
+                {/* صورة الطالب تملأ الكارت — ستايل UULA */}
+                <div className="relative h-64 sm:h-72">
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#232c4a] to-[#161c29]" />
+                  <img
+                    src={s.img}
+                    alt={s.name}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#161c29] via-[#161c29]/20 to-transparent" />
+                  {/* نسبة التفوق فوق الصورة */}
+                  <div className="absolute top-4 inset-x-0 text-center font-black text-4xl sm:text-5xl text-white tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,.5)]" dir="ltr">
                     {s.pct}
                   </div>
-
-                  {/* صورة الطالب */}
-                  <div className="relative w-20 h-20 mx-auto mb-4">
-                    <img
-                      src={s.img}
-                      alt={s.name}
-                      loading="lazy"
-                      className="w-20 h-20 rounded-full object-cover border-2 border-[#2072e0]/40 shadow-lg shadow-[#2072e0]/20"
-                    />
+                  <div className="absolute bottom-3 inset-x-0 text-center px-4">
+                    <div className="font-black text-lg text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.name}</div>
+                    <div className="text-[#99a8bd] text-xs font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.rank}</div>
                   </div>
-
-                  <div className="font-black text-xl text-white">{s.name}</div>
-                  <div className="text-white/70 text-xs font-bold mt-1">{s.rank}</div>
-
-                  <p className="mt-4 text-white/80 text-xs sm:text-sm leading-relaxed border-t border-white/10 pt-4 font-medium">
-                    «{s.quote}»
-                  </p>
                 </div>
+
+                <p className="relative p-5 pt-4 text-white/75 text-xs sm:text-sm leading-relaxed text-center font-medium">
+                  «{s.quote}»
+                </p>
               </div>
             ))}
           </div>

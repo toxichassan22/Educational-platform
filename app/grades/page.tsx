@@ -43,7 +43,7 @@ export default function GradesPage() {
               </Link>
             ) : (
               <Link href="/login"
-                className="bg-[#2072e0] hover:bg-[#1b63c4] text-white font-bold text-sm px-6 py-2.5 rounded-full transition-colors">
+                className="border-2 border-[#2072e0] text-white hover:bg-[#2072e0] font-bold text-sm px-6 py-2 rounded-full transition-all">
                 ادخل
               </Link>
             )}

@@ -1,0 +1,159 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "شعار علا" [ref=e7] [cursor=pointer]:
+          - /url: /kw
+        - generic [ref=e16]:
+          - link "تسوق" [ref=e18] [cursor=pointer]:
+            - /url: /kw/shop
+          - combobox "اختيار الدولة - الكويت" [ref=e22] [cursor=pointer]
+          - link "ادخل" [ref=e28] [cursor=pointer]:
+            - /url: /kw/enter
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - heading "كل اللي تحتاجه للتفوق بمكان واحد" [level=1] [ref=e41]: كل اللي تحتاجهللتفوق بمكان واحد
+            - heading "ارفع درجاتك مع مذكرات علا الشاملة و فيديوهاتها المميزة و اختباراتها الذكية" [level=3] [ref=e42]
+            - link "استكشف المواد" [ref=e43] [cursor=pointer]:
+              - /url: /kw/shop
+            - generic [ref=e45]: جائزة أفضل منصة تعليمية في الكويت
+          - generic [ref=e66]:
+            - link "أوائل الخريجين" [ref=e67] [cursor=pointer]:
+              - /url: /kw/top-students/2025
+            - generic [ref=e68]: ندى رضا التراسالخامس على الكويت - علمي
+        - generic [ref=e74]:
+          - heading "10 سنين من الانجازات والتفوق" [level=2] [ref=e76]
+          - generic [ref=e78]:
+            - link [ref=e79] [cursor=pointer]:
+              - /url: https://www.instagram.com/reel/DAOcEc7OtH3/?igsh=QkFMd3JHUUxlUg%3D%3D
+            - link "جائزة أفضل منصة تعليم" [ref=e85] [cursor=pointer]:
+              - /url: https://www.edtechdigest.com/2023-finalists-winners
+            - generic [ref=e93]: Avg. Rating
+            - link "جائزة Red Dot للابتكار" [ref=e133] [cursor=pointer]:
+              - /url: https://www.uula.com/kw/mp/award
+            - link "الطلبة الأوائل" [ref=e143] [cursor=pointer]:
+              - /url: https://www.uula.com/kw/top-students/2023
+        - generic [ref=e150]:
+          - heading "ادرس وأنت مرتاح" [level=2] [ref=e151]
+          - heading "مرتبين لك منهجك بطريقة سهلة عشان تدرس المادة على دفعات وانت مرتاح!" [level=3] [ref=e152]
+        - generic [ref=e157]:
+          - heading "مذكرات شاملة" [level=2] [ref=e158]
+          - heading "أقوى مذكرات بالكويت تغطي منهجك بالكامل وتغنيك عن كل المصادر الأخرى" [level=3] [ref=e159]
+          - link "استكشف المواد" [ref=e160] [cursor=pointer]:
+            - /url: /kw/shop
+        - generic [ref=e164]:
+          - heading "فيديوهات شرح مميزة" [level=2] [ref=e165]
+          - heading "فيديوهات مسجلة تشرح لك المذكرة بالكامل , تقدر تعيدها في أي وقت , كثر ما تبي" [level=3] [ref=e166]
+          - link "استكشف المواد" [ref=e167] [cursor=pointer]:
+            - /url: /kw/shop
+        - generic [ref=e174]:
+          - heading "اختبارات ذكية" [level=2] [ref=e175]
+          - heading "ثبت معلوماتك و استعد لاختباراتك مع اختبارات علا الذكية المبنية على اختبارات سابقة و تعالج نقاط ضعفك" [level=3] [ref=e176]
+          - link "استكشف المواد" [ref=e177] [cursor=pointer]:
+            - /url: /kw/shop
+        - generic [ref=e181]:
+          - heading "نخبة المعلمين معاك" [level=2] [ref=e182]
+          - heading "تابع أقوى المعلمين اللي يشرحون لك كل المواد و يجاوبون أسئلتك ويفهمونك" [level=3] [ref=e183]
+          - link "استكشف المواد" [ref=e184] [cursor=pointer]:
+            - /url: /kw/shop
+        - generic [ref=e190]:
+          - heading "وفر أكثر مع باقات علا" [level=2] [ref=e191]
+          - heading "اشتراك واحد يفتح جميع مواد مرحلتك بسعر خيالي! وفر لغاية 80%" [level=3] [ref=e192]
+          - link "استكشف المواد" [ref=e193] [cursor=pointer]:
+            - /url: /kw/shop
+        - generic [ref=e196]:
+          - generic [ref=e197]: نجاحكم نجاحنا
+          - generic [ref=e198]:
+            - button "%100 يوسف عبدالعزيز الأول على الكويت - علمي يوسف عبدالعزيز الأول على الكويت - علمي علا أتاحت لي إن أذاكر في أي مكان و بأي وقت، و دي الميزة اللي خلتني أشترك بعلا لأنيمبحبش المدرس يحكمني بوقت معين" [ref=e201] [cursor=pointer]:
+              - generic [ref=e211]:
+                - generic [ref=e212]: "%100"
+                - generic [ref=e214]: يوسف عبدالعزيز
+                - generic [ref=e215]: الأول على الكويت - علمي
+              - generic [ref=e216]:
+                - generic [ref=e218]: يوسف عبدالعزيز
+                - generic [ref=e219]: الأول على الكويت - علمي
+                - generic [ref=e220]: علا أتاحت لي إن أذاكر في أي مكان و بأي وقت، و دي الميزة اللي خلتني أشترك بعلا لأنيمبحبش المدرس يحكمني بوقت معين
+            - button "%100 سليم مسيكة الأول على الكويت - علمي سليم مسيكة الأول على الكويت - علمي أفضل شي بعلا هو وجود فيديوهات فيها شرح من مدرسين خبراء، ممكن الطالب ينظم وقت دراسته بيعني بنمط حياته هو فهذا بيسمح له أنه يدرس على مدار 24 ساعة بأي وقت هو بيريدها." [ref=e223] [cursor=pointer]:
+              - generic [ref=e233]:
+                - generic [ref=e234]: "%100"
+                - generic [ref=e236]: سليم مسيكة
+                - generic [ref=e237]: الأول على الكويت - علمي
+              - generic [ref=e238]:
+                - generic [ref=e240]: سليم مسيكة
+                - generic [ref=e241]: الأول على الكويت - علمي
+                - generic [ref=e242]: أفضل شي بعلا هو وجود فيديوهات فيها شرح من مدرسين خبراء، ممكن الطالب ينظم وقت دراسته بيعني بنمط حياته هو فهذا بيسمح له أنه يدرس على مدار 24 ساعة بأي وقت هو بيريدها.
+            - button "%99.99 جمانة النجدي الثاني على الكويتيين - علمي جمانة النجدي الثاني على الكويتيين - علمي أحلى ميزة إن اقدر أطالع الفيديوهات وأعيدها على كيفي. أسرع أبطأ الفيديو. والميزة الثانية الأسئلة يعني أقدر أسأل بأي وقت يجاوبون علطول. أي سؤال أحتاجه بس أسأل ويعني يردون علي باقل من دقايق." [ref=e245] [cursor=pointer]:
+              - generic [ref=e255]:
+                - generic [ref=e256]: "%99.99"
+                - generic [ref=e258]: جمانة النجدي
+                - generic [ref=e259]: الثاني على الكويتيين - علمي
+              - generic [ref=e260]:
+                - generic [ref=e262]: جمانة النجدي
+                - generic [ref=e263]: الثاني على الكويتيين - علمي
+                - generic [ref=e264]: أحلى ميزة إن اقدر أطالع الفيديوهات وأعيدها على كيفي. أسرع أبطأ الفيديو. والميزة الثانية الأسئلة يعني أقدر أسأل بأي وقت يجاوبون علطول. أي سؤال أحتاجه بس أسأل ويعني يردون علي باقل من دقايق.
+          - link "أرنى المزيد" [ref=e266] [cursor=pointer]:
+            - /url: /kw/top-students/2025
+      - contentinfo [ref=e268]:
+        - generic [ref=e269]:
+          - combobox [ref=e270]:
+            - generic [ref=e272] [cursor=pointer]:
+              - generic: الدولة
+              - generic [ref=e276]: الكويت
+          - generic [ref=e281]:
+            - generic [ref=e282]:
+              - generic [ref=e283]: المنصة
+              - link "الطلبة الأوائل" [ref=e284] [cursor=pointer]:
+                - /url: /kw/top-students/2025
+              - link "العروض" [ref=e286] [cursor=pointer]:
+                - /url: /kw/shop
+              - link "أولياء الأمور" [ref=e288] [cursor=pointer]:
+                - /url: /kw/parents
+            - generic [ref=e290]:
+              - generic [ref=e291]: تواصل معنا
+              - button "محادثة أونلاين" [ref=e292] [cursor=pointer]
+              - link "واتساب" [ref=e294] [cursor=pointer]:
+                - /url: https://api.whatsapp.com/send?phone=9651810888&text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7!%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D9%85%D8%B9%D8%B1%D9%81%D8%A9%20%D8%A7%D9%84%D9%85%D8%B2%D9%8A%D8%AF%20%D8%B9%D9%86%20%D9%85%D9%86%D8%B5%D8%A9%20%D8%B9%D9%84%D8%A7.
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - link [ref=e298] [cursor=pointer]:
+              - /url: https://www.instagram.com/uula.kwt?utm_source=footer
+            - link [ref=e302] [cursor=pointer]:
+              - /url: https://www.youtube.com/@UULA_kwt?utm_source=footer
+            - link [ref=e305] [cursor=pointer]:
+              - /url: https://twitter.com/uula_kwt?utm_source=footer
+            - link [ref=e309] [cursor=pointer]:
+              - /url: https://www.facebook.com/uula.kwt?utm_source=footer
+          - generic [ref=e312]:
+            - link [ref=e313] [cursor=pointer]:
+              - /url: https://apps.apple.com/app/uula-%D8%B9%D9%84%D8%A7/id1457971298
+            - link [ref=e339] [cursor=pointer]:
+              - /url: https://play.google.com/store/apps/details?id=com.uula.android
+        - generic [ref=e353]:
+          - link [ref=e354] [cursor=pointer]:
+            - /url: https://www.apple.com/apple-pay
+          - link [ref=e355] [cursor=pointer]:
+            - /url: https://www.knet.com.kw
+        - generic [ref=e356]:
+          - generic [ref=e357]:
+            - generic [ref=e358]: علا شركة كويتية مقرها في مدينة الكويت.
+            - generic [ref=e359]:
+              - link "شروط" [ref=e360] [cursor=pointer]:
+                - /url: /kw/terms
+              - text: •
+              - link "الخصوصية" [ref=e361] [cursor=pointer]:
+                - /url: /kw/privacy
+          - generic [ref=e362]: علا © جميع الحقوق محفوظة 2026
+    - dialog [ref=e363]:
+      - generic [ref=e364]:
+        - heading "اختر دولتك" [level=4] [ref=e365]
+        - generic [ref=e366]: يعتمد المنهج والعملة على اختيار دولتك
+      - generic [ref=e367]:
+        - combobox [ref=e368]:
+          - generic [ref=e370] [cursor=pointer]:
+            - generic: الدولة
+            - generic [ref=e374]: الكويت
+        - button "حفظ" [ref=e379] [cursor=pointer]
+      - button [ref=e381] [cursor=pointer]
+  - alert [ref=e385]

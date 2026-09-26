@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض فني وخطة تنفيذ — منصة تعليمية إلكترونية</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: #f4f6f9;
+    color: #1e293b;
+    line-height: 1.8;
+    padding: 24px;
+  }
+  .page { max-width: 900px; margin: 0 auto; }
+
+  header {
+    background: linear-gradient(135deg, #0f3d56, #16658a);
+    color: #fff;
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 24px;
+  }
+  header h1 { font-size: 26px; margin-bottom: 6px; }
+  header p { opacity: .85; font-size: 15px; }
+  .doc-meta {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,.25);
+    font-size: 13px; opacity: .9;
+  }
+  .doc-meta span b { font-weight: 600; }
+
+  section {
+    background: #fff;
+    border-radius: 14px;
+    padding: 26px 30px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 4px rgba(15, 40, 60, .07);
+  }
+  section h2 {
+    font-size: 19px;
+    color: #0f3d56;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+    border-bottom: 3px solid #e2e8f0;
+  }
+  section h2 .num {
+    display: inline-block;
+    background: #0f3d56;
+    color: #fff;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+  section h3.sub {
+    font-size: 15px;
+    color: #16658a;
+    margin: 16px 0 8px;
+    padding: 6px 12px;
+    background: #f0f7fb;
+    border-radius: 8px;
+    border-right: 4px solid #16658a;
+  }
+
+  ol.scope { padding-right: 22px; }
+  ol.scope li { padding: 4px 0; font-size: 14.5px; }
+  ol.scope li b { color: #0f3d56; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  th, td { padding: 11px 13px; text-align: right; border-bottom: 1px solid #e8edf3; vertical-align: top; }
+  th { background: #f1f5f9; color: #0f3d56; font-size: 13.5px; }
+  tr:last-child td { border-bottom: none; }
+  td .ph {
+    display: inline-block; background: #16658a; color: #fff;
+    width: 26px; height: 26px; border-radius: 50%;
+    text-align: center; line-height: 26px; font-weight: bold; font-size: 13px;
+  }
+  .preview { color: #16658a; font-size: 13.5px; }
+
+  .pay-box { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 14px; }
+  .pay-card { flex: 1; min-width: 200px; border-radius: 12px; padding: 18px; text-align: center; }
+  .pay-card.green { background: #ecfdf5; border: 2px solid #10b981; }
+  .pay-card.blue { background: #eff6ff; border: 2px solid #3b82f6; }
+  .pay-card.gray { background: #f8fafc; border: 2px solid #94a3b8; }
+  .pay-card .amount { font-size: 24px; font-weight: bold; color: #0f3d56; }
+  .pay-card .label { font-size: 13.5px; color: #475569; margin-top: 4px; }
+
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+  .badge.in { background: #dcfce7; color: #15803d; }
+  .badge.out { background: #fee2e2; color: #b91c1c; }
+
+  .note {
+    background: #fffbeb; border: 1px solid #fde68a;
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 13.5px; color: #92400e; margin-top: 12px;
+  }
+  .clause {
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 13.5px; color: #334155; margin-top: 10px;
+  }
+  ul.clean { list-style: none; }
+  ul.clean li { padding: 6px 0; font-size: 14.5px; }
+  ul.clean li::before { content: "—"; color: #94a3b8; margin-left: 8px; }
+
+  footer { text-align: center; color: #94a3b8; font-size: 12.5px; padding: 18px 0 6px; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    section { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; }
+    .notes-area { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>عرض فني وخطة تنفيذ — منصة تعليمية إلكترونية</h1>
+    <p>منصة تعليمية لطلاب الكويت &nbsp;·&nbsp; موقع ويب يعمل على جميع الأجهزة</p>
+    <div class="doc-meta">
+      <span><b>مُقدَّم من:</b> مطوّر برمجيات مستقل</span>
+      <span><b>إلى:</b> العميل — مالك المشروع</span>
+      <span><b>الإصدار:</b> 1.0</span>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="num">١</span> ملخص العرض</h2>
+    <p style="font-size:15px;">
+      تطوير منصة تعليمية إلكترونية متكاملة للسوق الكويتي، تجمع للطالب في مكان واحد:
+      <b>المذكرات الدراسية، فيديوهات الشرح، الاختبارات الإلكترونية المصححة تلقائيًا،
+      تقارير الأداء، ونظام اشتراكات مدفوعة عبر بوابة دفع كويتية</b> —
+      مع لوحة متابعة لولي الأمر ولوحة تحكم شاملة للإدارة.
+      المنصة موقع ويب Responsive يعمل من المتصفح على الموبايل والتابلت والكمبيوتر،
+      بواجهة عربية كاملة (RTL) وهوية بصرية خاصة بالمشروع.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="num">٢</span> نطاق العمل — ما سيتم تسليمه</h2>
+
+    <h3 class="sub">أولًا: تجربة الطالب</h3>
+    <ol class="scope">
+      <li><b>حساب شخصي:</b> تسجيل ودخول آمن + استعادة كلمة المرور، مع تحديد المرحلة والصف الدراسي.</li>
+      <li><b>تصفح المنهج:</b> تنظيم كامل حسب نظام الكويت: المرحلة (ابتدائي / متوسط / ثانوي) ← الصف ← المادة ← الوحدات والدروس.</li>
+      <li><b>المذكرات:</b> عرض ملفات PDF داخل المنصة مع إمكانية التحميل.</li>
+      <li><b>فيديوهات الشرح:</b> مشغل فيديو منظم بالدروس، يعمل بسلاسة على الموبايل والكمبيوتر.</li>
+      <li><b>الاختبارات الإلكترونية:</b> اختبارات موقوتة بأسئلة اختيار من متعدد وصح/خطأ، مع تصحيح تلقائي فوري عند التسليم.</li>
+      <li><b>تقارير الأداء:</b> صفحة نتائج توضح الدرجات، نسبة الإنجاز، ونقاط القوة والضعف لكل مادة ودرس.</li>
+      <li><b>إدارة الاشتراك:</b> صفحة توضح الباقة الحالية، تاريخ الانتهاء، وخيارات التجديد والترقية.</li>
+    </ol>
+
+    <h3 class="sub">ثانيًا: تجربة ولي الأمر</h3>
+    <ol class="scope" start="8">
+      <li><b>حساب ولي أمر</b> مرتبط بحساب الطالب (أو أكثر من طالب).</li>
+      <li><b>لوحة متابعة:</b> درجات الابن، مستوى تقدمه في المواد، ونتائج اختباراته.</li>
+    </ol>
+
+    <h3 class="sub">ثالثًا: لوحة تحكم الإدارة (Admin)</h3>
+    <ol class="scope" start="10">
+      <li><b>إدارة الهيكل الدراسي:</b> إضافة وتعديل المراحل والصفوف والمواد والدروس.</li>
+      <li><b>إدارة المحتوى:</b> رفع المذكرات والفيديوهات وتنظيمها بالدروس — دون الحاجة للمطوّر.</li>
+      <li><b>بنك الأسئلة:</b> إضافة وتصنيف الأسئلة وإنشاء الاختبارات وربطها بالدروس.</li>
+      <li><b>إدارة المستخدمين:</b> الطلاب وأولياء الأمور، تفعيل/إيقاف الحسابات.</li>
+      <li><b>إدارة الباقات:</b> إنشاء باقات (مادة واحدة / مرحلة كاملة)، التسعير، وأكواد الخصم.</li>
+      <li><b>متابعة المبيعات:</b> سجل المدفوعات والاشتراكات النشطة والمنتهية.</li>
+    </ol>
+
+    <h3 class="sub">رابعًا: الأنظمة المساندة</h3>
+    <ol class="scope" start="16">
+      <li><b>الدفع الإلكتروني:</b> ربط مع بوابة كويتية (Tap Payments أو MyFatoorah) — دعم KNET و Visa / Mastercard.</li>
+      <li><b>الإشعارات:</b> إشعارات داخل المنصة + بريد إلكتروني عند نجاح الدفع، اقتراب انتهاء الاشتراك، وصدور النتائج.</li>
+      <li><b>حماية المحتوى:</b> تقييد الوصول للمذكرات والفيديوهات على المشتركين فقط، وحماية الحسابات والبيانات.</li>
+      <li><b>التصميم:</b> واجهة عربية عصرية بهوية المشروع البصرية (اسم + لوجو + ألوان).</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2><span class="num">٣</span> التقنيات المستخدمة</h2>
+    <table>
+      <tr><th style="width:170px">الجزء</th><th>التقنية</th></tr>
+      <tr><td>واجهة المستخدم</td><td>Next.js (React) — أداء سريع وواجهة عربية متجاوبة</td></tr>
+      <tr><td>قاعدة البيانات</td><td>PostgreSQL — قاعدة موثوقة قابلة للتوسع</td></tr>
+      <tr><td>الفيديوهات والملفات</td><td>تخزين سحابي + بث فيديو مُحسَّن (Bunny / Cloudflare)</td></tr>
+      <tr><td>الدفع</td><td>Tap Payments أو MyFatoorah — بوابات معتمدة في الكويت تدعم KNET</td></tr>
+      <tr><td>الاستضافة</td><td>خادم سحابي (VPS) بحساب باسم العميل — ملكية كاملة له</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="num">٤</span> مراحل التنفيذ ونقاط المعاينة</h2>
+    <p style="font-size:14px; margin-bottom:12px;">
+      كل مرحلة تنتهي بمعاينة يستلمها العميل للمراجعة قبل الانتقال للمرحلة التالية.
+    </p>
+    <table>
+      <tr><th style="width:70px">المرحلة</th><th>نطاق العمل</th><th style="width:250px">ما يعاينه العميل</th></tr>
+      <tr>
+        <td><span class="ph">1</span></td>
+        <td>التأسيس: بنية المشروع + قاعدة البيانات + نظام الحسابات والأدوار</td>
+        <td class="preview">تسجيل ودخول فعلي على رابط تجريبي</td>
+      </tr>
+      <tr>
+        <td><span class="ph">2</span></td>
+        <td>الهيكل الدراسي + لوحة الأدمن + رفع المذكرات والفيديوهات</td>
+        <td class="preview">رفع محتوى تجريبي من لوحة الأدمن وعرضه للطالب</td>
+      </tr>
+      <tr>
+        <td><span class="ph">3</span></td>
+        <td>بنك الأسئلة + الاختبارات + التصحيح التلقائي + التقارير</td>
+        <td class="preview">أداء اختبار تجريبي كامل واستلام النتيجة</td>
+      </tr>
+      <tr>
+        <td><span class="ph">4</span></td>
+        <td>الباقات والاشتراكات + بوابة الدفع الكويتية + أكواد الخصم</td>
+        <td class="preview">عملية شراء تجريبية كاملة ببوابة الدفع</td>
+      </tr>
+      <tr>
+        <td><span class="ph">5</span></td>
+        <td>لوحة ولي الأمر + الإشعارات + الهوية البصرية النهائية</td>
+        <td class="preview">نسخة شبه نهائية للمنصة كاملة للمراجعة</td>
+      </tr>
+      <tr>
+        <td><span class="ph">6</span></td>
+        <td>الإطلاق والتسليم: نقل المنصة على استضافة العميل + تدريب على الأدمن + تسليم الكود المصدري</td>
+        <td class="preview">المنصة تعمل على نطاق العميل + جلسة تدريب</td>
+      </tr>
+    </table>
+    <div class="note">
+      مدة التنفيذ تتحدد بعد اعتماد الخطة، وتعتمد جزئيًا على سرعة توفير العميل للمحتوى التجريبي وبيانات بوابة الدفع والاعتمادات المرحلية.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">٥</span> حدود العرض — مشمول / غير مشمول</h2>
+    <table>
+      <tr><th>البند</th><th style="width:140px">الحالة</th></tr>
+      <tr><td>منصة الويب كاملة بجميع البنود في القسم ٢</td><td><span class="badge in">مشمول</span></td></tr>
+      <tr><td>تصميم الهوية البصرية للمنصة (لوجو بسيط + ألوان)</td><td><span class="badge in">مشمول</span></td></tr>
+      <tr><td>تدريب العميل على لوحة الأدمن</td><td><span class="badge in">مشمول</span></td></tr>
+      <tr><td>ضمان إصلاح الأخطاء البرمجية (90 يوم من التسليم)</td><td><span class="badge in">مشمول</span></td></tr>
+      <tr><td>تطبيقات iOS و Android على المتاجر</td><td><span class="badge out">غير مشمول — عرض منفصل لاحقًا</span></td></tr>
+      <tr><td>ميزات الذكاء الاصطناعي (مساعد تعليمي / شات)</td><td><span class="badge out">غير مشمول — عرض منفصل لاحقًا</span></td></tr>
+      <tr><td>إنتاج المحتوى: تصوير فيديوهات، كتابة مذكرات، إعداد أسئلة</td><td><span class="badge out">مسؤولية العميل</span></td></tr>
+      <tr><td>رفع المحتوى والإدارة اليومية للمنصة</td><td><span class="badge out">مسؤولية العميل عبر لوحة الأدمن</span></td></tr>
+      <tr><td>رسوم الاستضافة وبوابة الدفع والخدمات الخارجية</td><td><span class="badge out">يدفعها العميل لمقدمي الخدمة مباشرة</span></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="num">٦</span> التزامات العميل</h2>
+    <ul class="clean">
+      <li>توفير اسم المشروع وهويته البصرية (أو تفويض المطوّر باقتراحها).</li>
+      <li>توفير سجل تجاري / نشاط مسجل — مطلوب لتفعيل بوابة الدفع الكويتية (KNET).</li>
+      <li>توفير عينة من المحتوى في بداية العمل (مذكرة + فيديو + مجموعة أسئلة) لبناء النظام عليها.</li>
+      <li>فتح حسابات الخدمات الخارجية باسمه (استضافة، بوابة دفع، بريد) مع منح المطوّر صلاحية الإعداد.</li>
+      <li>مراجعة معاينات المراحل والرد عليها في وقت معقول.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="num">٧</span> الشروط المالية</h2>
+    <div class="pay-box">
+      <div class="pay-card green">
+        <div class="amount">75,000 ج.م</div>
+        <div class="label">الدفعة الأولى — عند اعتماد الخطة وقبل بدء العمل</div>
+      </div>
+      <div class="pay-card blue">
+        <div class="amount">75,000 ج.م</div>
+        <div class="label">الدفعة الأخيرة — عند التسليم النهائي (المرحلة ٦)</div>
+      </div>
+      <div class="pay-card gray">
+        <div class="amount">150,000 ج.م</div>
+        <div class="label">الإجمالي — سعر ثابت للنطاق المتفق عليه</div>
+      </div>
+    </div>
+    <div class="clause">
+      <b>ثبات السعر:</b> المبلغ أعلاه يغطي نطاق العمل المذكور في هذا المستند بالكامل.
+      أي طلبات أو ميزات جديدة خارج هذا النطاق تُقدَّر وتُسعَّر باتفاق مكتوب بين الطرفين قبل تنفيذها.
+    </div>
+    <div class="note">
+      <b>تكاليف التشغيل منفصلة:</b> الاستضافة والنطاق (Domain) وخدمة بث الفيديوهات يدفعها العميل مباشرة لمقدمي الخدمة
+      — تقدير مبدئي: ما يعادل 2,000 – 7,000 ج.م شهريًا حسب عدد الطلاب، وتبدأ بعد الإطلاق.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">٨</span> الضمان والتسليم</h2>
+    <ul class="clean">
+      <li><b>ضمان 90 يومًا</b> من تاريخ التسليم: إصلاح أي خطأ برمجي في النطاق المتفق عليه دون تكلفة إضافية.</li>
+      <li><b>ملكية كاملة:</b> الكود المصدري وقاعدة البيانات وجميع الحسابات تنتقل ملكيتها للعميل بعد سداد الدفعة الأخيرة.</li>
+      <li><b>الصيانة بعد الضمان:</b> تُغطى باتفاق منفصل بين الطرفين عند الحاجة.</li>
+    </ul>
+  </section>
+
+  <footer>عرض فني وخطة تنفيذ — منصة تعليمية إلكترونية · السوق الكويتي</footer>
+
+</div>
+</body>
+</html>

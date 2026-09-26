@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui";
-import { HeroArt, WatermelonArt, BookQrArt, LaptopArt, QuizArt, ChatArt, BoxArt } from "@/components/landing-art";
+import { HeroArt, WatermelonArt, BookQrArt, LaptopArt, QuizArt, ChatArt, BoxArt, SkyBg, TopBadgeArt, PayBadges } from "@/components/landing-art";
 
 /* ===================== بيانات الصفحة ===================== */
 
@@ -23,24 +23,24 @@ const AWARDS = [
 
 const TOP_STUDENTS = [
   {
-    name: "يوسف عبدالعزيز",
-    rank: "الأول على الكويت - علمي",
+    name: "نموذج متفوق ١",
+    rank: "من أوائل القسم العلمي",
     pct: "100%",
-    img: "/uula/st-yousef.webp",
+    color: "#2072e0",
     quote: "المذكرات غطّت كل شي، والاختبارات ورّتني ضعفي قبل الامتحان.",
   },
   {
-    name: "سليم مسيكة",
-    rank: "الأول على الكويت - علمي",
+    name: "نموذج متفوق ٢",
+    rank: "من أوائل القسم العلمي",
     pct: "100%",
-    img: "/uula/st-saleem.webp",
+    color: "#8e5cf0",
     quote: "كنت أذاكر بالوقت اللي يريحني وأعيد الشرح أكثر من مرة — هذا اللي فرق معي.",
   },
   {
-    name: "جمانة النجدي",
-    rank: "الثاني على الكويتيين - علمي",
-    pct: "99.99%",
-    img: "/uula/st-jumana.webp",
+    name: "نموذج متفوقة ٣",
+    rank: "من أوائل القسم العلمي",
+    pct: "99.9%",
+    color: "#33bf6b",
     quote: "أي سؤال يعقّدني أسأله للمعلم ويرد عليّ بسرعة، والتدريب رفع مستواي.",
   },
 ];
@@ -48,24 +48,24 @@ const TOP_STUDENTS = [
 /* قصص إضافية تظهر عند «اعرض المزيد» */
 const MORE_STUDENTS = [
   {
-    name: "لين ناصر",
+    name: "نموذج متفوقة ٤",
     rank: "نسبة 98.5% — القسم العلمي",
     pct: "98.5%",
-    img: "/uula/st-leen-nasser.webp",
+    color: "#f5b329",
     quote: "فيديوهات الشرح القصيرة خلتني أراجع المنهج كاملًا قبل الامتحان بأسبوع.",
   },
   {
-    name: "نور كندري",
+    name: "نموذج متفوقة ٥",
     rank: "الأولى على المدرسة في الرياضيات",
     pct: "+28%",
-    img: "/uula/st-nour.webp",
+    color: "#4a9bf5",
     quote: "الاختبارات الذكية ورّتني غلطاتي بالضبط، وركزت مراجعتي عليها بس.",
   },
   {
-    name: "يوسف درويش",
+    name: "نموذج متفوق ٦",
     rank: "من متعثر إلى متفوق في فصل واحد",
     pct: "+40%",
-    img: "/uula/st-yousef-d.webp",
+    color: "#e04d4d",
     quote: "حفظ موضع الفيديو والمذكرات المرتبة خلّوا المذاكرة عادة يومية سهلة.",
   },
 ];
@@ -169,7 +169,7 @@ export default function Landing() {
             </div>
           </Link>
 
-          {/* الوسط: روابط التنقل — زي UULA */}
+          {/* الوسط: روابط التنقل */}
           <nav className="hidden lg:flex items-center gap-8">
             {NAV_LINKS.map((l) => (
               <a key={l.label} href={l.href} className="text-sm font-bold text-white/75 hover:text-white transition-colors">
@@ -241,12 +241,8 @@ export default function Landing() {
 
       {/* ===================== الهيرو (1:1 Hero) ===================== */}
       <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden">
-        {/* خلفية سماء UULA الأصلية */}
-        <img
-          src="/uula/hero.webp"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-        />
+        {/* خلفية مرسومة بالكود — صفر صور خارجية */}
+        <SkyBg />
         {/* نجوم الليل */}
         {STARS.map(([x, y, s], i) => (
           <span
@@ -317,7 +313,7 @@ export default function Landing() {
       <section id="trust" className="px-4 sm:px-8 pb-6">
         <div className="rv mx-auto max-w-6xl text-center">
           <div className="flex items-center justify-center gap-3 sm:gap-5 mb-8">
-            <img src="/uula/top10.png" alt="" className="h-16 sm:h-24 w-auto drop-shadow-2xl" />
+            <TopBadgeArt />
             <h2 className="text-2xl sm:text-4xl font-black text-white">سنين من الإنجازات والتفوق</h2>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
@@ -417,23 +413,18 @@ export default function Landing() {
                 className="rv group rounded-[2rem] overflow-hidden border border-[#2b3547] bg-[#161c29] shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 style={{ "--rvd": `${i * 100}ms` } as React.CSSProperties}
               >
-                {/* صورة الطالب تملأ الكارت — ستايل UULA */}
-                <div className="relative h-64 sm:h-72">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#232c4a] to-[#161c29]" />
-                  <img
-                    src={s.img}
-                    alt={s.name}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover object-top"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#161c29] via-[#161c29]/20 to-transparent" />
-                  {/* نسبة التفوق فوق الصورة */}
-                  <div className="absolute top-4 inset-x-0 text-center font-black text-4xl sm:text-5xl text-white tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,.5)]" dir="ltr">
+                {/* بطاقة قصة نجاح — أيقونة ملونة بدل صورة خارجية */}
+                <div className="relative h-64 sm:h-72 flex flex-col items-center justify-center gap-3 overflow-hidden" style={{ background: `linear-gradient(160deg, ${s.color}33, #161c29 70%)` }}>
+                  <span className="w-20 h-20 rounded-3xl flex items-center justify-center text-3xl font-black text-white shadow-xl" style={{ background: s.color }}>
+                    {s.name.replace("نموذج ", "").slice(0, 1)}
+                  </span>
+                  {/* نسبة التفوق */}
+                  <div className="font-black text-4xl sm:text-5xl text-white tracking-tight pct-shine" dir="ltr">
                     {s.pct}
                   </div>
-                  <div className="absolute bottom-3 inset-x-0 text-center px-4">
-                    <div className="font-black text-lg text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.name}</div>
-                    <div className="text-[#9297a6] text-xs font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)]">{s.rank}</div>
+                  <div className="text-center px-4">
+                    <div className="font-black text-lg text-white">{s.name}</div>
+                    <div className="text-[#9297a6] text-xs font-bold mt-0.5">{s.rank}</div>
                   </div>
                 </div>
 
@@ -555,11 +546,7 @@ export default function Landing() {
             </div>
             <div>
               <div className="font-black text-white mb-4">وسائل الدفع المعتمدة</div>
-              <div className="flex items-center gap-2 flex-wrap">
-                {["knet", "apple-pay", "visa", "mastercard", "mada"].map((p) => (
-                  <img key={p} src={`/uula/${p}.png`} alt={p} className="h-7 w-auto rounded-md bg-white px-1.5 py-1" />
-                ))}
-              </div>
+              <PayBadges />
             </div>
           </div>
 

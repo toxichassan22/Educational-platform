@@ -6,25 +6,28 @@ import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
 import { Icon, Logo, KuwaitFlag } from "@/components/ui";
 
-/* مراحل إضافية خارج صفوف المدرسة — نفس تايلات UULA */
+/* بطاقات ترويجية لمراحل خارج المدرسة */
 const EXTRAS = [
-  { name: "اختبار القدرات", img: "/uula/grade-qudrat.png" },
-  { name: "الجامعة", img: "/uula/grade-uni.png" },
+  { name: "اختبار القدرات", icon: "◈" },
+  { name: "الجامعة", icon: "🎓" },
 ];
+
+/* ألوان أرقام الصفوف — من لوحة تفوّق فقط */
+const GRADE_COLORS = ["#4a9bf5", "#8e5cf0", "#33bf6b", "#f5b329", "#2072e0", "#e04d4d"];
 
 export default function GradesPage() {
   const { db, me } = useStore();
   const router = useRouter();
 
   const pick = (gradeId: string) => {
-    // مسار التسوق العام أولًا (مثل صفحة الصف في UULA) — ثم الدخول للدراسة
+    // مسار التسوق العام أولًا — ثم الدخول للدراسة
     if (me?.role === "student") router.push(`/grades/${encodeURIComponent(gradeId)}`);
     else router.push(`/grades/${encodeURIComponent(gradeId)}`);
   };
 
   return (
     <div className="min-h-screen bg-[#0f1217] text-white">
-      {/* نافبار — نفس نمط UULA */}
+      {/* نافبار */}
       <header className="border-b border-[#2b3547]/60">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-7">
@@ -56,28 +59,17 @@ export default function GradesPage() {
       <main className="max-w-[1100px] mx-auto px-4 sm:px-8 pt-12 pb-20">
         <h1 className="text-center text-3xl sm:text-4xl font-black mb-12">المكتبة</h1>
 
-        {/* تايلات الصفوف — أرقام UULA ثلاثية الأبعاد */}
+        {/* تايلات الصفوف — أرقام ملونة أصلية */}
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
-          {db.grades.map((g) => {
-            const hasArt = g.order >= 4 && g.order <= 12;
-            return (
+          {db.grades.map((g) => (
               <button key={g.id} onClick={() => pick(g.id)} title={g.name}
-                className="aspect-square bg-[#1a2030] hover:bg-[#1f2637] border border-white/[0.05] rounded-[26px] flex items-center justify-center transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group">
-                {hasArt ? (
-                  <img
-                    src={`/uula/grade-${g.order}.png`}
-                    alt={g.name}
-                    loading="lazy"
-                    className="w-[62%] h-auto drop-shadow-2xl group-hover:scale-105 transition-transform"
-                  />
-                ) : (
-                  <span className="text-6xl sm:text-7xl font-black bg-gradient-to-b from-[#5c9dff] to-[#2b5fb8] bg-clip-text text-transparent tabular-nums" dir="ltr">
-                    {g.order}
-                  </span>
-                )}
+                className="aspect-square bg-[#1a2030] hover:bg-[#1f2637] border border-white/[0.05] rounded-[26px] flex flex-col items-center justify-center gap-1 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group">
+                <span className="text-6xl sm:text-7xl font-black tabular-nums leading-none" dir="ltr" style={{ color: GRADE_COLORS[g.order % GRADE_COLORS.length] }}>
+                  {g.order}
+                </span>
+                <span className="text-[11px] font-bold text-[#9297a6]">{g.name}</span>
               </button>
-            );
-          })}
+          ))}
         </div>
 
         {/* مرحلة أخرى */}
@@ -87,7 +79,7 @@ export default function GradesPage() {
             <button key={x.name} onClick={() => router.push("/bundles")}
               className="aspect-square bg-[#1a2030] hover:bg-[#1f2637] border border-white/[0.05] rounded-[26px] p-5 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 group text-right">
               <span className="font-black text-base sm:text-lg">{x.name}</span>
-              <img src={x.img} alt={x.name} loading="lazy" className="w-2/3 h-auto self-start drop-shadow-2xl group-hover:scale-105 transition-transform" />
+              <span className="w-14 h-14 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-2xl self-start">{x.icon}</span>
             </button>
           ))}
         </div>

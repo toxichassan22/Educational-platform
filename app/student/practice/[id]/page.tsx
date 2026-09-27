@@ -74,7 +74,7 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
             <h2 className="font-black mb-2">لا يوجد تدريب متخصص لهذا الدرس بعد</h2>
             <p className="text-sm text-[#9297a6] mb-5">يمكنك إعادة الاختبار الكامل أو مراجعة المذكرة.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href={`/student/exam/${lessonId}`} className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-full font-black text-sm transition-colors">إعادة الاختبار</Link>
+              <Link href={`/student/exam/${encodeURIComponent(lessonId)}`} className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-full font-black text-sm transition-colors">إعادة الاختبار</Link>
               <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">العودة للدرس</Link>
             </div>
           </DCard>
@@ -142,11 +142,11 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
             <p className="text-[#9297a6] text-sm mb-1">أصبت {score} من {questions.length} في التدريب</p>
             <p className="text-[#9297a6]/60 text-xs mb-6">{pct >= 80 ? "مستوى ممتاز — جاهز لإعادة الاختبار الكامل" : "راجع الأقسام المحددة في المذكرة ثم أعد الاختبار الكامل لقياس تحسّنك"}</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href={`/student/exam/${lessonId}`} className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-7 py-3 rounded-full font-black text-sm transition-colors flex items-center gap-2">
+              <Link href={`/student/exam/${encodeURIComponent(lessonId)}`} className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-7 py-3 rounded-full font-black text-sm transition-colors flex items-center gap-2">
                 <Icon name="target" size={15} /> إعادة الاختبار الكامل
               </Link>
               <button onClick={reset} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">إعادة التدريب</button>
-              <Link href={`/student/lesson/${lessonId}#review`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">خطة المراجعة</Link>
+              <Link href={`/student/lesson/${encodeURIComponent(lessonId)}#review`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">خطة المراجعة</Link>
             </div>
           </DCard>
         )}

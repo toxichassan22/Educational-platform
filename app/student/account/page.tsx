@@ -1,28 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AppShell from "@/components/AppShell";
 import { useStore } from "@/lib/store";
 import { Icon, DCard } from "@/components/ui";
-import { gradeOf, activeSub, packageById } from "@/lib/data";
+import { gradeOf, activeSub, packageById, userById } from "@/lib/data";
+import { buildNotifs, whenLabel } from "@/components/NotifBell";
+
+type Panel = null | "parents" | "notifications" | "settings";
 
 export default function AccountPage() {
   const { me, db, logout } = useStore();
   const router = useRouter();
+  const [panel, setPanel] = useState<Panel>(null);
+  const [emailNotif, setEmailNotif] = useState(true);
+  const [examAlerts, setExamAlerts] = useState(true);
+
   if (!me) return <AppShell role="student" dark>{null}</AppShell>;
 
   const grade = gradeOf(db, me.gradeId);
   const sub = activeSub(db, me.id);
   const pkg = sub ? packageById(db, sub.packageId) : null;
+  const notifs = buildNotifs(db, me);
+  const parent = db.users.find((u) => u.role === "parent" && (u.childrenIds ?? []).includes(me.id));
 
-  const items: { label: string; icon: string; href?: string }[] = [
+  const items: { label: string; icon: string; href?: string; panel?: Panel }[] = [
     { label: "الاشتراكات والمدفوعات", icon: "card", href: "/student/subscription" },
     { label: "نتائجي وتقاريري", icon: "chart", href: "/student/reports" },
-    { label: "أولياء الأمور", icon: "users" },
-    { label: "الإشعارات", icon: "bell" },
-    { label: "الإعدادات", icon: "settings" },
+    { label: "أولياء الأمور", icon: "users", panel: "parents" },
+    { label: "الإشعارات", icon: "bell", panel: "notifications" },
+    { label: "الإعدادات", icon: "settings", panel: "settings" },
   ];
 
   return (
@@ -41,6 +50,86 @@ export default function AccountPage() {
           </div>
         </DCard>
 
+        {/* لوحة جانبية حسب الاختيار */}
+        {panel === "parents" && (
+          <DCard className="rounded-[22px] p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-black text-lg">أولياء الأمور</h2>
+              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
+            </div>
+            {parent ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 bg-[#1a2130] rounded-2xl p-4">
+                  <div className="w-11 h-11 rounded-full bg-[#33bf6b] flex items-center justify-center font-black text-white">{parent.name[0]}</div>
+                  <div>
+                    <div className="font-bold">{parent.name}</div>
+                    <div className="text-xs text-[#9297a6]" dir="ltr">+965 {parent.phone}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-[#9297a6] leading-relaxed">
+                  ولي الأمر يتابع تقدمك ودرجاتك ويجدّد الاشتراك من لوحته. يمكنك التواصل معه مباشرة للاستفسارات.
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-[#9297a6]">لا يوجد ولي أمر مرتبط بحسابك بعد.</p>
+            )}
+          </DCard>
+        )}
+
+        {panel === "notifications" && (
+          <DCard className="rounded-[22px] p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-black text-lg">الإشعارات</h2>
+              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
+            </div>
+            <div className="space-y-2.5">
+              {notifs.length === 0 && (
+                <p className="text-sm text-[#9297a6] text-center py-4">لا توجد إشعارات جديدة.</p>
+              )}
+              {notifs.map((n) => (
+                <div key={n.id} className="flex items-start gap-3 bg-[#1a2130] rounded-2xl p-3.5">
+                  <span className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-white" style={{ background: n.color + "33", color: n.color }}>
+                    <Icon name={n.icon} size={16} />
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold leading-relaxed">{n.text}</div>
+                    <div className="text-[11px] text-[#9297a6] mt-1">{whenLabel(n.ts)}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </DCard>
+        )}
+
+        {panel === "settings" && (
+          <DCard className="rounded-[22px] p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-black text-lg">الإعدادات</h2>
+              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "إشعارات البريد والرسائل", value: emailNotif, set: setEmailNotif },
+                { label: "تنبيهات الاختبارات والمراجعات", value: examAlerts, set: setExamAlerts },
+              ].map((row) => (
+                <button key={row.label}
+                  onClick={() => row.set(!row.value)}
+                  className="w-full flex items-center justify-between bg-[#1a2130] rounded-2xl px-4 py-3.5 hover:bg-[#1f2837] transition-colors">
+                  <span className="text-sm font-bold">{row.label}</span>
+                  <span className={`w-11 h-6 rounded-full transition-colors relative ${row.value ? "bg-[#2072e0]" : "bg-[#2b3547]"}`}>
+                    <span
+                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all ${row.value ? "right-0.5" : "right-5.5"}`}
+                    />
+                  </span>
+                </button>
+              ))}
+              <Link href="/privacy" className="block text-center text-sm font-bold text-[#4a9bf5] hover:text-white py-2">
+                سياسة الخصوصية والشروط
+              </Link>
+            </div>
+          </DCard>
+        )}
+
         {/* المنيو */}
         <div className="space-y-2.5">
           {items.map((it) => {
@@ -54,9 +143,12 @@ export default function AccountPage() {
               </>
             );
             const cls = "w-full flex items-center gap-3.5 bg-[#161c29] border border-[#2b3547] rounded-2xl px-5 h-[62px] hover:border-[#2072e0]/60 transition-colors";
-            return it.href
-              ? <Link key={it.label} href={it.href} className={cls}>{inner}</Link>
-              : <button key={it.label} className={cls}>{inner}</button>;
+            if (it.href) return <Link key={it.label} href={it.href} className={cls}>{inner}</Link>;
+            return (
+              <button key={it.label} onClick={() => setPanel(panel === it.panel ? null : (it.panel ?? null))} className={cls}>
+                {inner}
+              </button>
+            );
           })}
         </div>
 

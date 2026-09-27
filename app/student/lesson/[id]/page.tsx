@@ -179,12 +179,12 @@ function LessonContent({ lessonId }: { lessonId: string }) {
               className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
               <Icon name="doc" size={16} className="text-[#9297a6]" /> المذكرة
             </a>
-            <Link href={`/student/exam/${lesson.id}`}
+            <Link href={`/student/exam/${encodeURIComponent(lesson.id)}`}
               className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
               <Icon name="chat" size={16} className="text-[#9297a6]" /> أسئلة
             </Link>
             {practiceQuestions.length > 0 && (
-              <Link href={`/student/practice/${lesson.id}`}
+              <Link href={`/student/practice/${encodeURIComponent(lesson.id)}`}
                 className="flex items-center gap-2 bg-[#8e5cf0] hover:bg-[#7c4de0] rounded-full px-5 py-2.5 font-bold text-sm text-white transition-colors">
                 <Icon name="bolt" size={16} /> تدريب متابعة
               </Link>
@@ -216,7 +216,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
             </div>
             <Icon name="back" size={15} className="text-[#9297a6] shrink-0" />
           </a>
-          <Link href={`/student/exam/${lesson.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
+          <Link href={`/student/exam/${encodeURIComponent(lesson.id)}`} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
             <span className="w-11 h-11 rounded-xl bg-[#2d2144] flex items-center justify-center shrink-0">
               <Icon name="target" size={16} className="text-[#b79bf7]" />
             </span>
@@ -289,7 +289,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
                 ))}
               </div>
               {practiceQuestions.length > 0 && (
-                <Link href={`/student/practice/${lesson.id}`}
+                <Link href={`/student/practice/${encodeURIComponent(lesson.id)}`}
                   className="inline-flex items-center gap-2 bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] rounded-xl px-5 py-2.5 text-xs font-black transition-colors">
                   <Icon name="bolt" size={14} /> تدريب متابعة — {practiceQuestions.length} أسئلة مختلفة
                 </Link>

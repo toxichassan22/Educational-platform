@@ -65,7 +65,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
 
         {/* زبدة المادة — ملخص المنهج */}
         {allLessons[0] && (
-          <Link href={`/student/lesson/${allLessons[0].id}#notes`}
+          <Link href={`/student/lesson/${encodeURIComponent(allLessons[0].id)}#notes`}
             className="flex items-center gap-4 bg-[#161c29] border border-white/[0.05] rounded-2xl px-5 py-4 hover:border-[#f5b329]/50 transition-colors group">
             <span className="w-11 h-11 rounded-xl bg-[#f5b329]/15 text-[#f5b329] flex items-center justify-center text-xl shrink-0">🧈</span>
             <div className="flex-1">
@@ -85,10 +85,10 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
               <DCard key={u.id} className="overflow-hidden rounded-2xl">
                 <button onClick={() => setOpenUnit(open ? null : u.id)}
                   className="w-full flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/60 transition-colors">
-                  <span className="w-8 h-8 rounded-full bg-[#1a2e4d] text-[#4a9bf5] flex items-center justify-center text-sm font-black shrink-0 border border-[#2072e0]/30">
+                  <span className="w-9 h-9 rounded-full bg-[#1a2e4d] text-[#4a9bf5] flex items-center justify-center text-sm font-black shrink-0">
                     {ui + 1}
                   </span>
-                  <div className="flex-1 text-right font-bold">{u.title}</div>
+                  <div className="flex-1 text-right font-bold text-[15px]">{u.title}</div>
                   <span className="text-[12px] font-bold text-[#9297a6]">{lessons.length} دروس</span>
                   <Icon name="down" size={14} className={`text-[#9297a6] transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
@@ -101,28 +101,28 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
                       const isNow = l.id === nextId;
                       const state = locked ? "lock" : lpct !== null ? "done" : isNow ? "now" : "todo";
                       return (
-                        <Link key={l.id} href={`/student/lesson/${l.id}`}
-                          className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a2130]/60 transition-colors border-b border-[#2b3547]/50 last:border-0 group">
+                        <Link key={l.id} href={`/student/lesson/${encodeURIComponent(l.id)}`}
+                          className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a2130]/60 transition-colors border-b border-[#2b3547]/50 last:border-0">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
                             state === "done" ? "bg-[#1a3d24] text-[#33bf6b]"
-                            : state === "now" ? "bg-[#1a2e4d] text-[#2072e0]"
+                            : state === "now" ? "bg-[#1a2e4d] text-[#4a9bf5]"
                             : "bg-[#212936] text-[#9297a6]"}`}>
                             {state === "lock" ? <Icon name="lock" size={15} />
                               : state === "done" ? <Icon name="check" size={17} />
                               : <Icon name="play" size={14} filled />}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`font-bold flex items-center gap-2 flex-wrap ${locked ? "text-[#9297a6]" : "text-white"}`}>
+                            <div className={`font-bold text-[15px] flex items-center gap-2 flex-wrap ${locked ? "text-[#9297a6]" : "text-white"}`}>
                               {l.title}
                               {l.free && <span className="text-[11px] font-black bg-[#1a3d24] text-[#33bf6b] px-2 py-0.5 rounded-lg">مجاني</span>}
                               {locked && <span className="text-[10px] font-black bg-[#212936] text-[#9297a6] px-2 py-0.5 rounded-lg">للمشتركين</span>}
                             </div>
-                            <div className="text-[13px] text-[#9297a6] mt-1">فيديو · {l.durationMin} دقيقة
+                            <div className="text-[12px] text-[#9297a6] mt-1">فيديو · {l.durationMin} دقيقة
                               {questionsOfLesson(db, l.id).length > 0 && <span> · {questionsOfLesson(db, l.id).length} أسئلة</span>}
                             </div>
                           </div>
                           {lpct !== null && (
-                            <span className={`text-xs font-black px-2.5 py-1 rounded-lg ${lpct >= 80 ? "bg-[#1a3d24] text-[#33bf6b]" : lpct >= 50 ? "bg-[#3d321a] text-[#f5b329]" : "bg-[#3d1a1a] text-[#e04d4d]"}`}>{lpct}%</span>
+                            <span className={`text-xs font-black px-2.5 py-1 rounded-lg tabular-nums ${lpct >= 80 ? "bg-[#1a3d24] text-[#33bf6b]" : lpct >= 50 ? "bg-[#3d321a] text-[#f5b329]" : "bg-[#3d1a1a] text-[#e04d4d]"}`}>{lpct}%</span>
                           )}
                         </Link>
                       );

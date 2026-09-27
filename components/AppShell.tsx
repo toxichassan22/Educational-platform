@@ -50,16 +50,17 @@ export default function AppShell({ children, role, dark }: { children: React.Rea
         {/* الشريط العلوي — ثيم فيجما الداكن */}
         <header className="sticky top-0 z-40 bg-[#0f1217]/90 backdrop-blur-xl border-b border-[#2b3547]">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-8 h-[72px] flex items-center justify-between gap-4">
-            <div className="flex items-center gap-7">
+            <div className="flex items-center gap-8">
               <Link href={HOME[role]}><Logo size={38} light /></Link>
               <nav className="hidden md:flex items-center gap-1">
                 {items.map((i) => {
                   const active = pathname === i.href;
                   return (
                     <Link key={i.href} href={i.href}
-                      className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all ${
-                        active ? "bg-[#1a2130] text-white border border-[#2b3547]" : "text-[#9297a6] hover:text-white"}`}>
-                      <Icon name={i.icon} size={16} /> {i.label}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold transition-colors ${
+                        active ? "text-white bg-white/[0.06]" : "text-[#9297a6] hover:text-white"}`}>
+                      <Icon name={i.icon} size={15} />
+                      {i.label}
                     </Link>
                   );
                 })}

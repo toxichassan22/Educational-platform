@@ -67,7 +67,7 @@ export default function StudentHome() {
                 </span>
                 <div className="min-w-0">
                   <div className="font-bold text-sm text-white truncate">بث مراجعة الاختبار</div>
-                  <div className="text-[11px] font-bold text-[#33bf6b] mt-0.5">أستاذ {contSubject.teacher}</div>
+                  <div className="text-[11px] font-bold text-[#33bf6b] mt-0.5">{contSubject.teacher}</div>
                 </div>
               </div>
               <span className="text-xs font-bold text-[#9297a6] shrink-0" dir="ltr">1:00 pm</span>

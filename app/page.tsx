@@ -419,14 +419,13 @@ export default function Landing() {
               >
                 {/* صورة الطالب تملأ الكارت — ستايل UULA */}
                 <div className="relative h-64 sm:h-72">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#232c4a] to-[#161c29]" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#3b0764] via-[#2a1050] to-[#161c29]" />
                   <img
                     src={s.img}
                     alt={s.name}
-                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#161c29] via-[#161c29]/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#161c29] via-transparent to-transparent" />
                   {/* نسبة التفوق فوق الصورة */}
                   <div className="absolute top-4 inset-x-0 text-center font-black text-4xl sm:text-5xl text-white tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,.5)]" dir="ltr">
                     {s.pct}

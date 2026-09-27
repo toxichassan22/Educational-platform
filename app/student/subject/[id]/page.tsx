@@ -54,7 +54,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
             </div>
             <div className="flex-1 min-w-[200px]">
               <h1 className="text-3xl sm:text-4xl font-black text-white drop-shadow">{subject.name}</h1>
-              <div className="text-white/80 font-bold text-sm mt-1.5">{grade?.name} · {totalLessons} درسًا · أ/ {subject.teacher}</div>
+              <div className="text-white/80 font-bold text-sm mt-1.5">{grade?.name} · {totalLessons} درسًا · {subject.teacher}</div>
             </div>
             <div className="bg-black/25 backdrop-blur rounded-2xl px-6 py-3 text-center">
               <div className="text-xs font-bold text-white/70 mb-0.5">نسبة الإنجاز</div>

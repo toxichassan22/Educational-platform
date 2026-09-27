@@ -169,7 +169,7 @@ function LessonContent({ lessonId }: { lessonId: string }) {
             <div className="text-[11px] font-black text-[#4a9bf5] mb-1">درس</div>
             <h1 className="text-xl sm:text-2xl font-black">{lesson.title}</h1>
             <div className="text-[#9297a6] font-bold text-sm mt-1.5 flex items-center gap-2.5 flex-wrap">
-              <span>{unit?.title} · أ/ {subject?.teacher}</span>
+              <span>{unit?.title} · {subject?.teacher}</span>
               <span className="flex items-center gap-1"><Icon name="clock" size={13} /> {lesson.durationMin} دقيقة</span>
               {best !== null && <span className="text-[#33bf6b]">أفضل نتيجة {best}%</span>}
             </div>

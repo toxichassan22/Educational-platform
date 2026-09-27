@@ -123,7 +123,7 @@ export function BoxArt({ size = 240 }: { size?: number }) {
     <img
       src={A("packages.png")}
       width={size * 1.3}
-      alt="باقات علا"
+      alt="باقات تفوّق"
       loading="lazy"
       className="drop-shadow-2xl"
     />

@@ -75,7 +75,7 @@ export default function GradeShopPage({ params }: { params: Promise<{ id: string
                     <Icon name={s.icon} size={24} />
                   </div>
                   <div className="font-black text-lg">{s.name}</div>
-                  <div className="text-[#9297a6] text-[11px] mt-0.5">أ/ {s.teacher}</div>
+                  <div className="text-[#9297a6] text-[11px] mt-0.5">{s.teacher}</div>
                 </div>
               </Link>
             ))}

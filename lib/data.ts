@@ -31,6 +31,7 @@ export interface LessonProgress {
 export interface StudyNote {
   id: string; userId: string; lessonId: string; videoUrl: string; seconds: number; text: string;
 }
+export interface SavedLesson { userId: string; lessonId: string; addedAt: string }
 export interface Package {
   id: string; name: string; scope: "subject" | "stage" | "all";
   priceKwd: number; period: string; features: string[]; popular?: boolean;
@@ -54,6 +55,7 @@ export interface DB {
   subscriptions: Subscription[]; payments: Payment[]; discountCodes: { code: string; pct: number }[];
   lessonProgress?: LessonProgress[];
   studyNotes?: StudyNote[];
+  savedLessons?: SavedLesson[];
 }
 
 // ===================== فيديوهات تجريبية =====================

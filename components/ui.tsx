@@ -58,12 +58,24 @@ const PATHS: Record<string, React.ReactNode> = {
   wa: <><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z" /><path d="M8.8 8.9c.3-.7.6-.7 1-.7.4 0 .8.1 1 .5l.7 1.4c.1.3 0 .7-.3 1l-.5.5c.5 1 1.5 2 2.6 2.5l.6-.6c.3-.3.7-.4 1-.2l1.3.7c.4.2.5.6.4 1-.2.9-1 1.6-1.9 1.6-2.9 0-6.9-4-6.9-6.9 0-.3.4-.5 1-.8z" fill="currentColor" stroke="none" /></>,
   apple: <path d="M16.7 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-2-.9-3.2-.9C6.8 7.4 5 9 5 11.4c0 .8.1 1.6.4 2.5.4 1.3 2 4.5 3.7 4.4.9 0 1.5-.6 2.7-.6s1.7.6 2.8.6c1.7 0 2.9-3 3.3-4.3-1-.5-2.1-1.6-2.1-3.4zM14.6 5.6c.5-.6.8-1.4.7-2.2-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.7 2.2.8.1 1.6-.4 2.1-1.1z" />,
   gplay: <><path d="M5 3.5v17c0 .6.7 1 1.2.6l12.7-8.5c.4-.3.4-.9 0-1.2L6.2 2.9C5.7 2.5 5 2.9 5 3.5z" /><path d="M8 4l7.5 5M8 20l7.5-5" strokeWidth="1.4" /></>,
+  // ===== أيقونات TheQ =====
+  info: <><circle cx="12" cy="12" r="10" /><path d="M12 16v-5" /><path d="M12 8h.01" /></>,
+  share: <><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></>,
+  bookmark: <path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />,
+  headset: <><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><rect x="2" y="13" width="5" height="7" rx="2" /><rect x="17" y="13" width="5" height="7" rx="2" /><path d="M19 20a3 3 0 0 1-3 3h-3" /></>,
+  search: <><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></>,
+  gradcap: <><path d="M22 9L12 4 2 9l10 5 10-5z" /><path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5" /><path d="M22 9v5" /></>,
+  exit: <><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><path d="M10 17l5-5-5-5" /><path d="M15 12H3" /></>,
+  printer: <><path d="M6 9V2h12v7" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></>,
+  clipboard: <><rect x="5" y="4" width="14" height="18" rx="2" /><path d="M9 4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" /><path d="M9 12h6M9 16h4" /></>,
+  sparkles: <><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3z" /><path d="M19 15l.9 2.6L22.5 18l-2.6.9L19 21.5l-.9-2.6L15.5 18l2.6-.4L19 15z" /></>,
+  playCircle: <><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" /></>,
 };
 
-export function Icon({ name, size = 20, className = "", filled }: { name: string; size?: number; className?: string; filled?: boolean }) {
+export function Icon({ name, size = 20, className = "", filled, style }: { name: string; size?: number; className?: string; filled?: boolean; style?: React.CSSProperties }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill={filled ? "currentColor" : "none"}
-      stroke={filled ? "none" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      stroke={filled ? "none" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
       {PATHS[name] ?? PATHS.book}
     </svg>
   );

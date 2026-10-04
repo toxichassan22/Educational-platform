@@ -9,62 +9,61 @@ import type { QBadgeTone } from "@/lib/theme-q";
 import { Icon } from "../ui";
 
 const HOME: Record<string, string> = { student: "/student", parent: "/parent", admin: "/admin" };
+const NOTIF: Record<string, string> = { student: "/student/notifications", parent: "/parent/notifications" };
+const ACCOUNT: Record<string, string> = { student: "/student/account", parent: "/parent/account" };
 
-const ROLE_TITLE: Record<string, string> = {
-  student: "الرئيسية",
-  parent: "حساب ولي الأمر",
-};
-
-/** شريط TheQ: كحلي #082770 + عنوان الصفحة + أيقونات يسار + لوجو يمين */
-export function QTopBar({ title, children }: { title?: string; children?: React.ReactNode }) {
+/**
+ * شريط TheQ العلوي: كحلي #082770.
+ * يمين (بداية RTL): لوجو TheQ ثم عنوان الصفحة «الرئيسية».
+ * يسار (نهاية RTL): جرس الإشعارات، علم الكويت دائري، أفاتار بنقطة خضراء.
+ */
+export function QTopBar({ title }: { title?: string }) {
   const { me } = useStore();
+  const role = me?.role ?? "student";
   const pathname = usePathname();
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const isHome = pathname === HOME[role];
 
   return (
-    <header
-      className="sticky top-0 z-40 text-white"
-      style={{ background: QC.navy, fontFamily: QFONT }}
-    >
+    <header className="sticky top-0 z-40 text-white" style={{ background: QC.navy, fontFamily: QFONT }}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-[64px] flex items-center justify-between gap-4">
-        {/* يمين (بداية RTL): اللوجو ثم عنوان الصفحة */}
-        <div className="flex items-center gap-4 min-w-0">
-          <Link href={HOME[me?.role ?? "student"]} className="flex items-center gap-2 shrink-0">
-            <QMark />
-            <span className="hidden sm:block font-extrabold text-[15px] tracking-tight">
-              The<span className="text-[#4da3ff]">Q</span>
-            </span>
+        {/* يمين: العنوان ثم اللوجو عند الطرف */}
+        <div className="flex items-center gap-3 min-w-0">
+          <h1
+            className={`font-bold text-[15px] truncate px-3 py-1.5 rounded-lg ${isHome ? "bg-white/[0.09]" : ""}`}
+          >
+            {title ?? "الرئيسية"}
+          </h1>
+          <Link href={HOME[role]} className="flex items-center shrink-0" aria-label="The Q App">
+            {/* لوجو المنصة الرسمي — public/theq/ui/logo.png */}
+            <img src="/theq/ui/logo.png" alt="The Q App" className="h-[34px] w-auto" />
           </Link>
-          <span className="w-px h-6 bg-white/20 hidden sm:block" />
-          <h1 className="font-semibold text-[15px] truncate">{title ?? ROLE_TITLE[me?.role ?? "student"]}</h1>
         </div>
 
-        {/* يسار: children ثم الأدوات */}
-        <div className="flex items-center gap-1.5">
-          {children}
-          <Link
-            href={HOME[me?.role ?? "student"]}
-            title="الرئيسية"
-            className={`p-2 rounded-lg transition-colors hover:bg-white/10 ${isActive("/student") || isActive("/parent") ? "bg-white/15" : ""}`}
-          >
-            <Icon name="home" size={19} />
-          </Link>
-          <button
-            title="اللغة"
-            className="w-9 h-9 rounded-full grid place-items-center text-[11px] font-extrabold hover:bg-white/10 transition-colors"
-          >
-            ع
-          </button>
+        {/* يسار: جرس ثم علم ثم أفاتار */}
+        <div className="flex items-center gap-2.5">
           {me && (
             <Link
-              href={me.role === "student" ? "/student/account" : HOME[me.role]}
+              href={ACCOUNT[role] ?? HOME[role]}
               title={me.name}
-              className="w-9 h-9 rounded-full grid place-items-center font-extrabold text-[13px] text-[#082770] hover:ring-2 hover:ring-white/40 transition"
-              style={{ background: "#cfe0ff" }}
+              className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-white/25 hover:border-white/60 transition-colors shrink-0"
             >
-              {me.name[0]}
+              <img src="/theq/ui/avatar.png" alt={me.name} className="w-full h-full object-cover" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-[#082770]" style={{ background: QC.success }} />
             </Link>
           )}
+          <span
+            className="w-8 h-8 rounded-full overflow-hidden grid place-items-center border border-white/20 shrink-0"
+            title="الكويت"
+          >
+            <img src="/theq/ui/kuwait.svg" alt="الكويت" className="w-full h-full object-cover" />
+          </span>
+          <Link
+            href={NOTIF[role] ?? HOME[role]}
+            title="الإشعارات"
+            className="p-1.5 text-white/80 hover:text-white transition-colors"
+          >
+            <Icon name="bell" size={21} />
+          </Link>
         </div>
       </div>
     </header>
@@ -72,29 +71,36 @@ export function QTopBar({ title, children }: { title?: string; children?: React.
 }
 
 export function QMark({ size = 30 }: { size?: number }) {
+  return <img src="/theq/ui/app-icon.png" alt="The Q" width={size} height={size} className="rounded-xl" />;
+}
+
+/** زر الدعم العائم على الطرف الأيسر — نفس موضعه في TheQ */
+function QSupportFab() {
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden>
-      <rect width="40" height="40" rx="11" fill="#ffffff" fillOpacity="0.14" />
-      {/* حرف Q مبسّط: دائرة + ذيل */}
-      <circle cx="19" cy="19" r="10" fill="none" stroke="#fff" strokeWidth="3.2" />
-      <path d="M25.5 25.5 L32 32" stroke="#fff" strokeWidth="3.6" strokeLinecap="round" />
-      <circle cx="19" cy="19" r="3.4" fill="#4da3ff" />
-    </svg>
+    <button
+      title="تواصل معنا"
+      className="fixed left-0 top-[62%] z-40 w-11 h-11 rounded-full grid place-items-center text-white shadow-lg shadow-[#006fff]/30 hover:scale-105 transition-transform -translate-x-1"
+      style={{ background: QC.brand }}
+    >
+      <Icon name="headset" size={19} />
+    </button>
   );
 }
 
 /**
  * هيكل صفحة TheQ: شريط كحلي + خلفية فاتحة.
- * صفحات الدخول والـ landing تستخدم AppShell/تصميمها هي — هذه للطالب وولي الأمر فقط.
+ * صفحات الدخول والـ landing تستخدم تصميمها — هذه للطالب وولي الأمر فقط.
  */
 export default function QShell({
   children,
   role,
   title,
+  fab = true,
 }: {
   children: React.ReactNode;
   role: string;
   title?: string;
+  fab?: boolean;
 }) {
   const { me, ready, logout } = useStore();
   const router = useRouter();
@@ -107,26 +113,22 @@ export default function QShell({
   if (!ready || !me || me.role !== role) {
     return (
       <div className="min-h-screen grid place-items-center" style={{ background: QC.bg }}>
-        <div className="animate-pop flex items-center gap-2" style={{ fontFamily: QFONT }}>
-          <QMark size={44} />
-          <span className="font-extrabold text-xl" style={{ color: QC.navy }}>
-            TheQ
-          </span>
-        </div>
+        <img src="/theq/ui/logo.png" alt="The Q App" className="h-16 w-auto animate-pop" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: QC.bg, fontFamily: QFONT, color: QC.body }}>
+    <div className="min-h-screen flex flex-col" style={{ background: QC.bgSoft, fontFamily: QFONT, color: QC.body }}>
       <QTopBar title={title} />
       <main className="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</main>
+      {fab && <QSupportFab />}
       <QTabBar role={role} onLogout={logout} />
     </div>
   );
 }
 
-/** شريط سفلي (موبايل) — نفس نمط TheQ */
+/** شريط سفلي (موبايل) */
 function QTabBar({ role, onLogout }: { role: string; onLogout: () => void }) {
   const pathname = usePathname();
   const items =
@@ -145,10 +147,7 @@ function QTabBar({ role, onLogout }: { role: string; onLogout: () => void }) {
         ];
 
   return (
-    <nav
-      className="md:hidden sticky bottom-0 z-40 border-t"
-      style={{ background: QC.surface, borderColor: QC.line }}
-    >
+    <nav className="md:hidden sticky bottom-0 z-40 border-t" style={{ background: QC.surface, borderColor: QC.line }}>
       <div className="flex">
         {items.map((i) => {
           const active = pathname === i.href;
@@ -179,14 +178,24 @@ function QTabBar({ role, onLogout }: { role: string; onLogout: () => void }) {
 
 // ===================== عناصر مشتركة =====================
 
-export function QPageTitle({ children, sub }: { children: React.ReactNode; sub?: string }) {
+/** عنوان صفحة + سهم رجوع على يساره (نمط TheQ: العنوان يمين والسهم يساره) */
+export function QPageHead({ children, href, sub }: { children: React.ReactNode; href?: string; sub?: string }) {
+  const arrow = (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={QC.faint} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-1 shrink-0">
+      <path d="M5 12h14" />
+      <path d="M13 6l6 6-6 6" />
+    </svg>
+  );
   return (
-    <div className="mb-4">
-      <h2 className="text-xl font-extrabold" style={{ color: QC.ink }}>
-        {children}
-      </h2>
+    <div className="mb-5">
+      <div className="flex items-center gap-2.5">
+        <h2 className="text-[22px] font-extrabold" style={{ color: QC.ink }}>
+          {children}
+        </h2>
+        {href ? <Link href={href} aria-label="رجوع">{arrow}</Link> : arrow}
+      </div>
       {sub && (
-        <p className="text-[13px] mt-0.5" style={{ color: QC.muted }}>
+        <p className="text-[12.5px] mt-1 font-semibold" style={{ color: QC.muted }}>
           {sub}
         </p>
       )}
@@ -230,6 +239,7 @@ export function QBtn({
   disabled,
   type = "button",
   className = "",
+  style,
 }: {
   children: React.ReactNode;
   href?: string;
@@ -239,6 +249,7 @@ export function QBtn({
   disabled?: boolean;
   type?: "button" | "submit";
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const v = {
     primary: { bg: QC.brand, fg: "#fff", bd: "transparent" },
@@ -249,7 +260,7 @@ export function QBtn({
   } as const;
   const s = size === "sm" ? "px-3 py-1.5 text-[12px]" : "px-4 py-2.5 text-[13px]";
   const cls = `inline-flex items-center justify-center gap-2 rounded-lg font-bold transition-colors active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none ${s} ${className}`;
-  const st = { background: v[variant].bg, color: v[variant].fg, border: `1px solid ${v[variant].bd}` };
+  const st = { background: v[variant].bg, color: v[variant].fg, border: `1px solid ${v[variant].bd}`, ...style };
 
   if (href)
     return (
@@ -286,6 +297,42 @@ export function QEmpty({ title, hint }: { title: string; hint?: string }) {
           {hint}
         </div>
       )}
+    </div>
+  );
+}
+
+/** مودال فاتح بنمط TheQ (أبيض، X عند اليسار) */
+export function QModal({
+  open,
+  onClose,
+  title,
+  children,
+  wide,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-[#0f172a]/50" />
+      <div
+        className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto bg-white ${wide ? "sm:max-w-2xl" : "sm:max-w-md"}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[17px] font-extrabold" style={{ color: QC.ink }}>
+            {title}
+          </h3>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100" style={{ color: QC.faint }}>
+            <Icon name="x" size={18} />
+          </button>
+        </div>
+        {children}
+      </div>
     </div>
   );
 }

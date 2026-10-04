@@ -114,20 +114,17 @@ export default function StudentHome() {
                 هل تريد الوصول إلى جميع الميزات والواجبات؟
               </h3>
               <div className="mt-4">
-                <QBtn href="/student/subscription" variant="primary" className="!bg-white !text-[#082770] !border-transparent">
+                <QBtn href="/student/subscription" variant="primary" style={{ background: "#fff", color: QC.navy, border: "none" }}>
                   اشترك
                 </QBtn>
               </div>
             </div>
-            <div className="hidden sm:block absolute -left-6 -bottom-8 w-56 h-56 opacity-90 pointer-events-none">
-              <svg viewBox="0 0 200 200" fill="none">
-                <circle cx="120" cy="60" r="26" fill="#ffd166" />
-                <rect x="24" y="104" width="150" height="16" rx="8" fill="#ffffff" opacity=".9" />
-                <rect x="40" y="126" width="120" height="14" rx="7" fill="#ffffff" opacity=".65" />
-                <rect x="58" y="146" width="86" height="12" rx="6" fill="#ffffff" opacity=".45" />
-                <path d="M150 84l30-14-8 18 12 14-32 6z" fill="#ffd166" opacity=".9" />
-              </svg>
-            </div>
+            {/* الصورة الرسمية لبانر الاشتراك من المنصة */}
+            <img
+              src="/theq/ui/subscribe.png"
+              alt=""
+              className="absolute left-4 sm:left-8 bottom-0 h-[105%] object-contain pointer-events-none"
+            />
           </div>
         )}
 

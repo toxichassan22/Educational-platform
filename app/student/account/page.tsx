@@ -3,163 +3,194 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AppShell from "@/components/AppShell";
+import QShell, { QPageHead, QCard, QBtn, QModal } from "@/components/q/QShell";
 import { useStore } from "@/lib/store";
-import { Icon, DCard } from "@/components/ui";
-import { gradeOf, activeSub, packageById, userById } from "@/lib/data";
-import { buildNotifs, whenLabel } from "@/components/NotifBell";
+import { Icon } from "@/components/ui";
+import { gradeOf, activeSub, packageById } from "@/lib/data";
+import { QC } from "@/lib/theme-q";
 
-type Panel = null | "parents" | "notifications" | "settings";
-
+/** حساب الطالب — نمط «عام» في TheQ: فورم إعدادات + روابط الحساب */
 export default function AccountPage() {
-  const { me, db, logout } = useStore();
+  const { me, db, logout, updateStudent } = useStore();
   const router = useRouter();
-  const [panel, setPanel] = useState<Panel>(null);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gradeId, setGradeId] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [savedMsg, setSavedMsg] = useState(false);
+  const [logoutAsk, setLogoutAsk] = useState(false);
   const [emailNotif, setEmailNotif] = useState(true);
   const [examAlerts, setExamAlerts] = useState(true);
 
-  if (!me) return <AppShell role="student" dark>{null}</AppShell>;
+  if (!me) return <QShell role="student">{null}</QShell>;
 
   const grade = gradeOf(db, me.gradeId);
   const sub = activeSub(db, me.id);
   const pkg = sub ? packageById(db, sub.packageId) : null;
-  const notifs = buildNotifs(db, me);
   const parent = db.users.find((u) => u.role === "parent" && (u.childrenIds ?? []).includes(me.id));
 
-  const items: { label: string; icon: string; href?: string; panel?: Panel }[] = [
+  const startEdit = () => {
+    setName(me.name);
+    setPhone(me.phone ?? "");
+    setGradeId(me.gradeId ?? "");
+    setEditing(true);
+  };
+  const save = () => {
+    updateStudent(me.id, { name: name.trim() || me.name, phone, gradeId: gradeId || me.gradeId });
+    setEditing(false);
+    setSavedMsg(true);
+    setTimeout(() => setSavedMsg(false), 1800);
+  };
+
+  const menu: { label: string; icon: string; href: string }[] = [
     { label: "الاشتراكات والمدفوعات", icon: "card", href: "/student/subscription" },
     { label: "نتائجي وتقاريري", icon: "chart", href: "/student/reports" },
-    { label: "أولياء الأمور", icon: "users", panel: "parents" },
-    { label: "الإشعارات", icon: "bell", panel: "notifications" },
-    { label: "الإعدادات", icon: "settings", panel: "settings" },
+    { label: "الدروس المحفوظة", icon: "bookmark", href: "/student/saved" },
+    { label: "سجل المشاهدة", icon: "clock", href: "/student/history" },
+    { label: "الإشعارات", icon: "bell", href: "/student/notifications" },
   ];
 
+  const inputCls = "w-full border rounded-xl px-4 py-3 text-[13.5px] outline-none focus:border-[#006fff] bg-white disabled:bg-slate-50 disabled:text-slate-500";
+
   return (
-    <AppShell role="student" dark>
-      <div className="max-w-[560px] mx-auto space-y-6 animate-fade-up pt-4">
+    <QShell role="student" title="حسابي">
+      <div className="max-w-2xl">
+        <QPageHead sub="حدّث إعدادات حسابك.">عام</QPageHead>
 
-        {/* كارت البروفايل */}
-        <DCard className="rounded-[22px] py-8 px-6 flex flex-col items-center text-center gap-3">
-          <div className="w-24 h-24 rounded-full bg-[#d99e66] flex items-center justify-center text-4xl font-black text-white">
-            {me.name[0]}
-          </div>
-          <div className="text-2xl font-black">{me.name}</div>
-          <div className="text-sm font-bold text-[#9297a6]" dir="ltr">+965 {me.phone}</div>
-          <div className="bg-[#1a3454] border border-[#2072e0] rounded-2xl px-4 py-2 text-[13px] font-bold text-[#4a9bf5]">
-            {grade?.name}{pkg ? ` · ${pkg.name}` : " · بدون اشتراك"}
-          </div>
-        </DCard>
-
-        {/* لوحة جانبية حسب الاختيار */}
-        {panel === "parents" && (
-          <DCard className="rounded-[22px] p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-black text-lg">أولياء الأمور</h2>
-              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
-            </div>
-            {parent ? (
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 bg-[#1a2130] rounded-2xl p-4">
-                  <div className="w-11 h-11 rounded-full bg-[#33bf6b] flex items-center justify-center font-black text-white">{parent.name[0]}</div>
-                  <div>
-                    <div className="font-bold">{parent.name}</div>
-                    <div className="text-xs text-[#9297a6]" dir="ltr">+965 {parent.phone}</div>
-                  </div>
-                </div>
-                <p className="text-sm text-[#9297a6] leading-relaxed">
-                  ولي الأمر يتابع تقدمك ودرجاتك ويجدّد الاشتراك من لوحته. يمكنك التواصل معه مباشرة للاستفسارات.
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm text-[#9297a6]">لا يوجد ولي أمر مرتبط بحسابك بعد.</p>
-            )}
-          </DCard>
-        )}
-
-        {panel === "notifications" && (
-          <DCard className="rounded-[22px] p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-black text-lg">الإشعارات</h2>
-              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
-            </div>
-            <div className="space-y-2.5">
-              {notifs.length === 0 && (
-                <p className="text-sm text-[#9297a6] text-center py-4">لا توجد إشعارات جديدة.</p>
-              )}
-              {notifs.map((n) => (
-                <div key={n.id} className="flex items-start gap-3 bg-[#1a2130] rounded-2xl p-3.5">
-                  <span className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-white" style={{ background: n.color + "33", color: n.color }}>
-                    <Icon name={n.icon} size={16} />
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold leading-relaxed">{n.text}</div>
-                    <div className="text-[11px] text-[#9297a6] mt-1">{whenLabel(n.ts)}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </DCard>
-        )}
-
-        {panel === "settings" && (
-          <DCard className="rounded-[22px] p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-black text-lg">الإعدادات</h2>
-              <button onClick={() => setPanel(null)} className="text-[#9297a6] hover:text-white"><Icon name="x" size={18} /></button>
-            </div>
-            <div className="space-y-3">
-              {[
-                { label: "إشعارات البريد والرسائل", value: emailNotif, set: setEmailNotif },
-                { label: "تنبيهات الاختبارات والمراجعات", value: examAlerts, set: setExamAlerts },
-              ].map((row) => (
-                <button key={row.label}
-                  onClick={() => row.set(!row.value)}
-                  className="w-full flex items-center justify-between bg-[#1a2130] rounded-2xl px-4 py-3.5 hover:bg-[#1f2837] transition-colors">
-                  <span className="text-sm font-bold">{row.label}</span>
-                  <span className={`w-11 h-6 rounded-full transition-colors relative ${row.value ? "bg-[#2072e0]" : "bg-[#2b3547]"}`}>
-                    <span
-                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all ${row.value ? "right-0.5" : "right-5.5"}`}
-                    />
-                  </span>
-                </button>
-              ))}
-              <Link href="/privacy" className="block text-center text-sm font-bold text-[#4a9bf5] hover:text-white py-2">
-                سياسة الخصوصية والشروط
-              </Link>
-            </div>
-          </DCard>
-        )}
-
-        {/* المنيو */}
-        <div className="space-y-2.5">
-          {items.map((it) => {
-            const inner = (
-              <>
-                <span className="w-8 h-8 rounded-lg bg-[#212936] flex items-center justify-center shrink-0 text-[#9297a6]">
-                  <Icon name={it.icon} size={16} />
-                </span>
-                <span className="flex-1 font-bold">{it.label}</span>
-                <Icon name="back" size={14} className="text-[#9297a6] rotate-180" />
-              </>
-            );
-            const cls = "w-full flex items-center gap-3.5 bg-[#161c29] border border-[#2b3547] rounded-2xl px-5 h-[62px] hover:border-[#2072e0]/60 transition-colors";
-            if (it.href) return <Link key={it.label} href={it.href} className={cls}>{inner}</Link>;
-            return (
-              <button key={it.label} onClick={() => setPanel(panel === it.panel ? null : (it.panel ?? null))} className={cls}>
-                {inner}
+        <QCard className="!p-6 sm:!p-8">
+          {/* الصورة الشخصية */}
+          <div className="mb-7">
+            <div className="text-[13px] font-bold mb-2.5" style={{ color: QC.ink }}>الصورة الشخصية</div>
+            <div className="relative w-fit">
+              <img src="/theq/ui/avatar.png" alt={me.name} className="w-20 h-20 rounded-xl object-cover border" style={{ borderColor: QC.line }} />
+              <button className="absolute -bottom-1.5 -left-1.5 w-6 h-6 rounded-full grid place-items-center text-white" style={{ background: QC.brand }}>
+                <Icon name="edit" size={11} />
               </button>
-            );
-          })}
+            </div>
+          </div>
+
+          {/* رقم الهاتف + الاسم */}
+          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5">
+            <div>
+              <label className="text-[12.5px] font-bold block mb-1.5" style={{ color: QC.ink }}>رقم الهاتف</label>
+              <div className="flex gap-2" dir="ltr">
+                <span className="w-11 h-11 rounded-xl border overflow-hidden grid place-items-center shrink-0" style={{ borderColor: QC.line }}>
+                  <img src="/theq/ui/kuwait.svg" alt="KW" className="w-full h-full object-cover" />
+                </span>
+                <input value={editing ? phone : `+965 ${me.phone ?? ""}`} onChange={(e) => setPhone(e.target.value)} disabled={!editing}
+                  className={inputCls} style={{ borderColor: QC.line }} dir="ltr" />
+              </div>
+            </div>
+            <div>
+              <label className="text-[12.5px] font-bold block mb-1.5" style={{ color: QC.ink }}>الاسم الكامل</label>
+              <input value={editing ? name : me.name} onChange={(e) => setName(e.target.value)} disabled={!editing}
+                className={inputCls} style={{ borderColor: QC.line }} />
+            </div>
+            <div>
+              <label className="text-[12.5px] font-bold block mb-1.5" style={{ color: QC.ink }}>الصف</label>
+              <select value={editing ? gradeId : me.gradeId ?? ""} onChange={(e) => setGradeId(e.target.value)} disabled={!editing}
+                className={inputCls} style={{ borderColor: QC.line }}>
+                {db.grades.map((g) => (
+                  <option key={g.id} value={g.id}>{g.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-[12.5px] font-bold block mb-1.5" style={{ color: QC.ink }}>المنهج</label>
+              <select disabled className={inputCls} style={{ borderColor: QC.line }}>
+                <option>المنهج الحكومي العام</option>
+              </select>
+            </div>
+          </div>
+
+          {/* حالة الاشتراك */}
+          <div className="mt-6 rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3" style={{ background: pkg ? QC.successSoft : QC.bgSoft }}>
+            <span className="text-[12.5px] font-bold flex items-center gap-2" style={{ color: QC.body }}>
+              <Icon name="gem" size={15} style={{ color: pkg ? QC.success : QC.faint }} />
+              {pkg ? `مشترك في ${pkg.name} · ينتهي ${sub?.endDate}` : "بدون اشتراك نشط"}
+            </span>
+            {!pkg && <QBtn href="/student/subscription" size="sm">اشترك الآن</QBtn>}
+          </div>
+
+          {/* ولي الأمر */}
+          {parent && (
+            <div className="mt-3 flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: QC.bgSoft }}>
+              <img src="/theq/ui/avatar.png" alt="" className="w-9 h-9 rounded-full object-cover" />
+              <div>
+                <div className="text-[12.5px] font-bold" style={{ color: QC.ink }}>ولي الأمر: {parent.name}</div>
+                <div className="text-[11px]" style={{ color: QC.muted }} dir="ltr">+965 {parent.phone}</div>
+              </div>
+            </div>
+          )}
+
+          {/* مفاتيح الإشعارات */}
+          <div className="mt-6 space-y-2.5">
+            {[
+              { label: "إشعارات البريد والرسائل", value: emailNotif, set: setEmailNotif },
+              { label: "تنبيهات الاختبارات والمراجعات", value: examAlerts, set: setExamAlerts },
+            ].map((row) => (
+              <button key={row.label} onClick={() => row.set(!row.value)}
+                className="w-full flex items-center justify-between rounded-xl px-4 py-3 transition-colors hover:bg-slate-50"
+                style={{ background: QC.bgSoft }}>
+                <span className="text-[13px] font-bold" style={{ color: QC.body }}>{row.label}</span>
+                <span className="w-11 h-6 rounded-full relative transition-colors" style={{ background: row.value ? QC.brand : QC.lineSoft }}>
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${row.value ? "right-0.5" : "right-[22px]"}`} />
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* حفظ/إلغاء + خطر */}
+          <div className="flex gap-3 mt-7">
+            {editing ? (
+              <>
+                <QBtn onClick={save} className="!px-8">حفظ</QBtn>
+                <QBtn variant="ghost" onClick={() => setEditing(false)}>إلغاء</QBtn>
+              </>
+            ) : (
+              <QBtn onClick={startEdit} className="!px-8">تعديل البيانات</QBtn>
+            )}
+            {savedMsg && <span className="self-center text-[12px] font-bold" style={{ color: QC.success }}>تم الحفظ ✓</span>}
+          </div>
+
+          <div className="flex gap-3 mt-4 pt-4 border-t" style={{ borderColor: QC.line }}>
+            <button onClick={() => setLogoutAsk(true)}
+              className="px-4 py-2.5 rounded-xl border font-bold text-[12.5px] transition-colors hover:bg-rose-50"
+              style={{ borderColor: "#fecaca", color: QC.danger }}>
+              <Icon name="logout" size={14} className="inline ml-1" /> تسجيل الخروج
+            </button>
+            <button className="px-4 py-2.5 rounded-xl border font-bold text-[12.5px] transition-colors hover:bg-slate-50"
+              style={{ borderColor: QC.line, color: QC.body }}>
+              <Icon name="lock" size={14} className="inline ml-1" /> تغيير كلمة المرور
+            </button>
+          </div>
+        </QCard>
+
+        {/* روابط الحساب */}
+        <div className="mt-5 space-y-2.5">
+          {menu.map((it) => (
+            <Link key={it.label} href={it.href}
+              className="w-full flex items-center gap-3.5 bg-white border rounded-2xl px-5 h-[58px] transition-all hover:-translate-y-0.5 hover:shadow-md"
+              style={{ borderColor: QC.line }}>
+              <span className="w-8 h-8 rounded-lg grid place-items-center shrink-0" style={{ background: QC.surfaceSoft, color: QC.muted }}>
+                <Icon name={it.icon} size={16} />
+              </span>
+              <span className="flex-1 font-bold text-[13.5px]" style={{ color: QC.ink }}>{it.label}</span>
+              <Icon name="back" size={14} className="rotate-180" style={{ color: QC.faint }} />
+            </Link>
+          ))}
         </div>
 
-        {/* تسجيل الخروج */}
-        <button onClick={() => { logout(); router.push("/"); }}
-          className="w-full flex items-center justify-center gap-2.5 bg-[#38191a] border border-[#e04d4d] rounded-2xl h-[58px] font-black text-[#e04d4d] hover:bg-[#e04d4d]/15 transition-colors">
-          <Icon name="logout" size={18} /> تسجيل الخروج
-        </button>
-
-        <p className="text-center text-[13px] text-[#9297a6]/50">تفوّق © 2026 · الإصدار 1.0</p>
+        <p className="text-center text-[12px] mt-8" style={{ color: QC.faint }}>The Q © 2026 · الإصدار 1.0</p>
       </div>
-    </AppShell>
+
+      <QModal open={logoutAsk} onClose={() => setLogoutAsk(false)} title="تسجيل الخروج">
+        <p className="text-[13.5px] mb-5" style={{ color: QC.body }}>متأكد إنك تبي تسجل خروج من حسابك؟</p>
+        <div className="flex gap-3">
+          <QBtn variant="danger" className="flex-1" onClick={() => { logout(); router.push("/"); }}>نعم، سجل خروج</QBtn>
+          <QBtn variant="ghost" className="flex-1" onClick={() => setLogoutAsk(false)}>تراجع</QBtn>
+        </div>
+      </QModal>
+    </QShell>
   );
 }

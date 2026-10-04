@@ -17,6 +17,9 @@ interface Store {
   saveLessonProgress: (lessonId: string, videoUrl: string, position: number) => void;
   addStudyNote: (lessonId: string, videoUrl: string, seconds: number, text: string) => void;
   removeStudyNote: (id: string) => void;
+  toggleSavedLesson: (lessonId: string) => void;
+  updateStudent: (userId: string, patch: Partial<Pick<User, "name" | "gradeId" | "phone">>) => void;
+  addStudent: (parentId: string, data: { name: string; gradeId: string; phone: string }) => string;
   storageError: string;
   // ==== إدارة الأدمن ====
   addSubject: (gradeId: string, name: string, teacher: string) => void;
@@ -102,7 +105,38 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         id: `note-${uid()}`, userId: me.id, lessonId, videoUrl, seconds, text: value,
       }] }));
     },
-    removeStudyNote: (id) => setDb((d) => ({ ...d, studyNotes: (d.studyNotes ?? []).filter((n) => n.id !== id || n.userId !== me?.id) })), 
+    removeStudyNote: (id) => setDb((d) => ({ ...d, studyNotes: (d.studyNotes ?? []).filter((n) => n.id !== id || n.userId !== me?.id) })),
+
+    toggleSavedLesson: (lessonId) => {
+      if (!me || me.role !== "student") return;
+      setDb((d) => {
+        const list = d.savedLessons ?? [];
+        const has = list.some((s) => s.userId === me.id && s.lessonId === lessonId);
+        return {
+          ...d,
+          savedLessons: has
+            ? list.filter((s) => !(s.userId === me.id && s.lessonId === lessonId))
+            : [...list, { userId: me.id, lessonId, addedAt: new Date().toISOString() }],
+        };
+      });
+    },
+
+    updateStudent: (userId, patch) =>
+      setDb((d) => ({ ...d, users: d.users.map((u) => (u.id === userId ? { ...u, ...patch } : u)) })),
+
+    addStudent: (parentId, data) => {
+      const id = `s-${uid()}`;
+      setDb((d) => ({
+        ...d,
+        users: [...d.users, { id, name: data.name, role: "student", phone: data.phone, gradeId: data.gradeId, active: true, joinedAt: new Date().toISOString().slice(0, 10) }],
+      }));
+      setDb((d) => ({
+        ...d,
+        users: d.users.map((u) => (u.id === parentId ? { ...u, childrenIds: [...(u.childrenIds ?? []), id] } : u)),
+      }));
+      setMe((m) => (m && m.id === parentId ? { ...m, childrenIds: [...(m.childrenIds ?? []), id] } : m));
+      return id;
+    },
 
     login: (userId) => {
       const u = db.users.find((x) => x.id === userId);

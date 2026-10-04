@@ -2,10 +2,11 @@
 
 import React, { use, useState } from "react";
 import Link from "next/link";
-import AppShell from "@/components/AppShell";
+import QShell, { QCard, QBtn, QBackLink, QPill } from "@/components/q/QShell";
 import { useStore } from "@/lib/store";
-import { Icon, DCard } from "@/components/ui";
+import { Icon } from "@/components/ui";
 import { lessonById, questionsOfLesson, followUpQuestions, unitById, subjectOfLesson, canAccessLesson } from "@/lib/data";
+import { QC } from "@/lib/theme-q";
 
 export default function PracticePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -22,23 +23,29 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
   const unit = lesson && unitById(db, lesson.unitId);
 
   if (!lesson) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">التدريب غير موجود</DCard></AppShell>;
+    return (
+      <QShell role="student">
+        <div className="text-center py-20 font-bold" style={{ color: QC.muted }}>التدريب غير موجود</div>
+      </QShell>
+    );
   }
 
   if (me && !canAccessLesson(db, me.id, lesson)) {
     return (
-      <AppShell role="student" dark>
-        <div className="max-w-lg mx-auto rounded-[2rem] p-10 text-center bg-[#161c29] border border-[#2b3547] animate-fade-up">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#f5b329] text-[#0f1217] flex items-center justify-center mb-4 animate-float">
-            <Icon name="lock" size={30} />
-          </div>
-          <h2 className="text-xl font-black text-white mb-2">التدريب للمشتركين فقط</h2>
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Link href="/student/subscription" className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-2xl font-black text-sm transition-colors">اشترك الآن</Link>
-            <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1a2130] transition-colors">رجوع</Link>
-          </div>
+      <QShell role="student">
+        <div className="max-w-lg mx-auto">
+          <QCard className="!p-10 text-center">
+            <div className="w-16 h-16 mx-auto rounded-2xl grid place-items-center mb-4" style={{ background: QC.warningSoft, color: QC.warning }}>
+              <Icon name="lock" size={30} />
+            </div>
+            <h2 className="text-[18px] font-extrabold mb-4" style={{ color: QC.ink }}>التدريب للمشتركين فقط</h2>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <QBtn href="/student/subscription">اشترك الآن</QBtn>
+              <QBtn variant="outline" href={`/student/lesson/${encodeURIComponent(lessonId)}`}>رجوع</QBtn>
+            </div>
+          </QCard>
         </div>
-      </AppShell>
+      </QShell>
     );
   }
 
@@ -52,45 +59,48 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
   };
 
   return (
-    <AppShell role="student" dark>
-      <div className="max-w-3xl mx-auto space-y-5 animate-fade-up">
-        {/* الترويسة */}
-        <DCard className="rounded-3xl p-6 md:p-7 relative overflow-hidden">
-          <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-[#8e5cf0]/15 blur-3xl" />
-          <div className="relative flex items-start justify-between gap-4 flex-wrap">
+    <QShell role="student">
+      <div className="max-w-3xl mx-auto space-y-5">
+        <QBackLink href={`/student/lesson/${encodeURIComponent(lessonId)}`}>العودة إلى الدرس</QBackLink>
+
+        <QCard className="!p-6">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <div className="inline-block bg-[#8e5cf0]/15 text-[#b79bf7] text-[11px] font-black px-3 py-1 rounded-full mb-3">تدريب متابعة — أسئلة مختلفة عن الاختبار</div>
-              <h1 className="text-xl md:text-2xl font-black text-white mb-1">{lesson.title}</h1>
-              <p className="text-[#9297a6] text-sm">{subject?.name} · {unit?.title}</p>
+              <QPill tone="trial">تدريب متابعة — أسئلة مختلفة عن الاختبار</QPill>
+              <h1 className="text-[19px] font-extrabold mt-2.5 mb-1" style={{ color: QC.ink }}>{lesson.title}</h1>
+              <p className="text-[12.5px]" style={{ color: QC.muted }}>{subject?.name} · {unit?.title}</p>
             </div>
-            <span className="text-[11px] font-black bg-[#3d321a] text-[#f5b329] px-2.5 py-1 rounded-full">{answered}/{questions.length}</span>
+            <QPill tone="locked">{answered}/{questions.length}</QPill>
           </div>
-          <p className="relative text-[#9297a6]/70 text-xs mt-4">أسئلة تدريبية على نفس نقاط الدرس — نتيجتها لا تُحتسب في تقاريرك، والاختبار الكامل هو مقياس التقدم.</p>
-        </DCard>
+          <p className="text-[11.5px] mt-4" style={{ color: QC.faint }}>
+            أسئلة تدريبية على نفس نقاط الدرس — نتيجتها لا تُحتسب في تقاريرك.
+          </p>
+        </QCard>
 
         {questions.length === 0 && (
-          <DCard className="p-8 text-center">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center mb-4"><Icon name="target" size={26} /></div>
-            <h2 className="font-black mb-2">لا يوجد تدريب متخصص لهذا الدرس بعد</h2>
-            <p className="text-sm text-[#9297a6] mb-5">يمكنك إعادة الاختبار الكامل أو مراجعة المذكرة.</p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link href={`/student/exam/${encodeURIComponent(lessonId)}`} className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-7 py-3 rounded-full font-black text-sm transition-colors">إعادة الاختبار</Link>
-              <Link href={`/student/lesson/${lessonId}`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">العودة للدرس</Link>
+          <QCard className="!p-8 text-center">
+            <div className="w-14 h-14 mx-auto rounded-2xl grid place-items-center mb-4" style={{ background: QC.brandSoft, color: QC.brand }}>
+              <Icon name="target" size={26} />
             </div>
-          </DCard>
+            <h2 className="font-extrabold mb-2" style={{ color: QC.ink }}>لا يوجد تدريب متخصص لهذا الدرس بعد</h2>
+            <p className="text-[13px] mb-5" style={{ color: QC.muted }}>يمكنك إعادة الاختبار الكامل أو مراجعة المذكرة.</p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <QBtn href={`/student/exam/${encodeURIComponent(lessonId)}`}>إعادة الاختبار</QBtn>
+              <QBtn variant="outline" href={`/student/lesson/${encodeURIComponent(lessonId)}`}>العودة للدرس</QBtn>
+            </div>
+          </QCard>
         )}
 
-        {/* الأسئلة */}
         {questions.map((q, i) => {
           const chosen = answers[i];
           const ok = done && chosen === q.correct;
           return (
-            <DCard key={q.id} className={`p-5 sm:p-6 !border-2 transition-colors ${done ? (ok ? "!border-emerald-500/40" : "!border-[#e04d4d]/40") : ""}`}>
+            <QCard key={q.id} className="!p-5" pad>
               <div className="flex items-center gap-2 mb-3">
-                <span className={`text-[11px] font-black px-2.5 py-0.5 rounded-full ${done ? (ok ? "bg-[#1a3d24] text-[#33bf6b]" : "bg-[#3d1a1a] text-[#e04d4d]") : "bg-[#2072e0]/15 text-[#4a9bf5]"}`}>سؤال {i + 1}</span>
-                <span className="text-[11px] font-black bg-[#212936] text-[#9297a6] px-2.5 py-0.5 rounded-full">{q.type === "mcq" ? "اختيار" : "صح / خطأ"}</span>
+                <QPill tone={done ? (ok ? "ok" : "locked") : "trial"}>سؤال {i + 1}</QPill>
+                <QPill tone="warn">{q.type === "mcq" ? "اختيار" : "صح / خطأ"}</QPill>
               </div>
-              <h2 className="font-bold leading-relaxed mb-4">{q.text}</h2>
+              <h2 className="font-bold leading-relaxed mb-4 text-[14.5px]" style={{ color: QC.ink }}>{q.text}</h2>
               <div className="grid sm:grid-cols-2 gap-2">
                 {q.options.map((opt, oi) => {
                   const selected = chosen === oi;
@@ -99,15 +109,17 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
                   return (
                     <button key={oi} disabled={done}
                       onClick={() => setAnswers((a) => a.map((x, j) => (j === i ? oi : x)))}
-                      className={`flex items-center gap-2.5 p-3.5 rounded-xl border-2 text-right text-sm font-bold transition-all ${
-                        isCorrect ? "border-emerald-500 bg-emerald-500/10 text-emerald-300"
-                        : isWrongPick ? "border-[#e04d4d] bg-[#e04d4d]/10 text-[#e04d4d]"
-                        : selected ? "border-[#2072e0] bg-[#1a3454] text-white"
-                        : "border-[#2b3547] text-[#fafbff] hover:border-[#2072e0]/50 hover:bg-[#1a2130]"}`}>
-                      <span className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${
+                      className={`flex items-center gap-2.5 p-3.5 rounded-xl border-2 text-right text-[13px] font-bold transition-all ${
+                        isCorrect ? "border-emerald-500 bg-emerald-50"
+                        : isWrongPick ? "border-rose-400 bg-rose-50"
+                        : selected ? "border-[#006fff] bg-[#eff6ff]"
+                        : "border-[#e2e8f0] hover:border-[#93c5fd]"}`}
+                      style={{ color: isCorrect ? QC.success : isWrongPick ? QC.danger : QC.ink }}>
+                      <span className={`w-6 h-6 rounded-lg border-2 grid place-items-center shrink-0 ${
                         isCorrect ? "border-emerald-500 bg-emerald-500 text-white"
-                        : isWrongPick ? "border-[#e04d4d] bg-[#e04d4d] text-white"
-                        : selected ? "border-[#2072e0] bg-[#2072e0] text-white" : "border-[#5a6577]"}`}>
+                        : isWrongPick ? "border-rose-400 bg-rose-400 text-white"
+                        : selected ? "text-white" : ""}`}
+                        style={selected && !done ? { background: QC.brand, borderColor: QC.brand } : { borderColor: QC.lineSoft }}>
                         {(selected || isCorrect) && <Icon name={isCorrect ? "check" : isWrongPick ? "x" : "check"} size={12} />}
                       </span>
                       {opt}
@@ -116,41 +128,40 @@ function PracticeSession({ lessonId }: { lessonId: string }) {
                 })}
               </div>
               {done && q.explanation && (
-                <div className="mt-3 bg-[#1a3454] border border-[#2072e0]/30 rounded-xl px-3 py-2 text-xs text-[#fafbff] leading-relaxed flex items-start gap-1.5">
-                  <Icon name="spark" size={13} className="text-[#4a9bf5] mt-0.5 shrink-0" />
-                  <span><b className="text-[#4a9bf5]">الشرح:</b> {q.explanation}</span>
+                <div className="mt-3 border rounded-xl px-3 py-2 text-[12px] leading-relaxed flex items-start gap-1.5"
+                  style={{ background: QC.brandSoft, borderColor: QC.brandBorder, color: QC.body }}>
+                  <Icon name="spark" size={13} className="mt-0.5 shrink-0" style={{ color: QC.brand }} />
+                  <span><b style={{ color: QC.brand }}>الشرح:</b> {q.explanation}</span>
                 </div>
               )}
-            </DCard>
+            </QCard>
           );
         })}
 
-        {/* تسليم / نتيجة */}
         {questions.length > 0 && !done && (
-          <button className="w-full h-[52px] rounded-full font-black text-[#0f1217] bg-[#f5b329] hover:bg-[#e0a41f] transition-all active:scale-[.98] disabled:opacity-40"
-            disabled={answered < questions.length} onClick={() => setDone(true)}>
+          <QBtn className="w-full !h-[50px] !rounded-full" disabled={answered < questions.length} onClick={() => setDone(true)}>
             صحّح إجاباتي — {answered}/{questions.length}
-          </button>
+          </QBtn>
         )}
         {questions.length > 0 && !done && answered < questions.length && (
-          <p className="text-center text-xs text-[#9297a6]">أجب على جميع الأسئلة لعرض التصحيح</p>
+          <p className="text-center text-[12px]" style={{ color: QC.muted }}>أجب على جميع الأسئلة لعرض التصحيح</p>
         )}
 
         {done && (
-          <DCard className="rounded-3xl p-7 text-center animate-fade-up">
-            <div className={`text-5xl font-black mb-1 ${pct >= 80 ? "text-emerald-300" : pct >= 50 ? "text-[#f5b329]" : "text-rose-300"}`}>{pct}%</div>
-            <p className="text-[#9297a6] text-sm mb-1">أصبت {score} من {questions.length} في التدريب</p>
-            <p className="text-[#9297a6]/60 text-xs mb-6">{pct >= 80 ? "مستوى ممتاز — جاهز لإعادة الاختبار الكامل" : "راجع الأقسام المحددة في المذكرة ثم أعد الاختبار الكامل لقياس تحسّنك"}</p>
+          <QCard className="!p-7 text-center">
+            <div className="text-[44px] font-extrabold mb-1" style={{ color: pct >= 80 ? QC.success : pct >= 50 ? QC.warning : QC.danger }}>{pct}%</div>
+            <p className="text-[13px] mb-1" style={{ color: QC.muted }}>أصبت {score} من {questions.length} في التدريب</p>
+            <p className="text-[11.5px] mb-6" style={{ color: QC.faint }}>{pct >= 80 ? "مستوى ممتاز — جاهز لإعادة الاختبار الكامل" : "راجع الأقسام المحددة في المذكرة ثم أعد الاختبار الكامل"}</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href={`/student/exam/${encodeURIComponent(lessonId)}`} className="bg-[#2072e0] hover:bg-[#1b63c4] text-white px-7 py-3 rounded-full font-black text-sm transition-colors flex items-center gap-2">
+              <QBtn href={`/student/exam/${encodeURIComponent(lessonId)}`}>
                 <Icon name="target" size={15} /> إعادة الاختبار الكامل
-              </Link>
-              <button onClick={reset} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">إعادة التدريب</button>
-              <Link href={`/student/lesson/${encodeURIComponent(lessonId)}#review`} className="border border-[#2b3547] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#1a2130] transition-colors">خطة المراجعة</Link>
+              </QBtn>
+              <QBtn variant="outline" onClick={reset}>إعادة التدريب</QBtn>
+              <QBtn variant="outline" href={`/student/lesson/${encodeURIComponent(lessonId)}#notes`}>خطة المراجعة</QBtn>
             </div>
-          </DCard>
+          </QCard>
         )}
       </div>
-    </AppShell>
+    </QShell>
   );
 }

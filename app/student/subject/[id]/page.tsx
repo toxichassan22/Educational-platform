@@ -2,138 +2,216 @@
 
 import React, { use, useState } from "react";
 import Link from "next/link";
-import AppShell from "@/components/AppShell";
+import QShell, { QPageHead, QBtn, QModal } from "@/components/q/QShell";
 import { useStore } from "@/lib/store";
-import { Icon, DCard } from "@/components/ui";
-import { subjectById, unitsOfSubject, lessonsOfUnit, questionsOfLesson, attemptsOfUser, gradeOf, canAccessLesson } from "@/lib/data";
+import { Icon } from "@/components/ui";
+import { subjectById, activeSub, gradeOf } from "@/lib/data";
+import { QC, Q_FEATURE_ART, qSubjectArt } from "@/lib/theme-q";
 
 export default function SubjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const subjectId = decodeURIComponent(id);
   const { db, me } = useStore();
+  const [askOpen, setAskOpen] = useState(false);
   const subject = subjectById(db, subjectId);
-  const units = subject ? unitsOfSubject(db, subject.id) : [];
-  const [openUnit, setOpenUnit] = useState<string | null>(units[0]?.id ?? null);
-  const myAttempts = me ? attemptsOfUser(db, me.id) : [];
-  const grade = subject ? gradeOf(db, subject.gradeId) : null;
 
   if (!subject) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">المادة غير موجودة</DCard></AppShell>;
+    return (
+      <QShell role="student">
+        <div className="text-center py-20 font-bold" style={{ color: QC.muted }}>
+          المادة غير موجودة
+        </div>
+      </QShell>
+    );
   }
 
-  const bestAttempt = (lessonId: string) => {
-    const list = myAttempts.filter((a) => a.lessonId === lessonId);
-    if (!list.length) return null;
-    return Math.max(...list.map((a) => Math.round((a.score / a.total) * 100)));
-  };
+  const grade = gradeOf(db, subject.gradeId);
+  const sub = me ? activeSub(db, me.id) : null;
+  const art = qSubjectArt(subject);
+  const base = `/student/subject/${encodeURIComponent(subject.id)}`;
 
-  const totalLessons = units.reduce((n, u) => n + lessonsOfUnit(db, u.id).length, 0);
-  const doneLessons = units.reduce((n, u) => n + lessonsOfUnit(db, u.id).filter((l) => bestAttempt(l.id) !== null).length, 0);
-  const pct = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
-
-  // أول درس مفتوح وغير منجز = «الحالي»
-  const allLessons = units.flatMap((u) => lessonsOfUnit(db, u.id));
-  const nextId = allLessons.find((l) => bestAttempt(l.id) === null && (!me || canAccessLesson(db, me.id, l)))?.id;
+  const tools = [
+    {
+      key: "lectures",
+      title: "الشرح",
+      sub: "شاهد دروسك",
+      art: Q_FEATURE_ART.lectures,
+      href: `${base}/lectures`,
+      badge: sub ? null : ("trial" as const),
+    },
+    {
+      key: "exams",
+      title: "الأسئلة",
+      sub: "اختبر معلوماتك",
+      art: Q_FEATURE_ART.exams,
+      href: `${base}/exams`,
+      badge: sub ? null : ("trial" as const),
+    },
+    {
+      key: "notes",
+      title: "حقيبة The Q",
+      sub: "ملفات المادة PDF",
+      art: Q_FEATURE_ART.notes,
+      href: `${base}/notes`,
+      badge: sub ? null : ("locked" as const),
+    },
+    {
+      key: "stats",
+      title: "الإحصائيات",
+      sub: "تابع تقدمك",
+      art: Q_FEATURE_ART.statistics,
+      href: `${base}/statistics`,
+      badge: null,
+    },
+    {
+      key: "ask",
+      title: "اسأل The Q",
+      sub: "يجاوب على كل شيء",
+      art: Q_FEATURE_ART.ask,
+      onClick: () => setAskOpen(true),
+      badge: sub ? null : ("locked" as const),
+    },
+  ];
 
   return (
-    <AppShell role="student" dark>
-      <div className="space-y-6 animate-fade-up">
+    <QShell role="student">
+      <QPageHead href="/student">{subject.name}</QPageHead>
 
-        {/* مسار التنقل */}
-        <div className="flex items-center gap-2.5 text-sm">
-          <Link href="/student" className="text-[#9297a6] font-bold hover:text-white transition-colors">الرئيسية</Link>
-          <span className="text-[#9297a6] font-bold">‹</span>
-          <span className="text-white font-bold">{subject.name}</span>
+      {/* ===== هيرو المادة الأزرق ===== */}
+      <div
+        className="relative overflow-hidden rounded-2xl px-6 sm:px-10 py-8 sm:py-10 text-white mb-6"
+        style={{ background: `linear-gradient(135deg, ${QC.brand} 0%, #0057d8 60%, ${QC.brandDark} 100%)` }}
+      >
+        <div className="relative z-10">
+          <h1 className="text-[26px] sm:text-[32px] font-extrabold">{subject.name}</h1>
+          <p className="text-white/85 text-[13px] sm:text-[14px] font-semibold mt-2">
+            استكشف جميع أدوات التعلّم المتاحة لـ {subject.name} ✨
+          </p>
         </div>
+        {art && (
+          <img
+            src={art}
+            alt=""
+            className="absolute left-4 sm:left-10 bottom-0 h-[90%] max-w-[40%] object-contain pointer-events-none"
+          />
+        )}
+      </div>
 
-        {/* هيدر المادة — عنوان كبير مثل صفحة المادة في UULA */}
-        <div className="rounded-[26px] p-7 sm:p-9 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${subject.color} 0%, ${subject.color}66 60%, #141a26 140%)` }}>
-          <div className="flex items-center gap-5 flex-wrap relative">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 shadow-xl">
-              <Icon name={subject.icon} size={34} className="text-white drop-shadow-lg" />
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <h1 className="text-3xl sm:text-4xl font-black text-white drop-shadow">{subject.name}</h1>
-              <div className="text-white/80 font-bold text-sm mt-1.5">{grade?.name} · {totalLessons} درسًا · {subject.teacher}</div>
-            </div>
-            <div className="bg-black/25 backdrop-blur rounded-2xl px-6 py-3 text-center">
-              <div className="text-xs font-bold text-white/70 mb-0.5">نسبة الإنجاز</div>
-              <div className="text-2xl font-black text-white">{pct}%</div>
+      {/* ===== شبكة الأدوات ===== */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {tools.map((t) => {
+          const inner = (
+            <>
+              {t.badge === "trial" && (
+                <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-black" style={{ background: "#ecfdf5", color: "#047857" }}>
+                  تجريبي
+                </span>
+              )}
+              {t.badge === "locked" && (
+                <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black" style={{ background: "#fff7ed", color: "#c2410c" }}>
+                  <Icon name="lock" size={10} /> مقفل
+                </span>
+              )}
+              <div className="h-[110px] grid place-items-center pt-2">
+                <img src={t.art} alt={t.title} className="max-h-full max-w-[70%] object-contain" />
+              </div>
+              <div className="px-4 pb-4 pt-1">
+                <div className="text-[15px] font-extrabold" style={{ color: QC.ink }}>
+                  {t.title}
+                </div>
+                <div className="text-[11.5px] font-semibold mt-0.5" style={{ color: QC.muted }}>
+                  {t.sub}
+                </div>
+                <div className="mt-2.5" style={{ color: QC.faint }}>
+                  <Icon name="info" size={15} />
+                </div>
+              </div>
+            </>
+          );
+          const cls = "relative rounded-xl border bg-white overflow-hidden text-right transition-all hover:-translate-y-0.5 hover:shadow-lg";
+          const st = { borderColor: QC.line };
+          return t.href ? (
+            <Link key={t.key} href={t.href} className={cls} style={st}>
+              {inner}
+            </Link>
+          ) : (
+            <button key={t.key} onClick={t.onClick} className={cls} style={st}>
+              {inner}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ===== CTA الاشتراك المنقّط ===== */}
+      {!sub && (
+        <div
+          className="mt-6 rounded-2xl border-2 border-dashed px-6 py-6 flex flex-wrap items-center justify-between gap-4"
+          style={{ borderColor: QC.brandBorder, background: QC.brandSoft }}
+        >
+          <p className="text-[14px] font-bold max-w-2xl" style={{ color: QC.ink }}>
+            اشترك الآن للاستفادة من جميع خدمات مادة {subject.name} ومميزات باقي المواد
+          </p>
+          <QBtn href="/student/subscription">اشترك الآن</QBtn>
+        </div>
+      )}
+
+      {/* ===== اسأل The Q — شات بسيط ===== */}
+      <QModal open={askOpen} onClose={() => setAskOpen(false)} title="اسأل The Q">
+        <AskTheQ subjectName={subject.name} gradeName={grade?.name ?? ""} />
+      </QModal>
+    </QShell>
+  );
+}
+
+function AskTheQ({ subjectName, gradeName }: { subjectName: string; gradeName: string }) {
+  const [msgs, setMsgs] = useState<{ from: "me" | "q"; text: string }[]>([
+    { from: "q", text: `أهلاً! أنا مساعد The Q الذكي في مادة ${subjectName} — اسألني أي سؤال في المنهج 👋` },
+  ]);
+  const [draft, setDraft] = useState("");
+  const send = () => {
+    const t = draft.trim();
+    if (!t) return;
+    setMsgs((m) => [
+      ...m,
+      { from: "me", text: t },
+      { from: "q", text: `سؤال حلو! دي إجابة تجريبية عن «${t}» — راجع درس «${subjectName}» في صفحة الشرح للشرح الكامل بالفيديو 📚` },
+    ]);
+    setDraft("");
+  };
+  return (
+    <div>
+      <div className="space-y-3 max-h-[45vh] overflow-y-auto pl-1 mb-4">
+        {msgs.map((m, i) => (
+          <div key={i} className={`flex ${m.from === "me" ? "justify-start" : "justify-end"}`}>
+            <div
+              className="max-w-[85%] px-4 py-2.5 rounded-2xl text-[13px] leading-relaxed"
+              style={
+                m.from === "me"
+                  ? { background: QC.brand, color: "#fff", borderTopLeftRadius: 4 }
+                  : { background: QC.surfaceSoft, color: QC.ink, borderTopRightRadius: 4 }
+              }
+            >
+              {m.text}
             </div>
           </div>
-        </div>
-
-        {/* زبدة المادة — ملخص المنهج */}
-        {allLessons[0] && (
-          <Link href={`/student/lesson/${encodeURIComponent(allLessons[0].id)}#notes`}
-            className="flex items-center gap-4 bg-[#161c29] border border-white/[0.05] rounded-2xl px-5 py-4 hover:border-[#f5b329]/50 transition-colors group">
-            <span className="w-11 h-11 rounded-xl bg-[#f5b329]/15 text-[#f5b329] flex items-center justify-center text-xl shrink-0">🧈</span>
-            <div className="flex-1">
-              <div className="font-bold text-white">زبدة المادة</div>
-              <div className="text-[11px] font-bold text-[#9297a6] mt-0.5">ملخص مركز لأهم ما في المنهج</div>
-            </div>
-            <Icon name="back" size={16} className="text-[#9297a6] group-hover:-translate-x-1 transition-transform" />
-          </Link>
-        )}
-
-        {/* الوحدات والدروس — صفوف مرقّمة مثل UULA */}
-        <div className="space-y-3">
-          {units.map((u, ui) => {
-            const lessons = lessonsOfUnit(db, u.id);
-            const open = openUnit === u.id;
-            return (
-              <DCard key={u.id} className="overflow-hidden rounded-2xl">
-                <button onClick={() => setOpenUnit(open ? null : u.id)}
-                  className="w-full flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/60 transition-colors">
-                  <span className="w-9 h-9 rounded-full bg-[#1a2e4d] text-[#4a9bf5] flex items-center justify-center text-sm font-black shrink-0">
-                    {ui + 1}
-                  </span>
-                  <div className="flex-1 text-right font-bold text-[15px]">{u.title}</div>
-                  <span className="text-[12px] font-bold text-[#9297a6]">{lessons.length} دروس</span>
-                  <Icon name="down" size={14} className={`text-[#9297a6] transition-transform ${open ? "rotate-180" : ""}`} />
-                </button>
-
-                {open && (
-                  <div className="border-t border-[#2b3547]/70">
-                    {lessons.map((l) => {
-                      const lpct = bestAttempt(l.id);
-                      const locked = me ? !canAccessLesson(db, me.id, l) : false;
-                      const isNow = l.id === nextId;
-                      const state = locked ? "lock" : lpct !== null ? "done" : isNow ? "now" : "todo";
-                      return (
-                        <Link key={l.id} href={`/student/lesson/${encodeURIComponent(l.id)}`}
-                          className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a2130]/60 transition-colors border-b border-[#2b3547]/50 last:border-0">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                            state === "done" ? "bg-[#1a3d24] text-[#33bf6b]"
-                            : state === "now" ? "bg-[#1a2e4d] text-[#4a9bf5]"
-                            : "bg-[#212936] text-[#9297a6]"}`}>
-                            {state === "lock" ? <Icon name="lock" size={15} />
-                              : state === "done" ? <Icon name="check" size={17} />
-                              : <Icon name="play" size={14} filled />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className={`font-bold text-[15px] flex items-center gap-2 flex-wrap ${locked ? "text-[#9297a6]" : "text-white"}`}>
-                              {l.title}
-                              {l.free && <span className="text-[11px] font-black bg-[#1a3d24] text-[#33bf6b] px-2 py-0.5 rounded-lg">مجاني</span>}
-                              {locked && <span className="text-[10px] font-black bg-[#212936] text-[#9297a6] px-2 py-0.5 rounded-lg">للمشتركين</span>}
-                            </div>
-                            <div className="text-[12px] text-[#9297a6] mt-1">فيديو · {l.durationMin} دقيقة
-                              {questionsOfLesson(db, l.id).length > 0 && <span> · {questionsOfLesson(db, l.id).length} أسئلة</span>}
-                            </div>
-                          </div>
-                          {lpct !== null && (
-                            <span className={`text-xs font-black px-2.5 py-1 rounded-lg tabular-nums ${lpct >= 80 ? "bg-[#1a3d24] text-[#33bf6b]" : lpct >= 50 ? "bg-[#3d321a] text-[#f5b329]" : "bg-[#3d1a1a] text-[#e04d4d]"}`}>{lpct}%</span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </DCard>
-            );
-          })}
-        </div>
+        ))}
       </div>
-    </AppShell>
+      <div className="flex gap-2">
+        <input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder={`اسأل عن أي حاجة في ${subjectName}…`}
+          className="flex-1 border rounded-xl px-4 py-2.5 text-[13px] outline-none"
+          style={{ borderColor: QC.line }}
+        />
+        <QBtn onClick={send} disabled={!draft.trim()}>
+          <Icon name="send" size={15} />
+        </QBtn>
+      </div>
+      <p className="text-[10px] mt-3 text-center" style={{ color: QC.faint }}>
+        مساعد ذكي لمنهج {gradeName} — إجابات تجريبية
+      </p>
+    </div>
   );
 }

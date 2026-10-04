@@ -2,13 +2,17 @@
 
 import React, { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
-import AppShell from "@/components/AppShell";
+import QShell, { QBackLink, QCard, QBtn, QPill } from "@/components/q/QShell";
+import { LessonCard, lessonViews } from "@/components/q/LessonCard";
 import { useStore } from "@/lib/store";
-import { Icon, DCard } from "@/components/ui";
+import { Icon } from "@/components/ui";
 import { lessonById, unitById, subjectById, lessonsOfUnit, unitsOfSubject, questionsOfLesson, attemptsOfUser, canAccessLesson, lessonNotes, reviewSection, followUpQuestions, reviewMistakes } from "@/lib/data";
+import { QC } from "@/lib/theme-q";
 
 const formatTime = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
+
+type Tab = "desc" | "comments" | "tasks";
 
 export default function LessonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -16,7 +20,7 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
 }
 
 function LessonContent({ lessonId }: { lessonId: string }) {
-  const { db, me, saveLessonProgress, addStudyNote, removeStudyNote, storageError } = useStore();
+  const { db, me, saveLessonProgress, addStudyNote, removeStudyNote, toggleSavedLesson, storageError } = useStore();
   const lesson = lessonById(db, lessonId);
   const unit = lesson && unitById(db, lesson.unitId);
   const subject = unit && subjectById(db, unit.subjectId);
@@ -33,18 +37,21 @@ function LessonContent({ lessonId }: { lessonId: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [tab, setTab] = useState<Tab>("desc");
   const [noteDraft, setNoteDraft] = useState("");
   const [reviewTarget, setReviewTarget] = useState<number | null>(null);
   const [qaDraft, setQaDraft] = useState("");
+  const [copied, setCopied] = useState(false);
   const [qaList, setQaList] = useState<{ q: string; a: string }[]>([
     {
       q: "أستاذ شلون حسبت سرعة السيارة؟",
-      a: `حياك الله! يمكنك استخدام هذه المعادلة (S = D / T: السرعة تساوي المسافة (D) على الزمن (T — راجع قسم المعادلات في المذكرة بالأسفل.`,
+      a: `حياك الله! يمكنك استخدام هذه المعادلة (S = D / T): السرعة تساوي المسافة (D) على الزمن (T) — راجع قسم المعادلات في المذكرة بالأسفل.`,
     },
   ]);
   const notes = lesson && me ? (db.studyNotes ?? []).filter((n) => n.userId === me.id && n.lessonId === lesson.id) : [];
   const saved = lesson && me ? (db.lessonProgress ?? []).find((p) => p.userId === me.id && p.lessonId === lesson.id) : undefined;
   const resumable = !!(saved && lesson && saved.videoUrl === lesson.videoUrl && duration && saved.position > 10 && saved.position < duration - 10);
+  const isSaved = !!(me && (db.savedLessons ?? []).some((s) => s.userId === me.id && s.lessonId === lessonId));
 
   const saveNow = () => {
     const video = videoRef.current;
@@ -68,8 +75,9 @@ function LessonContent({ lessonId }: { lessonId: string }) {
   }, []);
 
   useEffect(() => {
-    if (window.location.hash !== "#review") return;
-    const t = setTimeout(() => document.getElementById("review")?.scrollIntoView({ behavior: "smooth", block: "start" }), 400);
+    if (window.location.hash !== "#notes") return;
+    setTab("desc");
+    const t = setTimeout(() => document.getElementById("notes")?.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
     return () => clearTimeout(t);
   }, [lesson?.id]);
 
@@ -80,80 +88,76 @@ function LessonContent({ lessonId }: { lessonId: string }) {
     setNoteDraft("");
   };
 
+  const share = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch { /* تجاهل */ }
+  };
+
   if (!lesson) {
-    return <AppShell role="student" dark><DCard className="p-10 text-center text-[#9297a6]">الدرس غير موجود</DCard></AppShell>;
+    return (
+      <QShell role="student">
+        <div className="text-center py-20 font-bold" style={{ color: QC.muted }}>الدرس غير موجود</div>
+      </QShell>
+    );
   }
 
-  // ===== حماية المحتوى: غير المشترك يشوف شاشة قفل بدل المحتوى =====
+  // ===== حماية المحتوى =====
   const locked = me ? !canAccessLesson(db, me.id, lesson) : true;
   if (locked) {
     const freeLesson = subject ? unitsOfSubject(db, subject.id).flatMap((u) => lessonsOfUnit(db, u.id)).find((l) => l.free) : null;
     return (
-      <AppShell role="student" dark>
-        <div className="max-w-2xl mx-auto space-y-5 animate-fade-up">
-          <div className="flex items-center gap-2.5 text-sm">
-            <Link href="/student/browse" className="text-[#9297a6] font-bold hover:text-white">المواد</Link>
-            <span className="text-[#9297a6] font-bold">‹</span>
-            <Link href={`/student/subject/${subject?.id}`} className="text-[#9297a6] font-bold hover:text-white">{subject?.name}</Link>
-            <span className="text-[#9297a6] font-bold">‹</span>
-            <span className="text-white font-bold">{lesson.title}</span>
-          </div>
-
-          <div className="rounded-[2rem] p-8 md:p-10 text-center relative overflow-hidden bg-[#161c29] border border-[#2b3547]">
-            <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#f5b329]/10 blur-3xl" />
-            <div className="relative">
-              <div className="w-20 h-20 mx-auto rounded-3xl bg-[#f5b329] text-[#0f1217] flex items-center justify-center mb-5 animate-float shadow-2xl shadow-[#f5b329]/25">
-                <Icon name="lock" size={36} />
-              </div>
-              <div className="inline-block bg-white/10 text-[#f5b329] text-[11px] font-black px-3.5 py-1.5 rounded-full mb-4">محتوى حصري للمشتركين</div>
-              <h1 className="text-2xl md:text-3xl font-black text-white mb-2">{lesson.title}</h1>
-              <p className="text-[#9297a6] text-sm mb-2">{subject?.name} · {unit?.title} · {lesson.durationMin} دقيقة</p>
-              <p className="text-white/70 leading-relaxed mb-7 max-w-md mx-auto">
-                هذا الدرس — بفيديو الشرح والمذكرة والاختبار الذكي — متاح للمشتركين فقط.
-                اشترك الآن وافتح <b className="text-[#f5b329]">كل دروس موادك</b> فورًا.
-              </p>
-
-              <div className="grid grid-cols-3 gap-2.5 max-w-md mx-auto mb-8">
-                {[["video", "فيديوهات الشرح"], ["doc", "مذكرات PDF"], ["target", "اختبارات ذكية"]].map(([ic, t]) => (
-                  <div key={t} className="bg-[#1a2130] border border-[#2b3547] rounded-2xl p-3.5">
-                    <div className="text-[#f5b329] mx-auto w-fit mb-1.5"><Icon name={ic} size={19} /></div>
-                    <div className="text-[10px] font-bold text-[#9297a6]">{t}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-3 justify-center flex-wrap">
-                <Link href="/student/subscription"
-                  className="bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] px-9 py-3.5 rounded-2xl font-black transition-all active:scale-95 flex items-center gap-2 shadow-xl shadow-[#f5b329]/20">
-                  <Icon name="gem" size={18} /> اشترك الآن — من 9.9 د.ك
-                </Link>
-                {freeLesson && (
-                  <Link href={`/student/lesson/${freeLesson.id}`}
-                    className="border border-[#2b3547] text-white px-6 py-3.5 rounded-2xl font-bold text-sm hover:bg-[#1a2130] transition-colors">
-                    جرّب الدرس المجاني
-                  </Link>
-                )}
-              </div>
-              <p className="text-[#9297a6]/60 text-[11px] mt-5">دفع آمن عبر KNET و Visa · كود خصم تجريبي KUWAIT20</p>
+      <QShell role="student">
+        <div className="max-w-xl mx-auto">
+          <QBackLink href={subject ? `/student/subject/${encodeURIComponent(subject.id)}/lectures` : "/student"}>
+            العودة إلى الدروس
+          </QBackLink>
+          <QCard className="mt-4 !p-8 text-center">
+            <div className="w-16 h-16 mx-auto rounded-2xl grid place-items-center mb-4" style={{ background: QC.warningSoft, color: QC.warning }}>
+              <Icon name="lock" size={28} />
             </div>
-          </div>
+            <div className="inline-block px-3 py-1 rounded-full text-[11px] font-black mb-3" style={{ background: QC.warningSoft, color: "#c2410c" }}>
+              محتوى حصري للمشتركين
+            </div>
+            <h1 className="text-[20px] font-extrabold mb-1.5" style={{ color: QC.ink }}>{lesson.title}</h1>
+            <p className="text-[13px] mb-5" style={{ color: QC.muted }}>{subject?.name} · {unit?.title} · {lesson.durationMin} دقيقة</p>
+            <div className="grid grid-cols-3 gap-2.5 mb-6">
+              {[["video", "فيديوهات الشرح"], ["doc", "مذكرات PDF"], ["target", "اختبارات ذكية"]].map(([ic, t]) => (
+                <div key={t} className="rounded-xl border p-3" style={{ borderColor: QC.line, background: QC.bgSoft }}>
+                  <div className="mx-auto w-fit mb-1.5" style={{ color: QC.brand }}><Icon name={ic} size={18} /></div>
+                  <div className="text-[10px] font-bold" style={{ color: QC.muted }}>{t}</div>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3 justify-center flex-wrap">
+              <QBtn href="/student/subscription">اشترك الآن — من 9.9 د.ك</QBtn>
+              {freeLesson && <QBtn variant="outline" href={`/student/lesson/${encodeURIComponent(freeLesson.id)}`}>جرّب الدرس المجاني</QBtn>}
+            </div>
+            <p className="text-[11px] mt-4" style={{ color: QC.faint }}>دفع آمن عبر KNET و Visa · كود خصم تجريبي KUWAIT20</p>
+          </QCard>
         </div>
-      </AppShell>
+      </QShell>
     );
   }
 
-  return (
-    <AppShell role="student" dark>
-      <div className="space-y-6 animate-fade-up">
-        {/* مسار التنقل */}
-        <div className="flex items-center gap-2.5 text-sm">
-          <Link href={`/student/subject/${subject?.id}`} className="text-[#9297a6] font-bold hover:text-white">{subject?.name}</Link>
-          <span className="text-[#9297a6] font-bold">‹</span>
-          <span className="text-white font-bold">{lesson.title}</span>
-        </div>
+  const tabs: { key: Tab; label: string; icon: string }[] = [
+    { key: "desc", label: "الوصف", icon: "doc" },
+    { key: "comments", label: `التعليقات (${qaList.length})`, icon: "chat" },
+    { key: "tasks", label: "الواجبات", icon: "clipboard" },
+  ];
 
-        {/* ===== مشغل الفيديو ===== */}
-        <div className="rounded-[20px] overflow-hidden bg-[#0a0d12] border border-[#2b3547]">
+  return (
+    <QShell role="student">
+      {/* العودة */}
+      <QBackLink href={subject ? `/student/subject/${encodeURIComponent(subject.id)}/lectures` : "/student"}>
+        العودة إلى دروس {subject?.name ?? ""}
+      </QBackLink>
+
+      {/* المشغل */}
+      <div className="max-w-3xl mx-auto mt-4">
+        <div className="rounded-2xl overflow-hidden bg-black shadow-lg">
           <video ref={videoRef} key={lesson.id} controls preload="metadata" className="w-full aspect-video bg-black"
             onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
             onTimeUpdate={(e) => setSeconds(Math.floor(e.currentTarget.currentTime))}
@@ -163,262 +167,262 @@ function LessonContent({ lessonId }: { lessonId: string }) {
           </video>
         </div>
 
-        {/* ===== العنوان + بيلز الأفعال — مثل صفحة الدرس في UULA ===== */}
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <div className="text-[11px] font-black text-[#4a9bf5] mb-1">درس</div>
-            <h1 className="text-xl sm:text-2xl font-black">{lesson.title}</h1>
-            <div className="text-[#9297a6] font-bold text-sm mt-1.5 flex items-center gap-2.5 flex-wrap">
-              <span>{unit?.title} · {subject?.teacher}</span>
-              <span className="flex items-center gap-1"><Icon name="clock" size={13} /> {lesson.durationMin} دقيقة</span>
-              {best !== null && <span className="text-[#33bf6b]">أفضل نتيجة {best}%</span>}
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <a href="#notes"
-              className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
-              <Icon name="doc" size={16} className="text-[#9297a6]" /> المذكرة
-            </a>
-            <Link href={`/student/exam/${encodeURIComponent(lesson.id)}`}
-              className="flex items-center gap-2 bg-[#1a2130] border border-white/[0.05] rounded-full px-5 py-2.5 font-bold text-sm hover:border-[#2072e0]/60 transition-colors">
-              <Icon name="chat" size={16} className="text-[#9297a6]" /> أسئلة
-            </Link>
-            {practiceQuestions.length > 0 && (
-              <Link href={`/student/practice/${encodeURIComponent(lesson.id)}`}
-                className="flex items-center gap-2 bg-[#8e5cf0] hover:bg-[#7c4de0] rounded-full px-5 py-2.5 font-bold text-sm text-white transition-colors">
-                <Icon name="bolt" size={16} /> تدريب متابعة
-              </Link>
-            )}
+        {/* مشاهدات + أكشنز */}
+        <div className="flex items-center justify-between mt-3">
+          <span className="flex items-center gap-1.5 text-[12px] font-bold" style={{ color: QC.muted }}>
+            <Icon name="eye" size={15} /> <span dir="ltr">{lessonViews(lesson.id)}</span> مشاهدات
+            {best !== null && <span className="text-emerald-600">· أفضل نتيجة {best}%</span>}
+          </span>
+          <div className="flex items-center gap-2">
+            <button onClick={share}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border text-[12px] font-bold transition-colors hover:bg-slate-50"
+              style={{ borderColor: QC.line, color: QC.body }}>
+              <Icon name="share" size={14} /> {copied ? "تم النسخ!" : "مشاركة"}
+            </button>
+            <button onClick={() => toggleSavedLesson(lesson.id)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border text-[12px] font-bold transition-colors hover:bg-slate-50"
+              style={{ borderColor: isSaved ? QC.brand : QC.line, color: isSaved ? QC.brand : QC.body, background: isSaved ? QC.brandSoft : "#fff" }}>
+              <Icon name="bookmark" size={14} filled={isSaved} /> {isSaved ? "محفوظ" : "حفظ"}
+            </button>
           </div>
         </div>
 
-        {/* ===== محتوى الدرس — قائمة أجزاء مثل UULA ===== */}
-        <DCard className="rounded-2xl divide-y divide-[#2b3547]/60 overflow-hidden">
-          <div className="flex items-center gap-4 px-5 py-4">
-            <span className="w-11 h-11 rounded-xl bg-[#1a2e4d] flex items-center justify-center shrink-0">
-              <Icon name="play" size={16} filled className="text-[#4a9bf5]" />
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm">درس {lesson.title}</div>
-              <div className="text-[11px] text-[#9297a6] mt-0.5">فيديو شرح</div>
-            </div>
-            <span className="flex items-center gap-1.5 text-xs font-bold text-[#9297a6] shrink-0" dir="ltr">
-              <Icon name="clock" size={13} /> {lesson.durationMin}:00
-            </span>
-          </div>
-          <a href="#notes" className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
-            <span className="w-11 h-11 rounded-xl bg-[#1a3d24] flex items-center justify-center shrink-0">
-              <Icon name="doc" size={16} className="text-[#33bf6b]" />
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm">المذكرة الشاملة</div>
-              <div className="text-[11px] text-[#9297a6] mt-0.5">ملخص الدرس قابل للطباعة</div>
-            </div>
-            <Icon name="back" size={15} className="text-[#9297a6] shrink-0" />
-          </a>
-          <Link href={`/student/exam/${encodeURIComponent(lesson.id)}`} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1a2130]/50 transition-colors">
-            <span className="w-11 h-11 rounded-xl bg-[#2d2144] flex items-center justify-center shrink-0">
-              <Icon name="target" size={16} className="text-[#b79bf7]" />
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm">اختبار الدرس</div>
-              <div className="text-[11px] text-[#9297a6] mt-0.5">{questions.length} سؤال · {myAttempts.length ? "أعد المحاولة" : "لم يُحَل بعد"}</div>
-            </div>
-            <Icon name="back" size={15} className="text-[#9297a6] shrink-0" />
-          </Link>
-        </DCard>
-
-        {/* استكمال المشاهدة */}
+        {/* استئناف المشاهدة */}
         {resumable && saved && (
-          <div className="flex flex-wrap items-center justify-between gap-2 bg-[#1a2e4d] border border-[#2072e0]/40 rounded-2xl px-4 py-3">
-            <span className="text-xs font-bold text-white flex items-center gap-1.5">
-              <Icon name="clock" size={14} className="text-[#4a9bf5]" /> آخر مرة وقفت عند <span dir="ltr">{formatTime(saved.position)}</span>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border px-4 py-2.5" style={{ borderColor: QC.brandBorder, background: QC.brandSoft }}>
+            <span className="text-[12px] font-bold flex items-center gap-1.5" style={{ color: QC.brandText }}>
+              <Icon name="clock" size={14} /> آخر مرة وقفت عند <span dir="ltr">{formatTime(saved.position)}</span>
             </span>
             <div className="flex gap-1.5">
               <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = saved.position; videoRef.current.play(); } }}
-                className="bg-[#2072e0] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#1b63c4] transition-colors">
+                className="text-white text-[11px] font-bold px-3 py-1.5 rounded-lg" style={{ background: QC.brand }}>
                 أكمل من هناك
               </button>
               <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play(); } }}
-                className="text-xs font-bold px-3 py-1.5 rounded-lg text-[#9297a6] hover:bg-[#1a2130] transition-colors">
+                className="text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-white/70" style={{ color: QC.muted }}>
                 من البداية
               </button>
             </div>
           </div>
         )}
-        {storageError && <div className="text-xs text-[#e04d4d] bg-[#e04d4d]/10 border border-[#e04d4d]/30 rounded-xl px-3 py-2 font-bold">{storageError}</div>}
+        {storageError && <div className="mt-3 text-[12px] rounded-xl border px-3 py-2 font-bold" style={{ color: QC.danger, borderColor: "#fecaca", background: QC.dangerSoft }}>{storageError}</div>}
 
-        {/* ===== ملخص الدرس ===== */}
-        <DCard className="p-7 rounded-[18px] print-area">
-          <div id="notes" />
-          {/* هيدر الطباعة — يظهر في الـ PDF فقط */}
-          <div className="hidden print:block mb-6 pb-4 border-b-2 border-[#2072e0]">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-black text-2xl text-[#2072e0]">منصة تفوّق — مذكرة درس</div>
-                <div className="text-sm text-slate-500 mt-1">«{lesson.title}» · {subject?.name} · {unit?.title}</div>
-              </div>
-              <div className="text-xs text-slate-400 font-bold">tafawwug.edu.kw</div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-black text-lg flex items-center gap-2">
-              <Icon name="doc" size={19} className="text-[#4a9bf5]" /> ملخص الدرس
-            </h2>
-            <button onClick={() => window.print()}
-              className="no-print flex items-center gap-1.5 text-[#4a9bf5] text-sm font-bold hover:bg-[#2072e0]/10 px-3 py-1.5 rounded-lg transition-colors">
-              <Icon name="download" size={15} /> تحميل PDF
+        {/* ===== التبويبات ===== */}
+        <div className="flex gap-6 mt-5 border-b" style={{ borderColor: QC.line }}>
+          {tabs.map((t) => (
+            <button key={t.key} onClick={() => setTab(t.key)}
+              className="pb-3 text-[13.5px] font-extrabold flex items-center gap-1.5 border-b-2 -mb-px transition-colors"
+              style={{ color: tab === t.key ? QC.brand : QC.muted, borderColor: tab === t.key ? QC.brand : "transparent" }}>
+              <Icon name={t.icon} size={15} /> {t.label}
             </button>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          {/* خطة مراجعة موجهة من أخطاء آخر اختبار */}
-          {mistakes.length > 0 && (
-            <div id="review" className="mb-6 rounded-2xl border-2 border-[#f5b329]/40 bg-[#f5b329]/5 p-4 no-print">
-              <h3 className="font-black text-sm mb-1 flex items-center gap-2 text-white">
-                <Icon name="target" size={16} className="text-[#f5b329]" /> خطة مراجعتك — بناءً على أخطاء آخر اختبار
-              </h3>
-              <p className="text-xs text-[#9297a6] mb-3">أخطأت في {mistakes.length} {mistakes.length === 1 ? "سؤال" : "أسئلة"} آخر مرة. هذه الأقسام تشرحها، وبعدها يوجد تدريب متابعة بأسئلة مختلفة.</p>
-              <div className="space-y-1.5 mb-3">
-                {[...new Set(mistakes.map((m) => reviewSection(lesson, m.question)).filter((s): s is number => s !== null))].map((si) => (
-                  <button key={si} onClick={() => { setReviewTarget(si); document.getElementById(`note-sec-${si}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); }}
-                    className="w-full flex items-center gap-2 text-right text-xs font-bold text-white bg-[#1a2130] hover:bg-[#212936] rounded-lg px-3 py-2 transition-colors">
-                    <span className="w-5 h-5 rounded-md bg-[#f5b329]/20 text-[#f5b329] flex items-center justify-center shrink-0">{si + 1}</span>
-                    {lessonNotes(lesson)[si]?.heading ?? "قسم المراجعة"}
-                    <Icon name="down" size={12} className="mr-auto text-[#9297a6]" />
-                  </button>
-                ))}
-              </div>
-              {practiceQuestions.length > 0 && (
-                <Link href={`/student/practice/${encodeURIComponent(lesson.id)}`}
-                  className="inline-flex items-center gap-2 bg-[#f5b329] hover:bg-[#e0a41f] text-[#0f1217] rounded-xl px-5 py-2.5 text-xs font-black transition-colors">
-                  <Icon name="bolt" size={14} /> تدريب متابعة — {practiceQuestions.length} أسئلة مختلفة
-                </Link>
-              )}
-            </div>
-          )}
-
+      <div className="max-w-3xl mx-auto mt-6 pb-2">
+        {/* ===== الوصف ===== */}
+        {tab === "desc" && (
           <div className="space-y-5">
-            {lessonNotes(lesson).map((sec, i) => (
-              <div key={i} id={`note-sec-${i}`} className={`rounded-xl transition-all ${reviewTarget === i ? "bg-[#f5b329]/10 ring-2 ring-[#f5b329]/40 p-3 -m-3" : ""}`}>
-                <h3 className="font-bold text-[#4a9bf5] mb-2 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-lg bg-[#2072e0]/15 text-[#4a9bf5] text-xs flex items-center justify-center font-black">{i + 1}</span>
-                  {sec.heading}
-                </h3>
-                <p className="text-sm text-[#9297a6] leading-relaxed mb-2">{sec.body}</p>
-                {sec.points && (
-                  <ul className="space-y-1.5 mr-8">
-                    {sec.points.map((p, j) => (
-                      <li key={j} className="text-sm text-[#fafbff] flex items-start gap-2">
-                        <Icon name="check" size={14} className="text-[#33bf6b] mt-1 shrink-0" /> {p}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+            <QCard>
+              <h2 className="font-extrabold text-[15px] mb-1" style={{ color: QC.ink }}>{lesson.title}</h2>
+              <div className="text-[12px] font-semibold mb-4" style={{ color: QC.muted }}>
+                {subject?.name} · {unit?.title} · {subject?.teacher} · {lesson.durationMin} دقيقة
               </div>
-            ))}
-          </div>
+              {lesson.note[0] && <p className="text-[13px] leading-relaxed" style={{ color: QC.body }}>{lesson.note[0].body}</p>}
 
-          {/* ملاحظات بوقت الفيديو */}
-          <div className="mt-6 pt-5 border-t border-[#2b3547]/70 no-print">
-            <h3 className="font-bold text-sm mb-2.5 flex items-center gap-1.5">
-              <Icon name="edit" size={15} className="text-[#4a9bf5]" /> ملاحظاتي <span className="text-[10px] text-[#9297a6] font-medium">— محفوظة بتوقيت اللقطة</span>
-            </h3>
-            <div className="flex gap-2">
-              <input value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") addNote(); }}
-                maxLength={500} placeholder="اكتب ملاحظة عند هذه اللحظة…"
-                className="flex-1 bg-[#1a2130] border border-[#2b3547] rounded-xl px-3 py-2 text-sm text-white placeholder:text-[#9297a6]/50 outline-none focus:border-[#2072e0]" />
-              <button onClick={addNote} disabled={!noteDraft.trim()}
-                className="bg-[#2072e0] hover:bg-[#1b63c4] disabled:opacity-40 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5">
-                <Icon name="plus" size={13} /> {formatTime(seconds)}
-              </button>
-            </div>
-            {notes.length > 0 && (
-              <div className="mt-3 space-y-1.5">
-                {notes.map((n) => (
-                  <div key={n.id} className="flex items-center gap-2 bg-[#1a2130] rounded-xl px-3 py-2 text-sm group">
-                    <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = n.seconds; videoRef.current.play(); } }}
-                      className="shrink-0 text-[10px] font-black bg-[#2072e0]/20 text-[#4a9bf5] px-2 py-1 rounded-md hover:bg-[#2072e0]/30 transition-colors" dir="ltr">
-                      {formatTime(n.seconds)}
-                    </button>
-                    <span className="flex-1 text-[#fafbff] text-xs">{n.text}</span>
-                    <button onClick={() => removeStudyNote(n.id)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#9297a6] hover:text-[#e04d4d] transition-all">
-                      <Icon name="trash" size={13} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </DCard>
-
-        {/* ===== اسأل معلمك — Q&A مثل UULA ===== */}
-        <DCard className="rounded-2xl overflow-hidden">
-          <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2b3547]/60">
-            <span className="w-9 h-9 rounded-full bg-[#2072e0]/15 text-[#4a9bf5] flex items-center justify-center">
-              <Icon name="chat" size={16} />
-            </span>
-            <div>
-              <div className="font-bold text-sm">اسأل معلمك</div>
-              <div className="text-[10px] text-[#33bf6b] font-bold">يرد خلال دقائق عادة</div>
-            </div>
-          </div>
-          <div className="divide-y divide-[#2b3547]/40">
-            {qaList.map((qa, i) => (
-              <div key={i} className="px-5 py-4 space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="w-8 h-8 rounded-full bg-[#2b3547] flex items-center justify-center text-xs font-black shrink-0">{me?.name?.[0] ?? "ط"}</span>
-                  <div className="flex-1 bg-[#1a2130] rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#fafbff] leading-relaxed">{qa.q}</div>
+              <div id="notes" className="mt-5 pt-5 border-t" style={{ borderColor: QC.line }}>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-extrabold text-[14px] flex items-center gap-2" style={{ color: QC.ink }}>
+                    <Icon name="doc" size={16} style={{ color: QC.brand }} /> ملخص الدرس
+                  </h3>
+                  <button onClick={() => window.print()} className="flex items-center gap-1.5 text-[12px] font-bold hover:underline" style={{ color: QC.brand }}>
+                    <Icon name="download" size={14} /> تحميل PDF
+                  </button>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="w-8 h-8 rounded-full bg-[#2072e0] flex items-center justify-center text-[11px] font-black text-white shrink-0">ت</span>
-                  <div className="flex-1">
-                    <div className="bg-[#16233c] border border-[#2072e0]/25 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-[#fafbff] leading-relaxed">{qa.a}</div>
-                    <div className="flex gap-3 mt-2 pr-2">
-                      <button className="text-[#9297a6] hover:text-[#33bf6b] transition-colors"><Icon name="check" size={14} /></button>
+                <div className="space-y-4">
+                  {lessonNotes(lesson).map((sec, i) => (
+                    <div key={i} id={`note-sec-${i}`} className={`rounded-xl transition-all ${reviewTarget === i ? "ring-2 p-3 -m-3" : ""}`} style={reviewTarget === i ? { ["--tw-ring-color" as never]: QC.warning } : {}}>
+                      <h4 className="font-bold text-[13px] mb-1.5 flex items-center gap-2" style={{ color: QC.brandText }}>
+                        <span className="w-5 h-5 rounded-md text-[10px] grid place-items-center font-black" style={{ background: QC.brandSoft, color: QC.brand }}>{i + 1}</span>
+                        {sec.heading}
+                      </h4>
+                      <p className="text-[12.5px] leading-relaxed" style={{ color: QC.muted }}>{sec.body}</p>
+                      {sec.points && (
+                        <ul className="space-y-1.5 mt-2 mr-7">
+                          {sec.points.map((p, j) => (
+                            <li key={j} className="text-[12.5px] flex items-start gap-2" style={{ color: QC.ink }}>
+                              <Icon name="check" size={13} className="mt-0.5 shrink-0" style={{ color: QC.success }} /> {p}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="px-5 py-4 border-t border-[#2b3547]/60 flex gap-2">
-            <input value={qaDraft} onChange={(e) => setQaDraft(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
-              placeholder="اكتب سؤالك عن الدرس…"
-              className="flex-1 bg-[#1a2130] border border-[#2b3547] rounded-full px-4 py-2.5 text-sm text-white placeholder:text-[#9297a6]/50 outline-none focus:border-[#2072e0]" />
-            <button
-              onClick={() => { if (qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
-              disabled={!qaDraft.trim()}
-              className="bg-[#2072e0] hover:bg-[#1b63c4] disabled:opacity-40 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-colors">
-              إرسال
-            </button>
-          </div>
-        </DCard>
+            </QCard>
 
-        {/* ===== الدروس التالية ===== */}
-        {nextLessons.length > 0 && (
-          <>
-            <h2 className="text-xl font-black pt-2">الدروس التالية</h2>
-            <div className="grid sm:grid-cols-3 gap-4">
-              {nextLessons.map((l) => (
-                <Link key={l.id} href={`/student/lesson/${l.id}`}
-                  className="bg-[#161c29] border border-[#2b3547] rounded-2xl overflow-hidden hover:border-[#2072e0]/60 transition-all group">
-                  <div className="h-[74px] bg-[#1a2433] flex items-center justify-center">
-                    <span className="w-9 h-9 rounded-full bg-[#1a3d66] flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Icon name="play" size={14} filled className="text-white" />
+            {/* خطة المراجعة */}
+            {mistakes.length > 0 && (
+              <QCard className="!border-[#fcd9a8]" pad>
+                <h3 className="font-extrabold text-[14px] mb-1 flex items-center gap-2" style={{ color: QC.ink }}>
+                  <Icon name="target" size={16} style={{ color: QC.warning }} /> خطة مراجعتك — بناءً على أخطاء آخر اختبار
+                </h3>
+                <p className="text-[12px] mb-3" style={{ color: QC.muted }}>
+                  أخطأت في {mistakes.length} أسئلة آخر مرة. هذه الأقسام تشرحها:
+                </p>
+                <div className="space-y-1.5 mb-4">
+                  {[...new Set(mistakes.map((m) => reviewSection(lesson, m.question)).filter((s): s is number => s !== null))].map((si) => (
+                    <button key={si}
+                      onClick={() => { setTab("desc"); setReviewTarget(si); setTimeout(() => document.getElementById(`note-sec-${si}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 60); }}
+                      className="w-full flex items-center gap-2 text-right text-[12.5px] font-bold rounded-lg border px-3 py-2 transition-colors hover:bg-slate-50"
+                      style={{ borderColor: QC.line, color: QC.ink }}>
+                      <span className="w-5 h-5 rounded-md grid place-items-center shrink-0 text-[10px] font-black" style={{ background: QC.warningSoft, color: QC.warning }}>{si + 1}</span>
+                      {lessonNotes(lesson)[si]?.heading ?? "قسم المراجعة"}
+                    </button>
+                  ))}
+                </div>
+                {practiceQuestions.length > 0 && (
+                  <QBtn href={`/student/practice/${encodeURIComponent(lesson.id)}`} size="sm">
+                    <Icon name="bolt" size={14} /> تدريب متابعة — {practiceQuestions.length} أسئلة مختلفة
+                  </QBtn>
+                )}
+              </QCard>
+            )}
+
+            {/* ملاحظاتي */}
+            <QCard>
+              <h3 className="font-extrabold text-[14px] mb-2.5 flex items-center gap-1.5" style={{ color: QC.ink }}>
+                <Icon name="edit" size={15} style={{ color: QC.brand }} /> ملاحظاتي
+                <span className="text-[10px] font-semibold" style={{ color: QC.faint }}>— محفوظة بتوقيت اللقطة</span>
+              </h3>
+              <div className="flex gap-2">
+                <input value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") addNote(); }}
+                  maxLength={500} placeholder="اكتب ملاحظة عند هذه اللحظة…"
+                  className="flex-1 border rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:border-[#006fff] bg-white"
+                  style={{ borderColor: QC.line }} />
+                <QBtn onClick={addNote} disabled={!noteDraft.trim()} size="sm">
+                  <Icon name="plus" size={13} /> {formatTime(seconds)}
+                </QBtn>
+              </div>
+              {notes.length > 0 && (
+                <div className="mt-3 space-y-1.5">
+                  {notes.map((n) => (
+                    <div key={n.id} className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] group" style={{ background: QC.bgSoft }}>
+                      <button onClick={() => { if (videoRef.current) { videoRef.current.currentTime = n.seconds; videoRef.current.play(); } }}
+                        className="shrink-0 text-[10px] font-black px-2 py-1 rounded-md" style={{ background: QC.brandSoft, color: QC.brand }} dir="ltr">
+                        {formatTime(n.seconds)}
+                      </button>
+                      <span className="flex-1 text-[12.5px]" style={{ color: QC.ink }}>{n.text}</span>
+                      <button onClick={() => removeStudyNote(n.id)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg transition-all" style={{ color: QC.faint }}>
+                        <Icon name="trash" size={13} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </QCard>
+          </div>
+        )}
+
+        {/* ===== التعليقات ===== */}
+        {tab === "comments" && (
+          <QCard pad={false} className="overflow-hidden">
+            <div className="flex items-center gap-3 px-5 py-4 border-b" style={{ borderColor: QC.line }}>
+              <span className="w-9 h-9 rounded-full grid place-items-center" style={{ background: QC.brandSoft, color: QC.brand }}>
+                <Icon name="chat" size={16} />
+              </span>
+              <div>
+                <div className="font-extrabold text-[14px]" style={{ color: QC.ink }}>اسأل معلمك</div>
+                <div className="text-[10px] font-bold" style={{ color: QC.success }}>يرد خلال دقائق عادة</div>
+              </div>
+            </div>
+            <div className="divide-y" style={{ borderColor: QC.line }}>
+              {qaList.map((qa, i) => (
+                <div key={i} className="px-5 py-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="w-8 h-8 rounded-full grid place-items-center text-[11px] font-black shrink-0 text-white" style={{ background: QC.faint }}>
+                      {me?.name?.[0] ?? "ط"}
                     </span>
+                    <div className="flex-1 rounded-2xl px-4 py-3 text-[13px] leading-relaxed" style={{ background: QC.surfaceSoft, color: QC.ink, borderTopRightRadius: 4 }}>{qa.q}</div>
                   </div>
-                  <div className="p-4">
-                    <div className="font-bold text-sm truncate">{l.title}</div>
-                    <div className="text-xs text-[#9297a6] mt-1">{l.durationMin} دقيقة</div>
+                  <div className="flex items-start gap-3">
+                    <span className="w-8 h-8 rounded-full grid place-items-center text-[11px] font-black text-white shrink-0" style={{ background: QC.brand }}>Q</span>
+                    <div className="flex-1 rounded-2xl border px-4 py-3 text-[13px] leading-relaxed" style={{ background: QC.brandSoft, borderColor: QC.brandBorder, color: QC.ink, borderTopRightRadius: 4 }}>{qa.a}</div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
-          </>
+            <div className="px-5 py-4 border-t flex gap-2" style={{ borderColor: QC.line }}>
+              <input value={qaDraft} onChange={(e) => setQaDraft(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
+                placeholder="اكتب سؤالك عن الدرس…"
+                className="flex-1 border rounded-full px-4 py-2.5 text-[13px] outline-none focus:border-[#006fff]"
+                style={{ borderColor: QC.line }} />
+              <QBtn onClick={() => { if (qaDraft.trim()) { setQaList((l) => [...l, { q: qaDraft, a: "استلمنا سؤالك — هيرد عليك المعلم قريبًا." }]); setQaDraft(""); } }}
+                disabled={!qaDraft.trim()} size="sm" className="!rounded-full !px-5">إرسال</QBtn>
+            </div>
+          </QCard>
+        )}
+
+        {/* ===== الواجبات ===== */}
+        {tab === "tasks" && (
+          <div className="space-y-3">
+            <Link href={`/student/exam/${encodeURIComponent(lesson.id)}`}
+              className="flex items-center gap-4 rounded-xl border bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md" style={{ borderColor: QC.line }}>
+              <span className="w-11 h-11 rounded-xl grid place-items-center shrink-0" style={{ background: "#f3e8ff", color: "#8b5cf6" }}>
+                <Icon name="clipboard" size={18} />
+              </span>
+              <span className="flex-1">
+                <span className="block font-extrabold text-[14px]" style={{ color: QC.ink }}>اختبار الدرس</span>
+                <span className="block text-[11.5px] mt-0.5" style={{ color: QC.muted }}>
+                  {questions.length} سؤال · {myAttempts.length ? `أفضل نتيجة ${best}% — أعد المحاولة` : "لم يُحَل بعد"}
+                </span>
+              </span>
+              <QPill tone={best !== null && best >= 70 ? "ok" : "warn"}>{best !== null ? `${best}%` : "جديد"}</QPill>
+            </Link>
+
+            {practiceQuestions.length > 0 && (
+              <Link href={`/student/practice/${encodeURIComponent(lesson.id)}`}
+                className="flex items-center gap-4 rounded-xl border bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md" style={{ borderColor: QC.line }}>
+                <span className="w-11 h-11 rounded-xl grid place-items-center shrink-0" style={{ background: QC.brandSoft, color: QC.brand }}>
+                  <Icon name="bolt" size={18} />
+                </span>
+                <span className="flex-1">
+                  <span className="block font-extrabold text-[14px]" style={{ color: QC.ink }}>تدريب متابعة</span>
+                  <span className="block text-[11.5px] mt-0.5" style={{ color: QC.muted }}>{practiceQuestions.length} أسئلة مختلفة عن الاختبار</span>
+                </span>
+              </Link>
+            )}
+
+            <a href="#notes" onClick={() => setTab("desc")}
+              className="flex items-center gap-4 rounded-xl border bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md" style={{ borderColor: QC.line }}>
+              <span className="w-11 h-11 rounded-xl grid place-items-center shrink-0" style={{ background: QC.successSoft, color: QC.success }}>
+                <Icon name="doc" size={18} />
+              </span>
+              <span className="flex-1">
+                <span className="block font-extrabold text-[14px]" style={{ color: QC.ink }}>المذكرة الشاملة</span>
+                <span className="block text-[11.5px] mt-0.5" style={{ color: QC.muted }}>ملخص الدرس قابل للطباعة</span>
+              </span>
+            </a>
+          </div>
         )}
       </div>
-    </AppShell>
+
+      {/* ===== دروس تالية ===== */}
+      {nextLessons.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-[17px] font-extrabold mb-3" style={{ color: QC.ink }}>الدروس التالية</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            {nextLessons.map((l) => (
+              <LessonCard key={l.id} lesson={l} unit={unit} subject={subject}
+                locked={me ? !canAccessLesson(db, me.id, l) : true}
+                href={`/student/lesson/${encodeURIComponent(l.id)}`} />
+            ))}
+          </div>
+        </div>
+      )}
+    </QShell>
   );
 }

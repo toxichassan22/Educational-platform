@@ -78,7 +78,7 @@ export function LessonCard({
 
       {/* النصوص */}
       <div className="px-3.5 py-3">
-        <div className="text-[13.5px] font-bold leading-snug line-clamp-2 min-h-[38px]" style={{ color: locked ? QC.muted : QC.ink }}>
+        <div className="text-[13.5px] font-bold leading-snug line-clamp-2 min-h-9.5" style={{ color: locked ? QC.muted : QC.ink }}>
           {lesson.title}
         </div>
         {unit && (

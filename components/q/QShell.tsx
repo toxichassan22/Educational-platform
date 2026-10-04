@@ -25,7 +25,7 @@ export function QTopBar({ title }: { title?: string }) {
 
   return (
     <header className="sticky top-0 z-40 text-white" style={{ background: QC.navy, fontFamily: QFONT }}>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-[64px] flex items-center justify-between gap-4">
+      <div className="max-w-350 mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* يمين: العنوان ثم اللوجو عند الطرف */}
         <div className="flex items-center gap-3 min-w-0">
           <h1
@@ -121,7 +121,7 @@ export default function QShell({
   return (
     <div className="min-h-screen flex flex-col" style={{ background: QC.bgSoft, fontFamily: QFONT, color: QC.body }}>
       <QTopBar title={title} />
-      <main className="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</main>
+      <main className="flex-1 w-full max-w-350 mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</main>
       {fab && <QSupportFab />}
       <QTabBar role={role} onLogout={logout} />
     </div>

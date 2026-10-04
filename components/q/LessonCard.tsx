@@ -39,7 +39,7 @@ export function LessonCard({
       style={{ borderColor: QC.line }}
     >
       {/* الثمبنيل */}
-      <div className="relative h-[150px] grid place-items-center overflow-hidden" style={{ background: locked ? "#e8edf4" : QC.bgSoft }}>
+      <div className="relative h-37.5 grid place-items-center overflow-hidden" style={{ background: locked ? "#e8edf4" : QC.bgSoft }}>
         {art && !locked ? (
           <img src={art} alt={lesson.title} className="w-full h-full object-cover opacity-90 group-hover:scale-[1.03] transition-transform" />
         ) : (

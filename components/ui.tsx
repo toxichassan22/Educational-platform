@@ -83,7 +83,7 @@ export function Icon({ name, size = 20, className = "", filled, style }: { name:
 
 // ===================== مكونات =====================
 export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`bg-[#161c29] rounded-2xl border border-[#2b3547] ${className}`}>{children}</div>;
+  return <div className={`bg-[#161c29] rounded-2xl border border-line ${className}`}>{children}</div>;
 }
 
 export function Badge({ children, tone = "blue" }: { children: React.ReactNode; tone?: "green" | "red" | "blue" | "amber" | "gray" }) {
@@ -99,7 +99,7 @@ export function Badge({ children, tone = "blue" }: { children: React.ReactNode; 
 
 export function Progress({ value, color = "#2072e0", h = 8 }: { value: number; color?: string; h?: number }) {
   return (
-    <div className="w-full bg-[#1a2130] rounded-full overflow-hidden" style={{ height: h }}>
+    <div className="w-full bg-surface-2 rounded-full overflow-hidden" style={{ height: h }}>
       <div className="h-full rounded-full transition-all duration-700" style={{ width: `${Math.min(100, Math.max(0, value))}%`, background: color }} />
     </div>
   );
@@ -131,11 +131,11 @@ export function Modal({ open, onClose, title, children, wide, dark }: {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"} bg-[#161c29] border border-[#2b3547] text-white`}
+      <div className={`relative w-full rounded-t-3xl sm:rounded-2xl p-6 animate-fade-up max-h-[90vh] overflow-y-auto ${wide ? "sm:max-w-2xl" : "sm:max-w-md"} bg-[#161c29] border border-line text-white`}
         onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-white">{title}</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-[#9297a6]"><Icon name="x" size={18} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-muted"><Icon name="x" size={18} /></button>
         </div>
         {children}
       </div>
@@ -158,7 +158,7 @@ export function KuwaitFlag({ w = 22 }: { w?: number }) {
 
 // كارت داكن — لصفحات المنصة الداخلية (ثيم فيجما)
 export function DCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`bg-[#161c29] rounded-2xl border border-[#2b3547] ${className}`}>{children}</div>;
+  return <div className={`bg-[#161c29] rounded-2xl border border-line ${className}`}>{children}</div>;
 }
 
 export function Stat({ icon, label, value, sub, color = "#2072e0" }: { icon: string; label: string; value: React.ReactNode; sub?: string; color?: string }) {
@@ -169,7 +169,7 @@ export function Stat({ icon, label, value, sub, color = "#2072e0" }: { icon: str
       </div>
       <div>
         <div className="text-2xl font-extrabold text-white leading-tight">{value}</div>
-        <div className="text-xs text-[#9297a6]">{label}{sub ? ` · ${sub}` : ""}</div>
+        <div className="text-xs text-muted">{label}{sub ? ` · ${sub}` : ""}</div>
       </div>
     </Card>
   );

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
 import { QC, QFONT } from "@/lib/theme-q";
 import type { QBadgeTone } from "@/lib/theme-q";
-import { Icon } from "../ui";
+import { Icon, Logo } from "../ui";
 
 const HOME: Record<string, string> = { student: "/student", parent: "/parent", admin: "/admin" };
 const NOTIF: Record<string, string> = { student: "/student/notifications", parent: "/parent/notifications" };
@@ -14,7 +14,7 @@ const ACCOUNT: Record<string, string> = { student: "/student/account", parent: "
 
 /**
  * شريط TheQ العلوي: كحلي #082770.
- * يمين (بداية RTL): لوجو TheQ ثم عنوان الصفحة «الرئيسية».
+ * يمين (بداية RTL): لوجو تفوّق ثم عنوان الصفحة «الرئيسية».
  * يسار (نهاية RTL): جرس الإشعارات، علم الكويت دائري، أفاتار بنقطة خضراء.
  */
 export function QTopBar({ title }: { title?: string }) {
@@ -33,9 +33,8 @@ export function QTopBar({ title }: { title?: string }) {
           >
             {title ?? "الرئيسية"}
           </h1>
-          <Link href={HOME[role]} className="flex items-center shrink-0" aria-label="The Q App">
-            {/* لوجو المنصة الرسمي — public/theq/ui/logo.png */}
-            <img src="/theq/ui/logo.png" alt="The Q App" className="h-[34px] w-auto" />
+          <Link href={HOME[role]} className="flex items-center shrink-0" aria-label="تفوّق">
+            <Logo size={30} light />
           </Link>
         </div>
 
@@ -71,7 +70,15 @@ export function QTopBar({ title }: { title?: string }) {
 }
 
 export function QMark({ size = 30 }: { size?: number }) {
-  return <img src="/theq/ui/app-icon.png" alt="The Q" width={size} height={size} className="rounded-xl" />;
+  return (
+    <div
+      className="relative flex items-center justify-center font-black text-white"
+      style={{ width: size, height: size, borderRadius: size * 0.32, background: "#2072e0", fontSize: size * 0.5 }}
+    >
+      ت
+      <div className="absolute -top-1 -left-1 rounded-full bg-gold-400" style={{ width: size * 0.28, height: size * 0.28, opacity: 0.9 }} />
+    </div>
+  );
 }
 
 /** زر الدعم العائم على الطرف الأيسر — نفس موضعه في TheQ */
@@ -113,7 +120,9 @@ export default function QShell({
   if (!ready || !me || me.role !== role) {
     return (
       <div className="min-h-screen grid place-items-center" style={{ background: QC.bg }}>
-        <img src="/theq/ui/logo.png" alt="The Q App" className="h-16 w-auto animate-pop" />
+        <div className="animate-pop">
+          <Logo size={52} />
+        </div>
       </div>
     );
   }

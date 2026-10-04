@@ -4,7 +4,7 @@ import React, { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
 import QShell, { QCard, QBtn, QBackLink } from "@/components/q/QShell";
 import { useStore } from "@/lib/store";
-import { Icon } from "@/components/ui";
+import { Icon, Logo } from "@/components/ui";
 import { lessonById, questionsOfLesson, subjectOfLesson, unitById, canAccessLesson, attemptsOfUser, compareAttempts, reviewMistakes, Attempt, Question } from "@/lib/data";
 import { QC } from "@/lib/theme-q";
 
@@ -121,7 +121,7 @@ function ExamSession({ lessonId }: { lessonId: string }) {
         <header className="sticky top-0 z-40 text-white" style={{ background: QC.navy }}>
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-[64px] flex items-center justify-between">
             <span className="font-bold text-[15px] px-3 py-1.5">الاختبار</span>
-            <img src="/theq/ui/logo.png" alt="The Q App" className="h-[34px] w-auto" />
+            <Logo size={30} light />
           </div>
         </header>
 

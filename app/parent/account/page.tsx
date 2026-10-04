@@ -72,7 +72,7 @@ export default function ParentAccount() {
           </div>
         </QCard>
 
-        <p className="text-center text-[12px] mt-8" style={{ color: QC.faint }}>The Q © 2026 · الإصدار 1.0</p>
+        <p className="text-center text-[12px] mt-8" style={{ color: QC.faint }}>تفوّق © 2026 · الإصدار 1.0</p>
       </div>
 
       <QModal open={logoutAsk} onClose={() => setLogoutAsk(false)} title="تسجيل الخروج">

@@ -49,7 +49,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
     },
     {
       key: "notes",
-      title: "حقيبة The Q",
+      title: "حقيبة تفوّق",
       sub: "ملفات المادة PDF",
       art: Q_FEATURE_ART.notes,
       href: `${base}/notes`,
@@ -65,7 +65,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
     },
     {
       key: "ask",
-      title: "اسأل The Q",
+      title: "اسأل تفوّق",
       sub: "يجاوب على كل شيء",
       art: Q_FEATURE_ART.ask,
       onClick: () => setAskOpen(true),
@@ -156,7 +156,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
       )}
 
       {/* ===== اسأل The Q — شات بسيط ===== */}
-      <QModal open={askOpen} onClose={() => setAskOpen(false)} title="اسأل The Q">
+      <QModal open={askOpen} onClose={() => setAskOpen(false)} title="اسأل تفوّق">
         <AskTheQ subjectName={subject.name} gradeName={grade?.name ?? ""} />
       </QModal>
     </QShell>
@@ -165,7 +165,7 @@ export default function SubjectPage({ params }: { params: Promise<{ id: string }
 
 function AskTheQ({ subjectName, gradeName }: { subjectName: string; gradeName: string }) {
   const [msgs, setMsgs] = useState<{ from: "me" | "q"; text: string }[]>([
-    { from: "q", text: `أهلاً! أنا مساعد The Q الذكي في مادة ${subjectName} — اسألني أي سؤال في المنهج 👋` },
+    { from: "q", text: `أهلاً! أنا مساعد تفوّق الذكي في مادة ${subjectName} — اسألني أي سؤال في المنهج 👋` },
   ]);
   const [draft, setDraft] = useState("");
   const send = () => {

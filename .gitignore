@@ -50,3 +50,7 @@ dev.log
 shots/
 shots-local/
 .freebuff/
+
+# بيانات دخول حقيقية — لا تُرفع أبدًا
+acc.txt
+*.credentials.json

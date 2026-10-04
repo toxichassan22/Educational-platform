@@ -112,7 +112,7 @@ function RailBtn({ side, onClick }: { side: "left" | "right"; onClick: () => voi
   return (
     <button
       onClick={onClick}
-      aria-label={side === "right" ? "التالي" : "السابق"}
+      aria-label={side === "right" ? "السابق" : "التالي"}
       className="absolute top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full grid place-items-center border bg-white shadow-md transition hover:scale-105"
       style={{ borderColor: QC.line, color: QC.muted, ...(side === "right" ? { right: -12 } : { left: -12 }) }}
     >
@@ -125,7 +125,7 @@ function RailBtn({ side, onClick }: { side: "left" | "right"; onClick: () => voi
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ transform: side === "right" ? "scaleX(-1)" : undefined }}
+        style={{ transform: side === "left" ? "scaleX(-1)" : undefined }}
       >
         <path d="M9 18l6-6-6-6" />
       </svg>
